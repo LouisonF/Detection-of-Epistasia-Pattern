@@ -14,8 +14,15 @@ namespace std {
 
 class data_input {
 public:
+	//Attributes
+    matrix<int> input;
+	//Methods
 	data_input();
 	virtual ~data_input();
+	file_parsing();
+	
+	
+
 };
 
 } /* namespace std */
