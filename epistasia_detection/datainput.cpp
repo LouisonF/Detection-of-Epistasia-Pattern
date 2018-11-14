@@ -14,75 +14,82 @@
 #include <algorithm>
 #include <map>
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
 
 
 
 using namespace std;
 
 //Constructor
-/*
-Data_input::Data_input(const string & filename, char sep, const unsigned int header_nrows, bool transpose)
+
+Data_input::Data_input(const string filename, char sep, const unsigned int header_nrows) : filename(filename), sep(sep), header_nrows(header_nrows)
 {
-	nrows = nrows = count_rows() - header_nrows;
+	nrows = count_rows() - header_nrows;
 	ncols = count_cols();
 
-	if(!transpose)
+	//bool transpose = false; Temporary, removed when i'll decide if i add the transpose mode or not.
+
+	/*if(!transpose)
+	{
 		read();
-	else
-		read_transpose();
-}*/
+	}else
+	{
+		//read_transpose();
+		cout << "This function has not been implemented yet" << endl;
+	}*/
+
+}
+/*
 //Temporary constructor
 Data_input::Data_input() {
 	// TODO Auto-generated constructor stub
 
-}
+}*/
 
 Data_input::~Data_input() {
 	// TODO Auto-generated destructor stub
 }
 //Debut des méthodes
 //***********************************************************************************************************
-/*Data_input::data() //Not sure about the utility of this, soon deprecated
-{
-	return this.matrix;
-}*/
+
  //File reading
 
-void Data_input::read(unsigned int header_nrows,unsigned int nrows,unsigned intncols)
+void Data_input::read()
 {
 	blas::matrix<int> matrix(nrows,ncols);
-	ifstream content("test_data.txt");
-	char c;
+	ifstream content(filename);
 
 	unsigned int row_pos = 1;
+	unsigned int row_matrix = 0;
 
 	if(content.is_open())
 	{
 
-		std::string line = "";
-		while (std::getline(content,line)) //Work but don't display in eclipse consol ... check with terminal
+		string line = "";
+		while (getline(content,line)) //Work but don't display in eclipse console ... check with terminal
 		{
-			//line = line.erase(',');
-			//if(row_pos <= header_nrows)
-			//{
-			//	cout << "HEADER Line, IGNORED \n";
-			//}else
 
-				//cout << line << endl;
-				unsigned int col_pos = 1;
+			if(row_pos <= header_nrows)
+			{
+				cout << "HEADER Line, IGNORED \n";
+			}else
+			{
+				unsigned int col_pos = 0;
 				string temp_string = line;
-				//for(std::string::size_type i = 0; i < ss.length();i++) // Cette boucle ne fonctionne pas
-				for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it, ++col_pos)
+
+				for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it)
 						{
-							if(*it == ','){continue;}
-							cout << "char is ";
-							//cout <<  *it << endl;
+							if(*it == sep){continue;}
 							string temp_char(1,*it);
-							cout << stoi(temp_char) << endl;
-							//matrix (row_pos,col_pos) = std::stoi(temp_char); // TODO: enter value in matrix, not working atm
+							int temp_value = stoi(temp_char);
+							matrix(row_matrix,col_pos) = temp_value;
+							col_pos++;
 						}
+				row_matrix++;
+
+			}
 			row_pos++;
-			cout << row_pos << endl;
+
 
 		}
 content.close();
@@ -91,24 +98,51 @@ content.close();
 		cerr << "error in file parsing \n";
 		exit(-1);
 	}
+	cout << matrix <<endl;
 };
-/*
+
 unsigned int Data_input::count_rows()
 {
 	unsigned int nrows=0;
-	string line;
-	ifstream file_content(filename);
+	string line = "";
+	ifstream content(filename);
 
-	if(file)
+	if(content.is_open())
 	{
-		while(getline(file_content,line))
+		while(getline(content,line))
 		{
 			nrows++;
 		}
 	}else
 	{
 		cerr << "Error in file reading \n";
+		exit(-1);
 	}
 	return nrows;
-}
-*/
+};
+
+unsigned int Data_input::count_cols()
+{
+	unsigned int ncols=0;
+	string line = "";
+	ifstream content(filename);
+
+	if(content.is_open())
+	{
+		getline(content,line);
+
+		string temp_string = line;
+
+		for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it)
+				{
+					if(*it == ','){continue;}
+					ncols++;
+				}
+
+	}else
+	{
+		cerr << "Error in file reading \n";
+		exit(-1);
+	}
+	return ncols;
+};
