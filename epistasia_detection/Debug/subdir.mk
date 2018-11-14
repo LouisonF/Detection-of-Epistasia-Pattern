@@ -4,14 +4,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../Algo_genet.cpp \
 ../datainput.cpp \
 ../main_test.cpp 
 
 OBJS += \
+./Algo_genet.o \
 ./datainput.o \
 ./main_test.o 
 
 CPP_DEPS += \
+./Algo_genet.d \
 ./datainput.d \
 ./main_test.d 
 
@@ -20,7 +23,7 @@ CPP_DEPS += \
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -std=c++0x -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

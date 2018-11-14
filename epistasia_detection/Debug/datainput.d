@@ -1,3 +1,3 @@
-datainput.o: ../datainput.cpp ../datainput.h
+datainput.o: ../datainput.cpp ../datainput.hpp
 
-../datainput.h:
+../datainput.hpp:

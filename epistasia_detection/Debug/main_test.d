@@ -1,3 +1,3 @@
-main_test.o: ../main_test.cpp ../datainput.h
+main_test.o: ../main_test.cpp ../datainput.hpp
 
-../datainput.h:
+../datainput.hpp:

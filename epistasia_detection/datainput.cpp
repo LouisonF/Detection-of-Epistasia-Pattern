@@ -6,10 +6,12 @@
  */
 
 #include "datainput.hpp"
+#include <stdlib.h>
 
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include <map>
 #include <boost/numeric/ublas/matrix.hpp>
 
@@ -49,41 +51,45 @@ Data_input::~Data_input() {
 void Data_input::read(unsigned int header_nrows,unsigned int nrows,unsigned intncols)
 {
 	blas::matrix<int> matrix(nrows,ncols);
-	ifstream file_content("test_data.txt");
+	ifstream content("test_data.txt");
+	char c;
 
 	unsigned int row_pos = 1;
 
-	if(file_content.is_open())
+	if(content.is_open())
 	{
 
 		std::string line = "";
-		while (std::getline(file_content,line)) //Work but don't display in eclipse consol ... check with terminal
+		while (std::getline(content,line)) //Work but don't display in eclipse consol ... check with terminal
 		{
-			if(row_pos <= header_nrows)
-			{
-				cout << "HEADER Line, IGNORED \n";
-			}else
-			{
-				cout << line << endl;
+			//line = line.erase(',');
+			//if(row_pos <= header_nrows)
+			//{
+			//	cout << "HEADER Line, IGNORED \n";
+			//}else
+
+				//cout << line << endl;
 				unsigned int col_pos = 1;
-				for(std::string::iterator it = line.begin(); it != line.end();it++) // Cette boucle ne fonctionne pas
-				{
-					//matrix (row_pos,col_pos) = *it;
-					col_pos++;
-					//test
-					cout << "char" + *it << endl;
-					//cout << matrix(row_pos,col_pos);
-				}
-			}
+				string temp_string = line;
+				//for(std::string::size_type i = 0; i < ss.length();i++) // Cette boucle ne fonctionne pas
+				for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it, ++col_pos)
+						{
+							if(*it == ','){continue;}
+							cout << "char is ";
+							//cout <<  *it << endl;
+							string temp_char(1,*it);
+							cout << stoi(temp_char) << endl;
+							//matrix (row_pos,col_pos) = std::stoi(temp_char); // TODO: enter value in matrix, not working atm
+						}
 			row_pos++;
 			cout << row_pos << endl;
 
 		}
-file_content.close();
+content.close();
 	}else
 	{
 		cerr << "error in file parsing \n";
-		exit(1);
+		exit(-1);
 	}
 };
 /*

@@ -17,8 +17,8 @@ using namespace std;
 int main()
 {
 	unsigned int header_nrows = 2;
-	unsigned int nrows = 15;
-	unsigned int ncols = 15;
+	unsigned int nrows = 100;
+	unsigned int ncols = 100;
 
 	Data_input test;
 	test.read(header_nrows,nrows,ncols);
