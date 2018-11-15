@@ -8,6 +8,8 @@
 import sys
 import numpy as np
 import re
+import sklearn
+from sklearn.linear_model import LogisticRegression
 
 from parameter_parsing import *
 
@@ -60,11 +62,18 @@ try:
 except TypeError:
 	number_control = int(input("enter the number of controls to simulate"))
 
+###Size of epistasia pattern
+try:
+	size_epistasia = int(args.get("pattern"))
+	print("Size of the epistasia pattern: ",size_epistasia)
+
+except TypeError:
+	size_epistasia = int(input("enter the size of the epistasia pattern"))
+
 #####################################################################
 #   						EXECUTION	 							#
 #####################################################################
-
-
+###Logistic Regression
 
 
 for i in range(1,number_file+1):
@@ -83,8 +92,10 @@ for i in range(1,number_file+1):
 	#Matrix random creation
 	matrix_case_geno = np.random.randint(low=0,high=3, size=(number_case, number_variable),dtype="int")
 	matrix_control_geno = np.random.randint(low=0,high=3, size=(number_control, number_variable))
-	matrix_case_pheno = np.random.randint(low=0,high=2, size=(number_case, 1))
-	matrix_control_pheno = np.random.randint(low=0,high=2, size=(number_control, 1))
+	
+
+	"""matrix_case_pheno = np.random.randint(low=0,high=2, size=(number_case, 1))
+	matrix_control_pheno = np.random.randint(low=0,high=2, size=(number_control, 1))""" #TODO: phenotypes will be obtained from logistic reg
 
 	#vstack will concatenate by rows case and control array
 	matrix_final_geno = np.vstack((matrix_case_geno,matrix_control_geno))

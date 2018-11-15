@@ -35,6 +35,8 @@ def argument_parsing():
     parser.add_argument('-nv','--variable', type=int, help='enter the number of variables to simulate')
     parser.add_argument('-nc','--case', type=int, help='enter the number of case to simulate')
     parser.add_argument('-no','--control', type=int, help='enter the number of controls to simulate')
+    parser.add_argument('-pa','--pattern', type=int, help='enter the size of the epistasia pattern')
+
     args = parser.parse_args()
 
     return args
