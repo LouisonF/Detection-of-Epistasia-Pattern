@@ -367,7 +367,7 @@ int main () {
     test = MChildren(0, 0);
 
     contingency_table(Mpop_pheno, test);
-
+ef
 }
 //Ma matrice de phénotypes est une matrice de matrice il faut que je la change en matrice d'entiers.
 
