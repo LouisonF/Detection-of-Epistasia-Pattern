@@ -4,14 +4,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../Parametersfileparsing.cpp \
 ../datainput.cpp \
 ../main_test.cpp 
 
 OBJS += \
+./Parametersfileparsing.o \
 ./datainput.o \
 ./main_test.o 
 
 CPP_DEPS += \
+./Parametersfileparsing.d \
 ./datainput.d \
 ./main_test.d 
 

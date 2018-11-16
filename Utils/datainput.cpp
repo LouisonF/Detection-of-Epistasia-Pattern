@@ -52,8 +52,7 @@ void Data_input::read()
 	{
 
 		string line = "";
-		while (getline(content,line)) //Work but don't display in eclipse console ... check with terminal
-		{
+		while (getline(content,line))
 
 			if(row_pos <= header_nrows)
 			{
