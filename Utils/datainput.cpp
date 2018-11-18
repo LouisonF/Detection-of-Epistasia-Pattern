@@ -76,15 +76,14 @@ void Data_input::read()
 			row_pos++;
 
 
-		}
-content.close();
 	}else
 	{
 		cerr << "error in file parsing \n";
 		exit(-1);
 	}
 	cout << matrix <<endl;
-};
+	content.close();
+}
 
 // This function count the number of rows in the input file
 unsigned int Data_input::count_rows()

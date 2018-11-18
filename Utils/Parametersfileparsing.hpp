@@ -18,11 +18,13 @@ public:
 	//Attributes are reachable from any other class
 	//parameters explanation are in the parameter file of SMMB-ACO
 	//Attributes
+	string file_path;
 	unsigned int header_nrows;
-	char sep;
-	unsigned float alpha;
+	string sep;
+	float alpha;
 	unsigned int number_smmbaco_runs;
-	unsigned float precision;
+	float precision;
+	unsigned int aco_set_size;
 	unsigned int number_aco_iter;
 	unsigned int number_ants;
 	unsigned int number_snp_per_ant;
@@ -38,18 +40,21 @@ public:
 	unsigned int aco_alpha;
 	unsigned int aco_beta;
 
+	string genos_file;
+	string phenos_file;
 	unsigned int n_mbs;
 
 	string geno_file;
 	string pheno_file;
 	//Methods
-	Parameters_file_parsing();
+	Parameters_file_parsing(const string);
 	virtual ~Parameters_file_parsing();
 	void Parsing();
-	void list_parameters() const;
-	void import_line(string const& line);
+	void list_parameters();
+	void import_line(string const line);
+	void update_subset_size_large(unsigned const n_genos);
 private:
-	vector<string> split(string const& s, char delim);
+	vector<string> split(string const s, char delim);
 };
 
 #endif /* PARAMETERSFILEPARSING_HPP_ */
