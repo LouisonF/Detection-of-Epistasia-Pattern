@@ -10,37 +10,46 @@
 using namespace std;
 
 typedef boost::numeric::ublas::matrix<int> int_matrix_type;
+typedef boost::numeric::ublas::matrix<float> float_matrix_type;
 typedef boost::numeric::ublas::matrix<int_matrix_type> matrix_of_int_matrix_type;
 
 
+//Hasard selection of solution to create the population
+int_matrix_type select_indiv(int_matrix_type Mgeno, int nb_sol){
+	int nb_indiv = Mgeno.size1();
+	int_matrix_type selected_indiv(nb_sol, 1);
+
+	for (int i = 0; i < nb_sol; i++){
+		selected_indiv(i, 0) = rand()%((nb_indiv));
+	}
+	return(selected_indiv);
+}
+
 //Methode initiation population(matrix of genomatrice de départ types, size of the population)
-matrix_of_int_matrix_type init_pop(int_matrix_type Mgeno, int_matrix_type Mpheno, int nb_sol){
+matrix_of_int_matrix_type init_pop(int_matrix_type Mgeno, int_matrix_type Selected_indiv, int nb_sol, int len_patern){
 
 
 	int nb_indiv = Mgeno.size1();
 	int nb_snp = Mgeno.size2();
 
-	int_matrix_type Mpop (nb_indiv, 3); //Matrix of a solution
+	int_matrix_type Mpop (nb_indiv, len_patern); //Matrix of a solution
 	int_matrix_type Mpop_pheno(nb_indiv, 1);
 
 	//Array of matrix = list of the solutions
-	matrix_of_int_matrix_type sol_list(2, nb_sol);
+	matrix_of_int_matrix_type sol_list(nb_sol, 1);
 
 	int nb_indiv_pop = Mpop.size1();
     //int nb_snp_pop = Mpop.size2();
-    int indiv_select;
-
 
     for (int i = 0; i < nb_sol; i++){
     	for (int j = 0; j < nb_indiv_pop; j++){
-        	indiv_select = rand()%((nb_indiv)); //Hasard selection of individus in the genotypes matrix
-        	Mpop (j, 0) = Mgeno(indiv_select, rand()%(nb_snp)); //hasard selection of 3 snp from an individu to forme the solution
-        	Mpop (j, 1) = Mgeno(indiv_select, rand()%(nb_snp));
-        	Mpop (j, 2) = Mgeno(indiv_select, rand()%(nb_snp));
-        	Mpop_pheno (j, 0) = Mpheno(indiv_select, 0);
+    		for (int k = 0; k < len_patern; k++){
+            	Mpop (j, k) = Mgeno(Selected_indiv(i, 0), rand()%(nb_snp)); //hasard selection of 3 snp from an individu to forme the solution
+            	Mpop (j, k) = Mgeno(Selected_indiv(i, 0), rand()%(nb_snp));
+            	Mpop (j, k) = Mgeno(Selected_indiv(i, 0), rand()%(nb_snp));
+    		}
     	}
-    	sol_list(0, i) = Mpop; //add the solution matrix in the list of solutions
-    	sol_list(1, i) = Mpop_pheno;
+    	sol_list(i, 0) = Mpop; //add the solution matrix in the list of solutions
     }
 
     return sol_list;
@@ -52,22 +61,22 @@ int_matrix_type parent_selection(matrix_of_int_matrix_type Mpop){
 
 
 	//Hasard selection of 2 pairs of prents
-	int parent1 = rand()%(Mpop.size2());
-	int parent2 = rand()%(Mpop.size2());
-	int parent3 = rand()%(Mpop.size2());
-	int parent4 = rand()%(Mpop.size2());
+	int parent1 = rand()%(Mpop.size1());
+	int parent2 = rand()%(Mpop.size1());
+	int parent3 = rand()%(Mpop.size1());
+	int parent4 = rand()%(Mpop.size1());
 
 	//Control if parents are not the same
 	while (parent2 == parent1){
-		parent2 = rand()%(Mpop.size2());
+		parent2 = rand()%(Mpop.size1());
 	}
 
 	while (parent3 == parent1 or parent3 == parent2){
-		parent3 = rand()%(Mpop.size2());
+		parent3 = rand()%(Mpop.size1());
 	}
 
 	while (parent4 == parent1 or parent4 == parent2 or parent4 == parent3){
-		parent4 = rand()%(Mpop.size2());
+		parent4 = rand()%(Mpop.size1());
 	}
 
 	int_matrix_type Mparents(1, 4);
@@ -86,18 +95,18 @@ matrix_of_int_matrix_type cross_sol(matrix_of_int_matrix_type Mpop, int_matrix_t
 
 	//first pair of parents
 	int_matrix_type MParent1(50, 2);
-	MParent1 = Mpop(0, Mparents(0, 0));
+	MParent1 = Mpop(Mparents(0, 0), 0);
 	cout << "parent 1 " << ":" << MParent1 << endl;
 	int_matrix_type MParent2(50, 2);
-	MParent2= Mpop(0, Mparents(0, 1));
+	MParent2= Mpop(Mparents(0, 1), 0);
 	cout << "parent 2 " << ":" << MParent2 << endl;
 
 	//second pair of parents
 	int_matrix_type MParent3(50, 2);
-	MParent3= Mpop(0, Mparents(0, 2));
+	MParent3= Mpop(Mparents(0, 2), 0);
 	cout << "parent 3 " << ":" << MParent3 << endl;
 	int_matrix_type MParent4(50, 2);
-	MParent4 = Mpop(0, Mparents(0, 3));
+	MParent4 = Mpop(Mparents(0, 3), 0);
 	cout << "parent 4 " << ":" << MParent4 << endl;
 
 	//Initialization of cut places in parents
@@ -275,12 +284,11 @@ matrix_of_int_matrix_type cross_sol(matrix_of_int_matrix_type Mpop, int_matrix_t
 
 
 //Fonction will compare children with parents and update the population
-void contingency_table(int_matrix_type MChildren_pheno,int_matrix_type MChildren_geno){
+float_matrix_type contingency_table(int_matrix_type MChildren_pheno,int_matrix_type MChildren_geno){
 
-
-	int_matrix_type table(2, 3);
+	float_matrix_type table(2, 3);
 	for (int i = 0; i < int(table.size1()); i++){
-		for (int j = 0; i < int(table.size2()); i++){
+		for (int j = 0; j < int(table.size2()); j++){
 			table(i, j) = 0;
 		}
 	}
@@ -310,10 +318,53 @@ void contingency_table(int_matrix_type MChildren_pheno,int_matrix_type MChildren
 			}
 		}
 	}
-	cout << "table contingence : " << table << endl;
-	//return(table);
+	return(table);
 }
 
+//Sum of a matrix's row
+float sum_row(int_matrix_type matrix, int row){
+	float sum = 0;
+	for (int i = 0; i < int(matrix.size2()); i++){
+		sum += matrix(row, i);
+	}
+	return(sum);
+}
+
+//sum of a matrix's column
+float sum_col(int_matrix_type matrix, int col){
+	float sum = 0;
+	for (int i = 0; i < int(matrix.size1()); i++){
+		sum += matrix(i, col);
+	}
+	return(sum);
+}
+
+
+//Calcul of a theorical contingency table from a contingency table
+// i,j = (sum row i * sum col j)/total
+float_matrix_type theorical_table(float_matrix_type table_cont){
+
+	float_matrix_type table_theo(2, 3);
+	float total = sum_row(table_cont, 0) + sum_row(table_cont, 1);
+	for (int i = 0; i < int(table_theo.size1()); i++){
+		for (int j = 0; j < int(table_theo.size2()); j++){
+			table_theo(i, j) = (sum_row(table_cont, i) * sum_col(table_cont, j))/total;
+		}
+	}
+	return(table_theo);
+}
+
+
+float chi2_calcul(float_matrix_type obs, float_matrix_type theo){
+
+	float chi2 = 0;
+	for (int i = 0; i < int(obs.size1()); i++){
+		for (int j = 0; j < int(obs.size2()); j++){
+			chi2 += pow((obs(i, j) - theo(i, j)), 2) / theo(i, j);
+		}
+	}
+	return (chi2);
+}
 
 
 int main () {
@@ -338,38 +389,54 @@ int main () {
 
     int nb_indiv_pop = 20;
 
-    matrix_of_int_matrix_type Mpop_pheno_geno(2, nb_indiv_pop);
-    Mpop_pheno_geno = init_pop(Mgeno, Mpheno, nb_indiv_pop);
+    int len_patern = 4; //Number of snp causal
 
-    matrix_of_int_matrix_type Mpop_geno(1, nb_indiv_pop);
-    int_matrix_type Mpop_pheno(1, nb_indiv_pop);
+    int_matrix_type Selected_indiv = select_indiv(Mgeno, nb_indiv_pop);
 
-    for (int i = 0; i < int(Mpop_pheno_geno.size2()); i++){
-    	Mpop_geno(0, i) = Mpop_pheno_geno(0, i);
+    matrix_of_int_matrix_type Mpop_geno(nb_indiv_pop, 1);
+    Mpop_geno = init_pop(Mgeno, Selected_indiv, nb_indiv_pop, len_patern);
+
+    int_matrix_type Mpop_pheno(nb_indiv_pop, 1);
+
+    for (int i = 0; i < nb_indiv_pop; i++){
+    	Mpop_pheno(i, 0) = Mpheno(Selected_indiv(i, 0), 0);
     }
 
-    for (int i = 0; i < int(Mpop_pheno_geno.size2()); i++){
-        	Mpop_pheno(0, i) = Mpop_pheno_geno(1, i);
-        }
-
     for (int i = 0; i < nb_indiv_pop; i++)
-    	cout << " genno solution " << i+1 << ":" << Mpop_geno(0, i) << endl;
+    	cout << " genno solution " << i+1 << ":" << Mpop_geno(i, 0) << endl;
     for (int i = 0; i < nb_indiv_pop; i++)
-    	cout << "pheno solution " << i+1 << ":" << Mpop_pheno(0, i) << endl;
+    	cout << "pheno solution " << i+1 << ":" << Mpop_pheno(i, 0) << endl;
 
 
-    int_matrix_type Mparents(1, 4);
-    Mparents = parent_selection(Mpop_geno);
+    int_matrix_type Parents(1, 4);
+    Parents = parent_selection(Mpop_geno);
 
-    matrix_of_int_matrix_type MChildren = cross_sol(Mpop_geno, Mparents);
-    int_matrix_type cont_table(2, 3);
-    int_matrix_type test(1, 1);
-    test = MChildren(0, 0);
+    matrix_of_int_matrix_type MChildren = cross_sol(Mpop_geno, Parents);
 
-    contingency_table(Mpop_pheno, test);
-ef
+    matrix_of_int_matrix_type MParents(1, 4);
+    for (int i = 0; i < int(MParents.size2()); i++){
+    	MParents(0, i) = Mpop_geno(Parents(0, i), 0);
+    }
+
+    float_matrix_type cont_table(2, 3);
+    float_matrix_type table_theo(2, 3);
+    float chi2_child;
+    float chi2_parent;
+
+    for (int i = 0; i < int(MChildren.size2()); i++){
+    	cont_table = contingency_table(Mpop_pheno, MChildren(0,i));
+    	table_theo = theorical_table(cont_table);
+    	chi2_child = chi2_calcul(cont_table, table_theo);
+    	cout << "enfant " << i << " : " << chi2_child << endl;
+    	cont_table = contingency_table(Mpop_pheno, MParents(0,i));
+    	table_theo = theorical_table(cont_table);
+    	chi2_parent = chi2_calcul(cont_table, table_theo);
+    	cout << "parent " << i << " : " << chi2_parent << endl;
+
+    	//Replace parent by child if child is a better solution
+    	if (chi2_child > chi2_parent){
+    		Mpop_geno(Parents(0, i), 0) = MChildren(0, i);
+    	}
+
+    }
 }
-//Ma matrice de phénotypes est une matrice de matrice il faut que je la change en matrice d'entiers.
-
-
-
