@@ -4,14 +4,17 @@
  *  Created on: 19 nov. 2018
  *      Author: courtin
  */
-
+#include "TypeDef.h"
 #include "Population.h"
 using namespace std;
 
-Population::Population(int_matrix_type Mgeno, int_matrix_type Mpheno, int len_pop, int len_patern) : Mgeno(Mgeno), Mpheno(Mpheno), len_pop(len_pop), len_patern(len_patern)
+Population::Population(int_matrix_type Mgeno, int_matrix_type Mpheno, int len_pop, int len_patern) : Mgeno(Mgeno), Mpheno(Mpheno), nb_sol(len_pop), len_patern(len_patern)
 {
-	nb_sol = len_pop;
+
 	nb_indiv = Mgeno.size1();
+	sol_selection();
+	init_pop_geno();
+	init_pop_pheno();
 
 }
 
@@ -35,15 +38,20 @@ void Population::init_pop_geno(){
 
 	int nb_indiv_pop = Msol_geno.size1();
 
+	int snp1;
+	int snp2;
+	int snp3;
+
     for (int i = 0; i < nb_sol; i++){
     	for (int j = 0; j < nb_indiv_pop; j++){
     		for (int k = 0; k < len_patern; k++){
-    			Msol_geno (j, k) = Mgeno(select_sol(i, 0), rand()%(nb_snp)); //hasard selection of 3 snp from an individu to forme the solution
-    			Msol_geno (j, k) = Mgeno(select_sol(i, 0), rand()%(nb_snp));
-    			Msol_geno (j, k) = Mgeno(select_sol(i, 0), rand()%(nb_snp));
+    			Msol_geno (j, k) = Mgeno(select_sol(i, 0), (snp1 = rand()%(nb_snp))); //hasard selection of 3 snp from an individu to form the solution
+    			Msol_geno (j, k) = Mgeno(select_sol(i, 0), (snp2 = rand()%(nb_snp)));
+    			Msol_geno (j, k) = Mgeno(select_sol(i, 0), (snp3 = rand()%(nb_snp)));
     		}
     	}
     	Mpop_geno(i, 0) = Msol_geno; //add the solution matrix in the list of solutions
+    	//Mpop_snp(i, 0);
     }
 }
 

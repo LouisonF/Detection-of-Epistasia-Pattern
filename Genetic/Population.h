@@ -11,19 +11,18 @@
 #include "TypeDef.h"
 
 class Population {
-protected:
+public:
 	int_matrix_type Mgeno;
 	int_matrix_type Mpheno;
-	int len_pop;
-	int len_patern;
 	int nb_sol;
+	int len_patern;
 	int nb_indiv;
 	int_matrix_type select_sol;
 	matrix_of_int_matrix_type Mpop_geno;
 	matrix_of_int_matrix_type Mpop_pheno;
 public:
 	Population(int_matrix_type, int_matrix_type, int, int);
-	virtual ~Population();
+	~Population();
 	void sol_selection();
 	void init_pop_geno();
 	void init_pop_pheno();

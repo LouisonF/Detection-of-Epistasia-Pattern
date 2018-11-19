@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+#include "Population.h"
 
 using namespace std;
 
@@ -415,7 +416,7 @@ int main () {
 
     int nb_indiv_pop = 20;
 
-    int len_patern = 4; //Number of snp causal
+    int len_patern = 3; //Number of snp causal
 
     int_matrix_type Selected_indiv = select_indiv(Mgeno, nb_indiv_pop);
 
@@ -426,7 +427,7 @@ int main () {
     Mpop_pheno = init_pop_pheno(Mpheno, Selected_indiv, nb_indiv_pop);
 
     for (int i = 0; i < nb_indiv_pop; i++)
-    	cout << " genno solution " << i+1 << ":" << Mpop_geno(i, 0) << endl;
+    	cout << " geno solution " << i+1 << ":" << Mpop_geno(i, 0) << endl;
     for (int i = 0; i < nb_indiv_pop; i++)
     	cout << "pheno solution " << i+1 << ":" << Mpop_pheno(i, 0) << endl;
 
@@ -473,3 +474,4 @@ int main () {
 
     }
 }
+//Ressortir chaque solution avec son score et évetuellment leur p value
