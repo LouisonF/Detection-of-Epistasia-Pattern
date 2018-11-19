@@ -107,17 +107,9 @@ void Parameters_file_parsing::import_line(string const line)
     {
     	max_trials_smmb = atoi(value.c_str());
     }
-    else if("max_learn_mb")
+    else if(key == "max_trials_learn_mb")
     {
     	max_trials_learn_mb = atoi(value.c_str());
-    }
-    else if(key == "gfile")
-    {
-    	genos_file =value;
-    }
-    else if(key == "pfile")
-    {
-    	phenos_file = value;
     }
     else if(key == "number_smmbaco_runs")
     {
@@ -129,7 +121,7 @@ void Parameters_file_parsing::import_line(string const line)
     }
     else if(key == "aco_set_size")
     {
-        aco_set_size = atoi(value.c_str());
+    	aco_set_size = atoi(value.c_str());
     }
     else if(key == "number_aco_iter")
     {
@@ -137,32 +129,32 @@ void Parameters_file_parsing::import_line(string const line)
     }
     else if(key == "aco_tau_init")
     {
-        aco_tau_init = atof(value.c_str());
+    	aco_tau_init = atof(value.c_str());
     }
     else if(key == "aco_rho")
     {
-        aco_rho = atof(value.c_str());
+    	aco_rho = atof(value.c_str());
     }
     else if(key == "aco_lambda")
     {
-        aco_lambda = atof(value.c_str());
+    	aco_lambda = atof(value.c_str());
     }
     else if(key == "aco_eta")
     {
-        aco_eta = atof(value.c_str());
+    	aco_eta = atof(value.c_str());
     }
     else if(key == "aco_alpha")
     {
-        aco_alpha = atof(value.c_str());
+    	aco_alpha = atof(value.c_str());
     }
     else if(key == "aco_beta")
     {
-        aco_beta = atof(value.c_str());
+    	aco_beta = atof(value.c_str());
     }
     else
     {
-    	cout << "parameter unknown, check Parametersfileparsing" <<endl;
-    };
+    	cout << "parameter unknown"<<endl;
+    }
 
     n_mbs = number_ants * number_aco_iter;
 }

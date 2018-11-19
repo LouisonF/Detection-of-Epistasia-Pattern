@@ -33,13 +33,13 @@ public:
 	unsigned int max_trials_smmb;
 	unsigned int max_trials_learn_mb;
 	//evaporation rate parameter
-	unsigned int aco_tau_init;
-	unsigned int aco_rho;
-	unsigned int aco_lambda;
+	float aco_tau_init;
+	float aco_rho;
+	float aco_lambda;
 	//Probability distribution parameter
-	unsigned int aco_eta;
-	unsigned int aco_alpha;
-	unsigned int aco_beta;
+	float aco_eta;
+	float aco_alpha;
+	float aco_beta;
 
 	string genos_file;
 	string phenos_file;
