@@ -1,0 +1,43 @@
+class matrice de départ{
+matrice de genotypes
+matrice de phenotypes
+}
+
+class population{
+int nombre de solutions
+matrice de genotypes solutions
+matrice de phenotypes solutions
+
+void afficher_matrice_geno()
+void afficher_matrice_pheno()
+}
+
+class parents : public population{
+constructeur : choisit des sol dans Population et crée une matrice de parents
+}
+
+class enfant : public population{
+
+}
+
+ne par faire une moyenne de la f measure ni du tempsd'execution. sortir les 100 à chaque fois.
+
+implémentation p(x) pour smmbaco a voir avec louisa et LA
+approche dichotomique, ne pas parcourir le vecteur trié on peut aller plus vite.
+
+Instancier plass pop pour voir i ça règle
+
+Refaire table contingence avec en colonnes les patterns possibles (0,0) (0,1), (1,1),......
+
+
+smmb aco :
+assoc_score :
+  on teste x1 par rapport au phénotype sachant la couverture en court U x2 x3
+  puis x2 puis x3
+  puis 2 ensembles pour chaque combinaison et 3 ensembles
+  savoir la combinaison qui retourne le max pour la mettre dans MB
+
+
+l68 G2 test indep pour générer table chi2 pvalue
+FAIRE UN G TEST PAS UN CHI2
+penser à la condition d'application du chi2
