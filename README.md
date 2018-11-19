@@ -1,0 +1,1 @@
+Detection of epistasia pattern with two different algorithms: Genetic Algorithm and SMMB-ACO algorithm.

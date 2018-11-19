@@ -20,3 +20,5 @@ DEBUT TODO:
  -ces snps vont avoir un impact important sur le phenotype.
 
 Le phenotype est donné par la regression logistique. Bs sont déterminés et x1 correspondent à la valeur du geno
+
+
