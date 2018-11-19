@@ -53,7 +53,7 @@ void Data_input::read()
 
 		string line = "";
 		while (getline(content,line))
-
+		{
 			if(row_pos <= header_nrows)
 			{
 				cout << "HEADER Line, IGNORED \n";
@@ -74,7 +74,7 @@ void Data_input::read()
 
 			}
 			row_pos++;
-
+		}
 
 	}else
 	{
