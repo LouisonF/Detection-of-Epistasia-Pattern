@@ -10,8 +10,13 @@
 #include "Population.h"
 
 class Parent : public Population{
+protected:
+	int_matrix_type Mparents;
+	matrix_of_int_matrix_type Mparents_geno;
+	matrix_of_int_matrix_type Mparents_pheno;
+
 public:
-	Parent();
+	Parent(matrix_of_int_matrix_type);
 	virtual ~Parent();
 };
 

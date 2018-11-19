@@ -9,7 +9,7 @@
 #define CHILD_H_
 #include "Population.h"
 
-class Child : public Population {
+class Child {
 public:
 	Child();
 	virtual ~Child();

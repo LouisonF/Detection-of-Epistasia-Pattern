@@ -1,3 +1,7 @@
+//courtin francois
+//fresnais louison
+//Projet algo genetic
+
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/array.hpp>
@@ -26,7 +30,7 @@ int_matrix_type select_indiv(int_matrix_type Mgeno, int nb_sol){
 }
 
 //Methode initiation population(matrix of genomatrice de départ types, size of the population)
-matrix_of_int_matrix_type init_pop(int_matrix_type Mgeno, int_matrix_type Selected_indiv, int nb_sol, int len_patern){
+matrix_of_int_matrix_type init_pop_geno(int_matrix_type Mgeno, int_matrix_type Selected_indiv, int nb_sol, int len_patern){
 
 
 	int nb_indiv = Mgeno.size1();
@@ -53,6 +57,30 @@ matrix_of_int_matrix_type init_pop(int_matrix_type Mgeno, int_matrix_type Select
     return sol_list;
 
 }
+
+
+matrix_of_int_matrix_type init_pop_pheno(int_matrix_type Mpheno, int_matrix_type Selected_indiv, int nb_sol){
+
+
+	int nb_indiv = Mpheno.size1();
+
+	int_matrix_type Mpop (nb_indiv, 1); //Matrix of a solution
+
+	matrix_of_int_matrix_type sol_list(nb_sol, 1);
+
+	int nb_indiv_pop = Mpop.size1();
+
+
+    for (int i = 0; i < nb_sol; i++){
+    	for (int j = 0; j < nb_indiv_pop; j++){
+            Mpop (j, 0) = Mpheno(j, 0);
+    	}
+    	sol_list(i, 0) = Mpop; //add the solution matrix in the list of solutions
+    }
+
+    return sol_list;
+}
+
 
 
 int_matrix_type parent_selection(matrix_of_int_matrix_type Mpop){
@@ -392,13 +420,10 @@ int main () {
     int_matrix_type Selected_indiv = select_indiv(Mgeno, nb_indiv_pop);
 
     matrix_of_int_matrix_type Mpop_geno(nb_indiv_pop, 1);
-    Mpop_geno = init_pop(Mgeno, Selected_indiv, nb_indiv_pop, len_patern);
+    Mpop_geno = init_pop_geno(Mgeno, Selected_indiv, nb_indiv_pop, len_patern);
 
-    int_matrix_type Mpop_pheno(nb_indiv_pop, 1);
-
-    for (int i = 0; i < nb_indiv_pop; i++){
-    	Mpop_pheno(i, 0) = Mpheno(Selected_indiv(i, 0), 0);
-    }
+    matrix_of_int_matrix_type Mpop_pheno(nb_indiv_pop, 1);
+    Mpop_pheno = init_pop_pheno(Mpheno, Selected_indiv, nb_indiv_pop);
 
     for (int i = 0; i < nb_indiv_pop; i++)
     	cout << " genno solution " << i+1 << ":" << Mpop_geno(i, 0) << endl;
@@ -409,11 +434,21 @@ int main () {
     int_matrix_type Parents(1, 4);
     Parents = parent_selection(Mpop_geno);
 
-    matrix_of_int_matrix_type MChildren = cross_sol(Mpop_geno, Parents);
+    matrix_of_int_matrix_type MChildren_geno = cross_sol(Mpop_geno, Parents);
 
-    matrix_of_int_matrix_type MParents(1, 4);
-    for (int i = 0; i < int(MParents.size2()); i++){
-    	MParents(0, i) = Mpop_geno(Parents(0, i), 0);
+    matrix_of_int_matrix_type MChildren_pheno(1, 4);
+    for (int i = 0; i < int(MChildren_pheno.size2()); i++){
+    	MChildren_pheno(0, i) = Mpop_pheno(Parents(0, i), 0);
+    }
+
+    matrix_of_int_matrix_type MParents_geno(1, 4);
+    for (int i = 0; i < int(MParents_geno.size2()); i++){
+    	MParents_geno(0, i) = Mpop_geno(Parents(0, i), 0);
+    }
+
+    matrix_of_int_matrix_type MParents_pheno(1, 4);
+    for (int i = 0; i < int(MParents_pheno.size2()); i++){
+    	MParents_pheno(0, i) = Mpop_pheno(Parents(0, i), 0);
     }
 
     float_matrix_type cont_table(2, 3);
@@ -421,19 +456,19 @@ int main () {
     float chi2_child;
     float chi2_parent;
 
-    for (int i = 0; i < int(MChildren.size2()); i++){
-    	cont_table = contingency_table(Mpop_pheno, MChildren(0,i));
+    for (int i = 0; i < int(MChildren_geno.size2()); i++){
+    	cont_table = contingency_table(MChildren_pheno(0,i), MChildren_geno(0,i));
     	table_theo = theorical_table(cont_table);
     	chi2_child = chi2_calcul(cont_table, table_theo);
     	cout << "enfant " << i << " : " << chi2_child << endl;
-    	cont_table = contingency_table(Mpop_pheno, MParents(0,i));
+    	cont_table = contingency_table(MParents_pheno(0,i), MParents_geno(0,i));
     	table_theo = theorical_table(cont_table);
     	chi2_parent = chi2_calcul(cont_table, table_theo);
     	cout << "parent " << i << " : " << chi2_parent << endl;
 
     	//Replace parent by child if child is a better solution
     	if (chi2_child > chi2_parent){
-    		Mpop_geno(Parents(0, i), 0) = MChildren(0, i);
+    		Mpop_geno(Parents(0, i), 0) = MChildren_geno(0, i);
     	}
 
     }

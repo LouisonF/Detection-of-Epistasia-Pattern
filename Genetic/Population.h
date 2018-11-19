@@ -12,14 +12,21 @@
 
 class Population {
 protected:
+	int_matrix_type Mgeno;
+	int_matrix_type Mpheno;
+	int len_pop;
+	int len_patern;
 	int nb_sol;
 	int nb_indiv;
 	int_matrix_type select_sol;
 	matrix_of_int_matrix_type Mpop_geno;
-	int_matrix_type Mpop_pheno;
+	matrix_of_int_matrix_type Mpop_pheno;
 public:
-	Population(matrix_of_int_matrix_type, int_matrix_type, int, int);
+	Population(int_matrix_type, int_matrix_type, int, int);
 	virtual ~Population();
+	void sol_selection();
+	void init_pop_geno();
+	void init_pop_pheno();
 	void display_geno_sol();
 	void display_pheno_sol();
 };
