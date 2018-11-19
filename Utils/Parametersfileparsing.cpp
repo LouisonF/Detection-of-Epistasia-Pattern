@@ -2,11 +2,11 @@
  * Parametersfileparsing.cpp
  *
  *  Created on: 16 nov. 2018
- *      Author: Louison Fresnais, François Courtin
+ *      Author: Louison Fresnais, François Courtin M2BB
  *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
  *      Under the supervision of Christine Sinoquet(Nantes University)
  *      Most of this code is from the SMMB-ACO implementation from Clément Niel
- *  Modified on: 18 nov. 2018
+ *  Modified on: 19 nov. 2018
  */
 
 #include "Parametersfileparsing.hpp"
@@ -203,16 +203,4 @@ void Parameters_file_parsing::list_parameters()
     << "#################################" << endl;
 }
 
-//=================================================
-// Parameters_file_parsing : update_subset_size_large
-//=================================================
-//Method from Clément Niel's code
-/*
-void Parameters_file_parsing::update_subset_size_large(unsigned const n_genos)
-{
-    if(number_snp_per_ant == 0)
-    {
-    	number_snp_per_ant = sqrt(n_genos);
-    }
-}*/
 

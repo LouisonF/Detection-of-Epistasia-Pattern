@@ -2,8 +2,11 @@
  * Parametersfileparsing.hpp
  *
  *  Created on: 16 nov. 2018
- *      Author: Louison Fresnais, François Courtin
+ *      Author: Louison Fresnais, François Courtin M2BB
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  *      Most of this code is from the SMMB-ACO implementation from Clément Niel
+ *   Modified on: 19 nov 2018
  */
 
 #ifndef PARAMETERSFILEPARSING_HPP_
@@ -53,7 +56,6 @@ public:
 	void Parsing();
 	void list_parameters();
 	void import_line(string const line);
-	void update_subset_size_large(unsigned const n_genos);
 private:
 	vector<string> split(string const s, char delim);
 };

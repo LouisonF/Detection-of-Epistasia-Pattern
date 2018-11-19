@@ -2,7 +2,10 @@
  * datainput.h
  *
  *  Created on: 9 nov. 2018
- *      Author: louison
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *  Modified on: 19 nov 2018
  */
 
 #ifndef DATAINPUT_HPP_

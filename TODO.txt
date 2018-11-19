@@ -22,3 +22,52 @@ DEBUT TODO:
 Le phenotype est donné par la regression logistique. Bs sont déterminés et x1 correspondent à la valeur du geno
 
 
+
+On veut s'arranger pour tirer uniformément sur tous les patterns qui rendent malade et non malade.
+
+On tire 50%malade et 50%non malade
+
+En simulation naive, il faut que l'on simule toute les configurations qui rendent non malade 
+
+pour les f-measures:
+
+fonction qui utilise le nombre de FP,FN et TP.
+
+On ne fait pas de moyenne, la sortie doit-être un ensemble des 100 résultats(100 pow ou 100f-measures)
+Il faut 100 executions pour 100 fichiers à cause de ce calcul. 
+Pour la durée d'exectuion, on prends le temps à chaque execution (10 000 executions).
+
+Pour SMMB-ACO: 
+
+Faire attention sur la méthode de calcul de p(x).
+Il faut le traiter avec de l'approche dichtomique pour aller plus vite.
+
+Ajouter une condition au test: si la matrice contient trop de zéros, on ne peux pas faire le test. 
+								prendre une décision en prenant le cas ou le choix à le moins d'impact.
+
+
+pour assoc-score (score qui maximise): 
+(calculer la dépendance par rapport au phenotype)
+	on considère toutes les sous combinaisonts d'un pattern.
+	Calcul de X1 conditionnellement au phenotype contre la markov blanket
+	Pour X1X2: X1 indépendant de P conditionnellement au phenotype contre MB{X2}
+			   X2 indépendant de P conditionnellement au phénotype contre MB{X1}
+Esnuite on regarde qui retourne le maximum.
+
+Pour l'algo Genetic: 
+
+Sur un patternn d'epistasie de taille2: 
+on a 9 tableau de contingence de taille 2/9 sur lequel on a un chi2.
+pour calculer la p-value, générer une distribution de chi2
+
+table de contingence en 2/3: uniquement pour SMMB-ACO indépendance conditionnelle
+Tous les autres, G2-test non conditionnelle.
+Eliminer les enfants de 4.
+
+
+Le G test doit être sommé sur les cases non nulles, si contenu de case inférieur à 5, on ajoute pas (implémenter mais ne pas activer).
+
+
+Pour les input: 
+
+Il faut aussi faire un vecteur qui contient les noms des SNP en fonction de leur position dans le fichier pour pouvoir ressortir les noms des SNP lors des résultats.
