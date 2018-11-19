@@ -3,7 +3,10 @@
  *
  *  Created on: 16 nov. 2018
  *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  *      Most of this code is from the SMMB-ACO implementation from Clément Niel
+ *  Modified on: 18 nov. 2018
  */
 
 #include "Parametersfileparsing.hpp"
@@ -42,7 +45,9 @@ void Parameters_file_parsing::Parsing()
 		{
             if (line.length() != 0 && line[0] != '#')
             {
-                import_line(line);
+                cout<<"current line";
+                cout<<line<<endl;
+            	import_line(line);
             }
         }
     }
@@ -63,6 +68,11 @@ void Parameters_file_parsing::import_line(string const line)
     string const key = token[0];
     string  value = token[1];
 
+    cout << "key is";
+    cout << key<<endl;
+    cout << "value is";
+    cout << value.c_str()<< endl;
+
     if(key == "header_nrows")
     {
     	header_nrows = atoi(value.c_str());
@@ -81,6 +91,10 @@ void Parameters_file_parsing::import_line(string const line)
     {
     	alpha = atof(value.c_str());
     }
+    else if(key == "number_snp_per_ant")
+    {
+    	number_snp_per_ant = atoi(value.c_str());
+    }
     else if(key == "precision")
     {
     	precision = atof(value.c_str());
@@ -93,7 +107,7 @@ void Parameters_file_parsing::import_line(string const line)
     {
     	max_trials_smmb = atoi(value.c_str());
     }
-    else if(max_trials_learn_mb)
+    else if("max_learn_mb")
     {
     	max_trials_learn_mb = atoi(value.c_str());
     }
@@ -182,6 +196,18 @@ void Parameters_file_parsing::list_parameters()
     << "smallest_subset_size => " << smallest_subset_size << endl
     << "max_trials_smmb => " << max_trials_smmb << endl
     << "max_trials_learn_mb => " << max_trials_learn_mb << endl
+	<< "genos_file => " << genos_file << endl
+	<< "phenos_file => "<< phenos_file <<endl
+	<< "number_smmbaco_runs =>" << number_smmbaco_runs <<endl
+	<< "number_ants =>" << number_ants <<endl
+	<< "aco_set_size =>" << aco_set_size <<endl
+	<< "number_aco_iter =>" << number_aco_iter <<endl
+	<< "aco_tau_init => " << aco_tau_init <<endl
+	<< "aco_rho => " << aco_rho <<endl
+	<< "aco_lambda => " << aco_lambda <<endl
+	<< "aco_eta => " << aco_eta <<endl
+	<< "aco_alpha => " << aco_alpha <<endl
+	<< "aco_beta => " << aco_beta <<endl
     << "#################################" << endl;
 }
 
@@ -189,11 +215,12 @@ void Parameters_file_parsing::list_parameters()
 // Parameters_file_parsing : update_subset_size_large
 //=================================================
 //Method from Clément Niel's code
+/*
 void Parameters_file_parsing::update_subset_size_large(unsigned const n_genos)
 {
     if(number_snp_per_ant == 0)
     {
     	number_snp_per_ant = sqrt(n_genos);
     }
-}
+}*/
 

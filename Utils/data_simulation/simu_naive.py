@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 #-*-coding: utf-8-*-
-#pas de shebang pour pouvoir lancer dans l'environnement conda, mettre python devant le ./file_to_launch
+# In order to launch the script in a conda environment, use this call: " Python ./file_to_launch"
 # Louison Fresnais M2BB
 # François Courtin M2BB
 

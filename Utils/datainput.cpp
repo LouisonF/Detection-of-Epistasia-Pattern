@@ -27,7 +27,7 @@ Data_input::Data_input(const string filename, char sep, const unsigned int heade
 	nrows = count_rows() - header_nrows;
 	ncols = count_cols();
 
-	//bool transpose = false; Temporary, removed when i'll decide if i add the transpose mode or not.
+	//bool transpose = false; Temporary, removed when I'll decide if I add the transpose mode or not.
 
 
 }

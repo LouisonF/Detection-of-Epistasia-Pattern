@@ -2,7 +2,8 @@
  * Parametersfileparsing.hpp
  *
  *  Created on: 16 nov. 2018
- *      Author: louison
+ *      Author: Louison Fresnais, François Courtin
+ *      Most of this code is from the SMMB-ACO implementation from Clément Niel
  */
 
 #ifndef PARAMETERSFILEPARSING_HPP_
