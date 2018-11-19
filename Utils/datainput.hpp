@@ -22,34 +22,9 @@ class Data_input {
 public:
 Data_input(const string filename, char sep, const unsigned int header_nrows);
 ~Data_input();
-    /*!
-     * \brief Get the imported matrix
-     * \return Imported Matrix
-     */
-    blas::matrix<int> data();
-
-    /*!
-     * \brief Count rows in the CSV file
-     * \return Row count
-     */
-    unsigned int count_rows( );
-
-    /*!
-     * \brief Count cols in the CSV file
-     * \return Column count
-     */
-    unsigned int count_cols( );
-
-    /*!
-     * \brief Import the CSV data in _matrix (Matrix<T> class)
-     */
-    void read(); //A changer
-
-    /*!
-     * \brief Transpose and import the CSV data in _matrix (Matrix<T> class)
-     */
-    void read_transpose();
-
+void read();
+unsigned int count_rows();
+unsigned int count_cols();
 
 private:
     string filename;
