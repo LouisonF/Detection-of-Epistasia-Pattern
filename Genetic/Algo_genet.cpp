@@ -33,8 +33,6 @@ matrix_of_int_matrix_type init_pop(int_matrix_type Mgeno, int_matrix_type Select
 	int nb_snp = Mgeno.size2();
 
 	int_matrix_type Mpop (nb_indiv, len_patern); //Matrix of a solution
-	int_matrix_type Mpop_pheno(nb_indiv, 1);
-
 	//Array of matrix = list of the solutions
 	matrix_of_int_matrix_type sol_list(nb_sol, 1);
 
