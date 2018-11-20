@@ -436,7 +436,7 @@ Population.o: ../Population.cpp ../TypeDef.h \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/core/swap.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/detail/iterator.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp \
- ../Population.h
+ ../Population.h ../InitialMatrix.h
 
 ../TypeDef.h:
 
@@ -1315,3 +1315,5 @@ Population.o: ../Population.cpp ../TypeDef.h \
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp:
 
 ../Population.h:
+
+../InitialMatrix.h:

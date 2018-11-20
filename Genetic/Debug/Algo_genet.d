@@ -436,7 +436,7 @@ Algo_genet.o: ../Algo_genet.cpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/core/swap.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/detail/iterator.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp \
- ../Population.h ../TypeDef.h
+ ../InitialMatrix.h ../TypeDef.h ../Population.h ../Parent.h
 
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/numeric/ublas/matrix.hpp:
 
@@ -1312,6 +1312,10 @@ Algo_genet.o: ../Algo_genet.cpp \
 
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp:
 
-../Population.h:
+../InitialMatrix.h:
 
 ../TypeDef.h:
+
+../Population.h:
+
+../Parent.h:

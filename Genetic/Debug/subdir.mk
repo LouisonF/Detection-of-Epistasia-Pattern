@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../InitialMatrix.cpp \
 ../Parent.cpp \
 ../Population.cpp \
+../old_algo.cpp \
 ../test.cpp 
 
 OBJS += \
@@ -17,6 +18,7 @@ OBJS += \
 ./InitialMatrix.o \
 ./Parent.o \
 ./Population.o \
+./old_algo.o \
 ./test.o 
 
 CPP_DEPS += \
@@ -25,6 +27,7 @@ CPP_DEPS += \
 ./InitialMatrix.d \
 ./Parent.d \
 ./Population.d \
+./old_algo.d \
 ./test.d 
 
 

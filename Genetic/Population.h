@@ -9,25 +9,19 @@
 #define POPULATION_H_
 
 #include "TypeDef.h"
+#include "InitialMatrix.h"
 
-class Population {
+class Population : public InitialMatrix {
 public:
-	int_matrix_type Mgeno;
-	int_matrix_type Mpheno;
 	int nb_sol;
-	int len_patern;
-	int nb_indiv;
-	int_matrix_type select_sol;
-	matrix_of_int_matrix_type Mpop_geno;
-	matrix_of_int_matrix_type Mpop_pheno;
+	int len_pattern;
+	int_matrix_type Mpop_geno;
 public:
 	Population(int_matrix_type, int_matrix_type, int, int);
 	~Population();
 	void sol_selection();
 	void init_pop_geno();
-	void init_pop_pheno();
 	void display_geno_sol();
-	void display_pheno_sol();
 };
 
 #endif /* POPULATION_H_ */

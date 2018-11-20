@@ -9,18 +9,17 @@
 #define PARENT_H_
 #include "Population.h"
 
-class Parent {
-public:
+class Parent : public Population {
 
-	matrix_of_int_matrix_type Mpop_geno;
-	matrix_of_int_matrix_type Mpop_pheno;
+protected:
+	int nb_parents;
 	int_matrix_type Mparents;
-	matrix_of_int_matrix_type MParents_geno;
-	matrix_of_int_matrix_type MParents_pheno;
 
-
-	Parent(matrix_of_int_matrix_type, matrix_of_int_matrix_type);
+public :
+	Parent(int_matrix_type, int_matrix_type, int, int, int);
 	~Parent();
+	void parents_selection();
+	void display_parents();
 };
 
 #endif /* PARENT_H_ */

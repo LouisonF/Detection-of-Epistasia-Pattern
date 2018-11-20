@@ -1,4 +1,4 @@
-Child.o: ../Child.cpp ../Child.h ../Population.h ../TypeDef.h \
+old_algo.o: ../old_algo.cpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/numeric/ublas/matrix.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/config.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/config/user.hpp \
@@ -436,13 +436,7 @@ Child.o: ../Child.cpp ../Child.h ../Population.h ../TypeDef.h \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/core/swap.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/detail/iterator.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp \
- ../InitialMatrix.h
-
-../Child.h:
-
-../Population.h:
-
-../TypeDef.h:
+ ../Population.h ../TypeDef.h ../InitialMatrix.h
 
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/numeric/ublas/matrix.hpp:
 
@@ -1317,5 +1311,9 @@ Child.o: ../Child.cpp ../Child.h ../Population.h ../TypeDef.h \
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/detail/iterator.hpp:
 
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp:
+
+../Population.h:
+
+../TypeDef.h:
 
 ../InitialMatrix.h:
