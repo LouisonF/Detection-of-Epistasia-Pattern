@@ -12,7 +12,7 @@
 using namespace std;
 
 class InitialMatrix {
-protected :
+public:
 	int_matrix_type Mgeno;
 	int_matrix_type Mpheno;
 public:

@@ -1,0 +1,51 @@
+/*
+ * TheoricalTable.cpp
+ *
+ *  Created on: 21 nov. 2018
+ *      Author: courtin
+ */
+
+#include "TheoricalTable.h"
+
+TheoricalTable::TheoricalTable(int len_pattern, int_matrix_type cont_table) : len_pattern(len_pattern), cont_table(cont_table){
+	if (len_pattern == 2)
+		nb_col = 9;
+	if (len_pattern == 3)
+		nb_col = 27;
+	int_matrix_type theo_table_temp(2, nb_col);
+	theo_table = theo_table_temp;
+
+}
+
+TheoricalTable::~TheoricalTable() {
+	// TODO Auto-generated destructor stub
+}
+
+float TheoricalTable::sum_row(int row){
+	float sum = 0;
+	for (int i = 0; i < nb_col; i++){
+		sum += cont_table(row, i);
+	}
+	return(sum);
+}
+
+float TheoricalTable::sum_col(int col){
+	float sum = 0;
+	for (int i = 0; i < cont_table.size1(); i++){
+		sum += cont_table(i, col);
+	}
+	return(sum);
+}
+void TheoricalTable::set_table(){
+	float total = sum_row(0) + sum_row(1);
+	for (int i = 0; i < int(theo_table.size1()); i++){
+		for (int j = 0; j < int(theo_table.size2()); j++){
+			theo_table(i, j) = (sum_row(i) * sum_col(j))/total;
+		}
+	}
+}
+
+
+void TheoricalTable::display_table(){
+	cout << "Theorical table : " << theo_table << endl;
+}

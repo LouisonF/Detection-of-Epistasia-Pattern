@@ -6,27 +6,33 @@
 CPP_SRCS += \
 ../Algo_genet.cpp \
 ../Child.cpp \
+../ContingencyTable.cpp \
 ../InitialMatrix.cpp \
 ../Parent.cpp \
 ../Population.cpp \
+../TheoricalTable.cpp \
 ../old_algo.cpp \
 ../test.cpp 
 
 OBJS += \
 ./Algo_genet.o \
 ./Child.o \
+./ContingencyTable.o \
 ./InitialMatrix.o \
 ./Parent.o \
 ./Population.o \
+./TheoricalTable.o \
 ./old_algo.o \
 ./test.o 
 
 CPP_DEPS += \
 ./Algo_genet.d \
 ./Child.d \
+./ContingencyTable.d \
 ./InitialMatrix.d \
 ./Parent.d \
 ./Population.d \
+./TheoricalTable.d \
 ./old_algo.d \
 ./test.d 
 
