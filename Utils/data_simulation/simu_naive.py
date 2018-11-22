@@ -6,6 +6,8 @@
 
 import sys
 import re
+import os
+
 
 from parameter_parsing import *
 from logistic_model import *
@@ -63,9 +65,13 @@ except TypeError:
 try:
     size_epistasia = int(args.get("pattern"))
     print("Size of the epistasia pattern: ",size_epistasia)
+    if number_variable <= size_epistasia:
+        number_variable = int(input("the pattern size must be greater than the number of variable, enter a new variable number  "))
 
 except TypeError:
     size_epistasia = int(input("enter the size of the epistasia pattern"))
+    if number_variable <= size_epistasia:
+        number_variable = int(input("the pattern size must be greater than the number of variable, enter a new variable number "))
 
 #####################################################################
 #                           EXECUTION                                 #
@@ -84,6 +90,16 @@ determination_th = determination_th(all_combinations,0.1)
 
 #Will provide a list of list of betas for the logit model
 logit_list = fit_relevant_logit(size_epistasia,all_combinations,determination_th,max_iter)
+
+
+#Folder creation with a bash command
+try:
+    folder = str(prefix+"_all_files")
+    os.mkdir(folder)
+except FileExistsError:
+        folder = str(prefix+"_all_files"+str(np.random.randint(low=1,high=10000,size=(1))))
+        os.mkdir(folder)
+
 
 #This loop will determine the number of file for a run(with the same logit model)
 for i in range(1,number_file+1):
@@ -138,9 +154,9 @@ for i in range(1,number_file+1):
     matrix_ready_save = np.vstack((matrix_final_geno_case,matrix_final_geno_control))
 
     #save the simulated genotype data file
-    np.savetxt(geno_file_name,np.r_[[matrix_genotype_ID], matrix_ready_save], fmt='%s', delimiter=',')
+    np.savetxt(folder+"/"+geno_file_name,np.r_[[matrix_genotype_ID], matrix_ready_save], fmt='%s', delimiter=',')
     header_pheno_file=["Class"]
     #concatenate pheno matrix
     matrix_final_pheno = np.hstack((matrix_phenotype_case,matrix_phenotype_control))
     #save the simulated phenotype data file
-    np.savetxt(pheno_file_name,np.r_[header_pheno_file,matrix_final_pheno], fmt='%s', delimiter=',')
+    np.savetxt(folder+"/"+pheno_file_name,np.r_[header_pheno_file,matrix_final_pheno], fmt='%s', delimiter=',')
