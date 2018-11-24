@@ -12,7 +12,7 @@
 using namespace std;
 
 class ContingencyTable {
-public:
+private:
 	int len_pattern;
 	int nb_col;
 	vector<string> list_pattern;
@@ -26,6 +26,7 @@ public:
 	void set_pattern_list();
 	void set_table();
 	void display_table();
+	int_matrix_type get_cont_table();
 };
 
 #endif /* CONTINGENCYTABLE_H_ */

@@ -8,10 +8,7 @@
 #include "TheoricalTable.h"
 
 TheoricalTable::TheoricalTable(int len_pattern, int_matrix_type cont_table) : len_pattern(len_pattern), cont_table(cont_table){
-	if (len_pattern == 2)
-		nb_col = 9;
-	if (len_pattern == 3)
-		nb_col = 27;
+	nb_col = pow(3, len_pattern);
 	int_matrix_type theo_table_temp(2, nb_col);
 	theo_table = theo_table_temp;
 
@@ -48,4 +45,8 @@ void TheoricalTable::set_table(){
 
 void TheoricalTable::display_table(){
 	cout << "Theorical table : " << theo_table << endl;
+}
+
+int_matrix_type TheoricalTable::get_theo_table(){
+	return(theo_table);
 }

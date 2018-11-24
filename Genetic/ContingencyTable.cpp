@@ -9,10 +9,7 @@
 #include <string>
 
 ContingencyTable::ContingencyTable(int_matrix_type Mgeno, int_matrix_type Mpheno, int_matrix_type Msol_geno, int len_pattern) : len_pattern(len_pattern), Mgeno(Mgeno), Mpheno(Mpheno), Msol_geno(Msol_geno){
-	if (len_pattern == 2)
-		nb_col = 9;
-	if (len_pattern == 3)
-		nb_col = 27;
+	nb_col = pow(3, len_pattern);
 	list_pattern = {};
 	int_matrix_type table_cont_temp(2, nb_col);
 	cont_table = table_cont_temp;
@@ -77,4 +74,8 @@ int index;
 
 void ContingencyTable::display_table(){
 	cout << "contingency table : " << cont_table << endl;
+}
+
+int_matrix_type ContingencyTable::get_cont_table(){
+	return(cont_table);
 }

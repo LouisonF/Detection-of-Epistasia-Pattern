@@ -12,7 +12,7 @@
 #include "InitialMatrix.h"
 
 class Population : public InitialMatrix {
-public:
+protected:
 	int nb_sol;
 	int len_pattern;
 	int_matrix_type Mpop_geno;
@@ -22,6 +22,7 @@ public:
 	void sol_selection();
 	void init_pop_geno();
 	void display_geno_sol();
+	int_matrix_type get_Mpop_geno();
 };
 
 #endif /* POPULATION_H_ */

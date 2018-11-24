@@ -24,6 +24,7 @@ public:
 	float sum_col(int);
 	void set_table();
 	void display_table();
+	int_matrix_type get_theo_table();
 };
 
 #endif /* THEORICALTABLE_H_ */

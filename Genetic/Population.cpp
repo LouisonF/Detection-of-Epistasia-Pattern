@@ -50,3 +50,7 @@ void Population::display_geno_sol(){
 	cout << " population : " << Mpop_geno << endl;
 }
 
+int_matrix_type Population::get_Mpop_geno(){
+	return(Mpop_geno);
+}
+

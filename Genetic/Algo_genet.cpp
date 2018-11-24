@@ -15,6 +15,7 @@
 #include "Parent.h"
 #include "ContingencyTable.h"
 #include "TheoricalTable.h"
+#include "G2test.h"
 
 
 using namespace std;
@@ -48,25 +49,34 @@ int main () {
 	population.display_pheno();
 	population.init_pop_geno();
 	population.display_geno_sol();
-	Parent parents(Mgeno, Mpheno, len_pop, len_pattern, nb_parents);
-	parents.parents_selection();
-	parents.display_parents();
 
-	int_matrix_type Msol_geno(1, len_pattern);
-
+	int_matrix_type Msol_geno(1, len_pattern); //temp solution for the loop
+	vector<float> G2_res;
+	vector<float> pval_res;
 
 	for (int i = 0; i < len_pop; i++){
 		for (int j = 0; j < len_pattern; j++){
-			Msol_geno(0, j) = population.Mpop_geno(i, j);
+			Msol_geno(0, j) = population.get_Mpop_geno()(i, j);
 		}
 		ContingencyTable cont_table(Mgeno, Mpheno, Msol_geno, len_pattern);
 		cont_table.set_pattern_list();
 		cont_table.set_table();
 		cont_table.display_table();
 
-		TheoricalTable theo_table(len_pattern, cont_table.cont_table);
+		TheoricalTable theo_table(len_pattern, cont_table.get_cont_table());
 		theo_table.set_table();
 		theo_table.display_table();
+
+		G2test G2(cont_table.get_cont_table(), theo_table.get_theo_table());
+		G2.run_G2();
+		G2.display_g2();
+		G2_res.push_back(G2.get_g2());
+		pval_res.push_back(G2.get_pval());
 	}
+	vector<float> oui = sort(G2_res.begin(), G2_res.end());
+	Parent parents(Mgeno, Mpheno, len_pop, len_pattern, nb_parents);
+	parents.parents_selection();
+	parents.display_parents();
 }
-//Ressortir chaque solution avec son score et évetuellment leur p value
+//Calculer ma médiane depuis le vecteur trié, faire la sélection des parents sur des valeurs uniquement au dessus de cette médiane.
+//Verifier si sort trie bien en croissant.

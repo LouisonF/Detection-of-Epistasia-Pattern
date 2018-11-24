@@ -7,6 +7,7 @@ CPP_SRCS += \
 ../Algo_genet.cpp \
 ../Child.cpp \
 ../ContingencyTable.cpp \
+../G2test.cpp \
 ../InitialMatrix.cpp \
 ../Parent.cpp \
 ../Population.cpp \
@@ -18,6 +19,7 @@ OBJS += \
 ./Algo_genet.o \
 ./Child.o \
 ./ContingencyTable.o \
+./G2test.o \
 ./InitialMatrix.o \
 ./Parent.o \
 ./Population.o \
@@ -29,6 +31,7 @@ CPP_DEPS += \
 ./Algo_genet.d \
 ./Child.d \
 ./ContingencyTable.d \
+./G2test.d \
 ./InitialMatrix.d \
 ./Parent.d \
 ./Population.d \
