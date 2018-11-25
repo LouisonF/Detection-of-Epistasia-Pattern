@@ -7,9 +7,18 @@
 
 #include "SmmbACO.hpp"
 
-Smmb_ACO::Smmb_ACO() {
-	// TODO Auto-generated constructor stub
+#include "Parametersfileparsing.hpp" // This include does not work, because it comes from a different project ... TODO
 
+
+using namespace std;
+
+Smmb_ACO::Smmb_ACO()
+{
+	//TODO Comment  passer un nom de fichier de paramètre sans le rentrer en dur ? Dans le script d'appel ?
+	file_path = 'SMMB-ACO-parameters.txt';
+	Parameters_file_parsing params(file_path);
+	params.Parsing();
+	params.list_parameters();
 }
 
 Smmb_ACO::~Smmb_ACO() {
@@ -17,6 +26,15 @@ Smmb_ACO::~Smmb_ACO() {
 }
 
 /*Tentative de définition de la marche à suivre ... */
+
+void Smmb_ACO::run_aco()
+{
+	/*for(unsigned number_aco_it=0; number_aco_it<params.number_aco_iter; number_aco_it++)
+	{
+		cout << number_aco_it; //TODO: params instance is not declared in this scope. error in the constructor apparently.
+
+	}*/
+}
 
 //BOUCLE FOR QUI FAIT TOURNER LA SMMB AVEC NMAX = LE NOMBRE D ITERATION
 

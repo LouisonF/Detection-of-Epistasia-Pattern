@@ -6,7 +6,7 @@
  */
 
 #include "Miscellaneous.hpp"
-#include <fstream>
+using namespace std;
 
 Miscellaneous::Miscellaneous() {
 	// TODO Auto-generated constructor stub

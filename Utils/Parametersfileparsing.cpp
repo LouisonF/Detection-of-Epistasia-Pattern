@@ -19,7 +19,9 @@
 #include <cstdlib>
 #include <cmath>
 #include <string>
+
 using namespace std;
+
 Parameters_file_parsing::Parameters_file_parsing(const string file_path): file_path(file_path)
 {
 
@@ -202,5 +204,3 @@ void Parameters_file_parsing::list_parameters()
 	<< "aco_beta => " << aco_beta <<endl
     << "#################################" << endl;
 }
-
-

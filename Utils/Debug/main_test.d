@@ -1,6 +1,7 @@
-main_test.o: ../main_test.cpp ../datainput.hpp \
- ../Parametersfileparsing.hpp
+main_test.o: ../main_test.cpp \
+ /home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils/includes/datainput.hpp \
+ /home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils/includes/Parametersfileparsing.hpp
 
-../datainput.hpp:
+/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils/includes/datainput.hpp:
 
-../Parametersfileparsing.hpp:
+/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils/includes/Parametersfileparsing.hpp:

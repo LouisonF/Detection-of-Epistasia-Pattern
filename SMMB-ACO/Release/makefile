@@ -37,19 +37,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: Utils
+all: SMMB-ACO
 
 # Tool invocations
-Utils: $(OBJS) $(USER_OBJS)
+SMMB-ACO: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils/includes -o "Utils" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++  -o "SMMB-ACO" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) Utils
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) SMMB-ACO
 	-@echo ' '
 
 .PHONY: all clean dependents

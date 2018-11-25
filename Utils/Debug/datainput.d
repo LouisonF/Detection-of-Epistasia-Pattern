@@ -1,3 +1,4 @@
-datainput.o: ../datainput.cpp ../datainput.hpp
+datainput.o: ../datainput.cpp \
+ /home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils/includes/datainput.hpp
 
-../datainput.hpp:
+/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils/includes/datainput.hpp:
