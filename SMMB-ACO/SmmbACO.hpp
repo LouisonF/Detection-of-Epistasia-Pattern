@@ -10,16 +10,24 @@
 
 #include "Parametersfileparsing.hpp"
 #include "datainput.hpp"
+#include <ctime>
+#include <libgen.h> //Needed to use basename
+
+
+
 
 using namespace std;
 
 class Smmb_ACO {
 public:
-	Smmb_ACO();
+	Smmb_ACO(Parameters_file_parsing params);
 	virtual ~Smmb_ACO();
-	void run_aco();
+	void run_ACO();
 private:
 	string file_path;
+	Parameters_file_parsing _params;
+	int rand_seed;
+	ofstream _results_handler;
 };
 
 #endif /* SMMBACO_HPP_ */

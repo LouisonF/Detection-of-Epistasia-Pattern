@@ -4,6 +4,11 @@ header_nrows 1
 # separation between fields in the genotype file
 sep ,
 
+#Name of the genotype file
+genos_file prefix1_geno.txt
+
+#Name of the phenotype file
+phenos_file prefix_pheno.txt
 # alpha type I error rate
 alpha 0.05
 

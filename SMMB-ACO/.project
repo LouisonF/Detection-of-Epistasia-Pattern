@@ -3,7 +3,6 @@
 	<name>SMMB-ACO</name>
 	<comment></comment>
 	<projects>
-		<project>Utils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -25,4 +24,10 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>Utils_ressources</name>
+			<value>file:/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/Utils</value>
+		</variable>
+	</variableList>
 </projectDescription>

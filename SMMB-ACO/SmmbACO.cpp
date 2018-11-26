@@ -6,48 +6,59 @@
  */
 
 #include "SmmbACO.hpp"
-
-#include "Parametersfileparsing.hpp" // This include does not work, because it comes from a different project ... TODO
-
-
 using namespace std;
 
-Smmb_ACO::Smmb_ACO()
+Smmb_ACO::Smmb_ACO(Parameters_file_parsing params): _params(params)
 {
-	//TODO Comment  passer un nom de fichier de paramètre sans le rentrer en dur ? Dans le script d'appel ?
-	file_path = 'SMMB-ACO-parameters.txt';
-	Parameters_file_parsing params(file_path);
-	params.Parsing();
-	params.list_parameters();
+
+	//Variable assignation
+	//Output file opening
+    string file_basename = basename((char*)_params.genos_file.c_str());
+    string result_filename = "outputs/RESULT_" + file_basename;
+    _results_handler.open(result_filename.c_str(), ios::trunc);
+
+    if(!_results_handler)
+    {
+        std::cerr << "Error while opening output.txt (by writing access) !\n";
+        exit(-1);
+    }
+
+	//Random seed
+	srand (time(NULL));
+	rand_seed = rand(); // TODO: Check if this is a good method to generate a seed.
+
+
+
 }
 
-Smmb_ACO::~Smmb_ACO() {
+Smmb_ACO::~Smmb_ACO()
+{
 	// TODO Auto-generated destructor stub
 }
 
 /*Tentative de définition de la marche à suivre ... */
 
-void Smmb_ACO::run_aco()
+void Smmb_ACO::run_ACO()
 {
-	/*for(unsigned number_aco_it=0; number_aco_it<params.number_aco_iter; number_aco_it++)
-	{
-		cout << number_aco_it; //TODO: params instance is not declared in this scope. error in the constructor apparently.
+	for(unsigned number_aco_it=0; number_aco_it< _params.number_aco_iter; number_aco_it++)
+	 {
+	 cout << number_aco_it; //TODO: params instance is not declared in this scope. error in the constructor apparently.
 
-	}*/
+	 }
 }
 
 //BOUCLE FOR QUI FAIT TOURNER LA SMMB AVEC NMAX = LE NOMBRE D ITERATION
 
-	//somme des tau
+//somme des tau
 
-	// calcul des distributions de proba et des proba de chaque snp
+// calcul des distributions de proba et des proba de chaque snp
 
-	// calcul parallelle et boucle pour faire travailler chaque fourmis.
+// calcul parallelle et boucle pour faire travailler chaque fourmis.
 
-		//select SNP, fonction de sampling
-		//learn Markov blanket
-		//ajout des mv à la secltion de mbs
-		//mise a jour de tau
+//select SNP, fonction de sampling
+//learn Markov blanket
+//ajout des mv à la secltion de mbs
+//mise a jour de tau
 //Fin de la fonction qui fait tourner la smmb
 
 //il faut une fonction de calcul du taux de phéromone.
