@@ -7,18 +7,23 @@
 
 #ifndef PARENT_H_
 #define PARENT_H_
-#include "Population.h"
+#include "TypeDef.h"
 
-class Parent : public Population {
+class Parent{
 
 protected:
+	int nb_sol;
 	int nb_parents;
+	int len_pattern;
+	float median;
+	float_matrix_type Mpop_geno;
 	int_matrix_type Mparents;
 
 public :
-	Parent(int_matrix_type, int_matrix_type, int, int, int);
+	Parent(int, int, int, float, float_matrix_type);
 	~Parent();
 	void parents_selection();
+	int_matrix_type get_MParents();
 	void display_parents();
 };
 

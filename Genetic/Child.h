@@ -7,34 +7,24 @@
 
 #ifndef CHILD_H_
 #define CHILD_H_
-#include "Population.h"
+#include "TypeDef.h"
+using namespace std;
 
-class Child {
-public:
+class Child{
+private:
 
-	matrix_of_int_matrix_type MParents_geno;
-	matrix_of_int_matrix_type MParents_pheno;
-
+	float_matrix_type Mpop_geno;
 	int_matrix_type MParents;
+	int_matrix_type MChildren;
+	int len_pattern;
 
-	matrix_of_int_matrix_type MChild_geno;
-	matrix_of_int_matrix_type MChild_pheno;
-
-	int cut1;
-	int cut2;
-	int cut3;
-	int cut4;
-
-	int_matrix_type Mchild1;
-	int_matrix_type Mchild2;
-	int_matrix_type Mchild3;
-	int_matrix_type Mchild4;
-
-	Child(matrix_of_int_matrix_type, matrix_of_int_matrix_type, int_matrix_type);
+public:
+	Child(float_matrix_type, int_matrix_type,int);
 	~Child();
 	void set_children();
-	void start_crossing_over();
-	void end_crossing_over();
+	void mutation();
+	void display_children();
+	int_matrix_type get_MChildren();
 };
 
 #endif /* CHILD_H_ */

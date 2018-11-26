@@ -9,7 +9,7 @@
 #include "Population.h"
 #include <set>
 
-Parent::Parent(int_matrix_type Mgeno, int_matrix_type Mpheno, int len_pop, int len_pattern, int nb_parents) : Population(Mgeno, Mpheno ,len_pop, len_pattern), nb_parents(nb_parents)
+Parent::Parent(int nb_sol, int nb_parents, int len_pattern, float median, float_matrix_type Mpop_geno) : nb_sol(nb_sol), nb_parents(nb_parents), len_pattern(len_pattern), median(median), Mpop_geno(Mpop_geno)
 {
 	int_matrix_type Mparents_temp (nb_parents, 1);
 	Mparents = Mparents_temp;
@@ -21,16 +21,20 @@ Parent::~Parent() {
 
 void Parent::parents_selection(){
 	//Hasard selection of n pairs of parents
-	set<int> parents_list = {999};
+	set<int> parents_list = {};
 	int selected_parent;
 	for (int i = 0; i < nb_parents; i++){
-		selected_parent = 999;
-		while (parents_list.count(selected_parent) != 0){
+		do {
 			selected_parent = rand()%nb_sol;
 		}
+		while (parents_list.count(selected_parent) != 0 or Mpop_geno(selected_parent, len_pattern) < median);
 		parents_list.emplace(selected_parent);
 		Mparents(i, 0) = selected_parent;
 	}
+}
+
+int_matrix_type Parent::get_MParents(){
+	return(Mparents);
 }
 
 void Parent::display_parents(){

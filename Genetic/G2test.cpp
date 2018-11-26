@@ -39,8 +39,8 @@ void G2test::run_G2(){
 }
 
 void G2test::display_g2(){
-	cout << g2 << endl;
-	cout << pval << endl;
+	cout << "g2 :" << g2 << endl;
+	cout << "pval : " << pval << endl;
 }
 
 float G2test::get_g2(){
