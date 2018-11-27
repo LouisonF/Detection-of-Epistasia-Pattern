@@ -6,7 +6,7 @@
  */
 #include "Child.h"
 
-Child::Child(float_matrix_type Mpop_geno, int_matrix_type MParents, int len_pattern) : Mpop_geno(Mpop_geno), MParents(MParents), len_pattern(len_pattern)
+Child::Child(float_matrix_type Mpop_geno, int_matrix_type MParents, int len_pattern, float P_mutation, int nb_snp) : Mpop_geno(Mpop_geno), MParents(MParents), len_pattern(len_pattern), P_mutation(P_mutation), nb_snp(nb_snp)
 {
 	int_matrix_type MChlidren_temp(MParents.size1(), len_pattern);
 	MChildren = MChlidren_temp;
@@ -43,9 +43,9 @@ void Child::set_children(){
 }
 
 void Child::mutation(){
-	for (int i = 0; i < MChildren.size1(); i++){
-		if ((rand()%100)+1 < 10){
-			MChildren(i, rand()%len_pattern) = rand()%Mpop_geno.size1();
+	for (int i = 0; i < int(MChildren.size1()); i++){
+		if ((rand()%100)+1 < P_mutation){
+			MChildren(i, rand()%len_pattern) = rand()%nb_snp;
 			cout << "mutation on child " << i << endl;
 		}
 	}

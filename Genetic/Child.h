@@ -17,9 +17,11 @@ private:
 	int_matrix_type MParents;
 	int_matrix_type MChildren;
 	int len_pattern;
+	float P_mutation;
+	int nb_snp;
 
 public:
-	Child(float_matrix_type, int_matrix_type,int);
+	Child(float_matrix_type, int_matrix_type, int, float, int);
 	~Child();
 	void set_children();
 	void mutation();
