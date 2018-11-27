@@ -21,17 +21,30 @@ using namespace std;
 
 int main()
 {
-	/*string filename = "test_data.txt";
-	unsigned int header_nrows = 2;
-	char sep = ',';
-	Data_input test(filename, sep, header_nrows);
-	test.read();*/
+	//Calling parameters file parsing
 	string file_path = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/SMMB-ACO-parameters.txt";
 	Parameters_file_parsing test_param(file_path);
-	//test_param.Parsing();
-	//test_param.list_parameters();
+	test_param.Parsing();
 
-	Smmb_ACO test_smmb(test_param);
+	string filename;
+	char sep;
+	unsigned int header_nrows;
+	//Calling Genotype input
+	 filename = test_param.genos_file;
+	 sep = test_param.sep;
+	 header_nrows = test_param.header_nrows;
+
+
+	Data_input gen_inst(filename, sep, header_nrows);
+	blas::matrix<int> genos = gen_inst.read();
+
+	//Calling Phenotype input
+	filename = test_param.phenos_file;
+	Data_input phen_inst(filename, test_param.sep,test_param.header_nrows);
+	blas::matrix<int> phenos = phen_inst.read();
+
+
+	Smmb_ACO test_smmb(genos, phenos, test_param);
 	test_smmb.run_ACO();
 
 

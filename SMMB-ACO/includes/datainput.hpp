@@ -25,7 +25,8 @@ class Data_input {
 public:
 Data_input(const string filename, char sep, const unsigned int header_nrows);
 ~Data_input();
-void read();
+blas::matrix<int> read();
+vector<string> get_snps();
 unsigned int count_rows();
 unsigned int count_cols();
 

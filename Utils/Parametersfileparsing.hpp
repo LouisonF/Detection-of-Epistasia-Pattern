@@ -24,7 +24,7 @@ public:
 	//Attributes
 	string file_path;
 	unsigned int header_nrows;
-	char sep;
+	string sep;
 	float alpha;
 	unsigned int number_smmbaco_runs;
 	float precision;

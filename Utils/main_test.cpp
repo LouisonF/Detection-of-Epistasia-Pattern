@@ -20,11 +20,22 @@ using namespace std;
 
 int main()
 {
-	/*string filename = "test_data.txt";
-	unsigned int header_nrows = 2;
+	string filename = "ouigenotypes1.txt";
+	unsigned int header_nrows = 1;
 	char sep = ',';
 	Data_input test(filename, sep, header_nrows);
-	test.read();*/
+	blas::matrix<int> matrice = test.read();
+	vector<string>  list = test.get_snps();
+
+    /*for(unsigned i=0;i<matrice.size1();++i)
+    {
+        cout<<"| ";
+        for (unsigned j=0;j<matrice.size2();++j)
+        {
+            cout<<matrice(i,j)<<" | ";
+        }
+        cout<<"|"<<endl;
+    }*/
 	string file_path = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/SMMB-ACO-parameters.txt";
 	Parameters_file_parsing test_param(file_path);
 	test_param.Parsing();

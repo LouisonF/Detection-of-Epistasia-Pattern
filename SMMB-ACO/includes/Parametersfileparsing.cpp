@@ -82,7 +82,7 @@ void Parameters_file_parsing::import_line(string const line)
     {
     	if(value =="\t")
     	{
-    		sep = "\t"; // TODO: Problem here, need invalid conversion from char* to char
+    		cerr << "tabulations are not supported as separator, use coma " << endl;
     	}
     	else
     	{

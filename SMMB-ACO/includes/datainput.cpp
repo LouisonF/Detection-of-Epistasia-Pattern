@@ -43,7 +43,7 @@ Data_input::~Data_input() {
 
  //This function read the input file and store data in a matrix.
 
-void Data_input::read()
+blas::matrix<int> Data_input::read()
 {
 	blas::matrix<int> matrix(nrows,ncols);
 	ifstream content(filename);
@@ -84,8 +84,58 @@ void Data_input::read()
 		cerr << "error in file parsing \n";
 		exit(-1);
 	}
-	cout << matrix <<endl;
 	content.close();
+	return matrix;
+
+}
+
+vector<string> Data_input::get_snps()
+{
+	vector<string> list_snps;
+	ifstream content(filename);
+	string temp_char;
+
+	unsigned int row_pos = 1;
+	unsigned int row_matrix = 0;
+
+	if(content.is_open())
+	{
+
+		string line = "";
+		while (getline(content,line))
+		{
+			if(row_pos <= header_nrows)
+			{
+				unsigned int col_pos = 0;
+				string temp_string = line;
+
+				for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it)
+						{
+							if(*it == sep)
+							{
+								list_snps.push_back(temp_char);
+								temp_char = "";
+								continue;
+							}
+							temp_char+= *it;
+							col_pos++;
+						}
+				list_snps.push_back(temp_char);
+				row_matrix++;
+			}
+
+			row_pos++;
+		}
+
+	}else
+	{
+		cerr << "error in file parsing \n";
+		exit(-1);
+	}
+	content.close();
+
+	return list_snps;
+
 }
 
 // This function count the number of rows in the input file

@@ -8,16 +8,19 @@
 #include "SmmbACO.hpp"
 using namespace std;
 
-Smmb_ACO::Smmb_ACO(Parameters_file_parsing params): _params(params)
+//Constructor
+Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas::matrix<int> & phenos, Parameters_file_parsing params): _genotypes(genos), _phenotypes(phenos), _params(params)
 {
 
 	//Variable assignation
+	int number_of_snps;
 	//Output file opening
     string file_basename = basename((char*)_params.genos_file.c_str());
     string result_filename = "outputs/RESULT_" + file_basename;
-    _results_handler.open(result_filename.c_str(), ios::trunc);
+    output_file.open(result_filename.c_str(), ios::trunc);
+    cout << "file_basename : "<< file_basename << "result_filename : " << result_filename << endl;
 
-    if(!_results_handler)
+    if(!output_file)
     {
         std::cerr << "Error while opening output.txt (by writing access) !\n";
         exit(-1);
@@ -27,10 +30,22 @@ Smmb_ACO::Smmb_ACO(Parameters_file_parsing params): _params(params)
 	srand (time(NULL));
 	rand_seed = rand(); // TODO: Check if this is a good method to generate a seed.
 
+    // Here, we count the number of independant test made during a SMMB execution.
+    number_of_indep_test = 0;
+    //sum_of_tau refers to the sum of pheromones levels
+    sum_of_tau= 0.0;
 
+    //number_of_snps refers to the number of snps available in the dataset
+    number_of_snps = _genotypes.size2();
+
+    tau.assign(number_of_snps,_params.aco_tau_init);
+    eta.assign(number_of_snps,_params.aco_eta);
+    pdf.assign(number_of_snps, 0.0);
+    number_executions = params.number_smmbaco_runs;
 
 }
 
+//Destructor
 Smmb_ACO::~Smmb_ACO()
 {
 	// TODO Auto-generated destructor stub
@@ -40,20 +55,34 @@ Smmb_ACO::~Smmb_ACO()
 
 void Smmb_ACO::run_ACO()
 {
+	cout << "SMMB is currently running" << endl;
 	for(unsigned number_aco_it=0; number_aco_it< _params.number_aco_iter; number_aco_it++)
 	 {
-	 cout << number_aco_it; //TODO: params instance is not declared in this scope. error in the constructor apparently.
+		cout << "ACO iteration number: " << number_aco_it << endl;
+	 //Computation of the probability distribution
+		//Sum of pheromones
+		sum_tau();
 
 	 }
 }
 
 //BOUCLE FOR QUI FAIT TOURNER LA SMMB AVEC NMAX = LE NOMBRE D ITERATION
+void Smmb_ACO::sum_tau()
+{
+    // initialisation of the variable sum_of_tau at 0 (this void is called at each ACO iteration)
+	sum_of_tau= 0.0;
+	//Tried to use list type for tau and eta variable but list don't use direct access, vector does.
+    for(auto i=0; i<tau.size(); i++)
+    {
+    	sum_of_tau += pow(tau.at(i), _params.aco_alpha) * pow(eta.at(i), _params.aco_beta);
+    }
 
+}
 //somme des tau
 
 // calcul des distributions de proba et des proba de chaque snp
 
-// calcul parallelle et boucle pour faire travailler chaque fourmis.
+// calcul parallelle et boucle pour faire travailler chaque fourmi.
 
 //select SNP, fonction de sampling
 //learn Markov blanket
