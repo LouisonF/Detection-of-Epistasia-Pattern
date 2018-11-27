@@ -46,7 +46,6 @@ void Child::mutation(){
 	for (int i = 0; i < int(MChildren.size1()); i++){
 		if ((rand()%100)+1 < P_mutation){
 			MChildren(i, rand()%len_pattern) = rand()%nb_snp;
-			cout << "mutation on child " << i << endl;
 		}
 	}
 }

@@ -21,6 +21,7 @@ ContingencyTable::~ContingencyTable() {
 }
 
 void ContingencyTable::set_pattern_list(){
+
 	int x1 = 0;
 	int x2;
 	if (len_pattern == 2){

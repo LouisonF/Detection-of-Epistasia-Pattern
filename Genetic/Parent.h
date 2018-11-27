@@ -16,11 +16,12 @@ protected:
 	int nb_parents;
 	int len_pattern;
 	float median;
+	float P_selection;
 	float_matrix_type Mpop_geno;
 	int_matrix_type Mparents;
 
 public :
-	Parent(int, int, int, float, float_matrix_type);
+	Parent(int, int, int, float, float, float_matrix_type);
 	~Parent();
 	void parents_selection();
 	int_matrix_type get_MParents();
