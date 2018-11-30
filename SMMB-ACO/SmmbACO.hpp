@@ -14,6 +14,10 @@
 #include <cmath>
 #include <vector>
 #include <libgen.h> //Needed to use basename
+#include <list> //Needed for the score map
+#include <map>
+#include <algorithm>
+
 
 
 
@@ -26,6 +30,12 @@ public:
 	virtual ~Smmb_ACO();
 	void run_ACO();
 	void sum_tau();
+	float pheromone_for_snp(float tau_for_snp, float eta_for_snp);
+	void compute_distrib_prob();
+	void compute_cumlative_dristrib_proba();
+	unsigned int select_snp_in_distrib_prob(float prob);
+	void snp_sampling(vector<unsigned int> &snp_table);
+
 private:
 	string file_path;
 	Parameters_file_parsing _params;
@@ -41,6 +51,8 @@ private:
 	vector<float> pdf;
 	int number_executions;
 	ofstream output_file;
+	map<unsigned, list<float> > scores;
+	map<float, vector<unsigned>> cumulated_distrib_prob;
 };
 
 #endif /* SMMBACO_HPP_ */
