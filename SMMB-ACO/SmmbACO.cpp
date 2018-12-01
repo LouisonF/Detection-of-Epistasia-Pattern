@@ -25,8 +25,8 @@ Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas::matrix<int> & phenos, Parame
     }
 
 	//Random seed
-	srand (time(NULL));
-	rand_seed = rand(); // TODO: Check if this is a good method to generate a seed.
+    srand(time(NULL));
+    rand_seed.seed(std::time(0));
 
     // Here, we count the number of independant test made during a SMMB execution.
     number_of_indep_test = 0;
@@ -206,17 +206,31 @@ void Smmb_ACO::learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_tabl
 	while(counter < _params.max_trials_learn_mb )
 	{
 		memory_mb = mb;
-		forward(mb,snp_table);
-		backward(mb,snp_table);
+		forward_phase(mb,snp_table);
+		backward_phase(mb,snp_table);
 		counter++;
 	}
 
 	//call forward
 	/*
 	 * échantillonnage sur snp_table, selon taille sous-ensemble
-	 * tri
+	 * tri: tri pour pouvoir sort ensuite
 	 *
 	 */
+}
+void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
+{
+	vector<unsigned int> random_snps;
+	//New sampling phase
+	Miscellaneous::random_subset(snp_table,random_snps,_params.smallest_subset_size ,rand_seed);
+	//Sorting is important for the combination method.
+	sort(random_snps.begin(),random_snps.end());
+
+	//Generating all combinations for the snp list
+	vector<vector<unsigned int>> snps_all_comb;
+	snps_all_comb = Miscellaneous::combinator(random_snps, _params.smallest_subset_size); //TODO Check that smallest subset size is the good parameter
+
+}
 	//call backward
 	/*
 	 * pour tout X element de la MB
@@ -228,8 +242,11 @@ void Smmb_ACO::learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_tabl
 	 *
 	 * 		Il faut faire des listes
 	 */
+void Smmb_ACO::backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
+{
 
 }
+
 //somme des tau DONE
 
 // calcul des distributions de proba et des proba de chaque snp DONE

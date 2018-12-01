@@ -17,6 +17,7 @@
 #include <list> //Needed for the score map
 #include <map>
 #include <algorithm>
+#include <random>;
 
 
 
@@ -35,11 +36,13 @@ public:
 	void compute_cumlative_dristrib_proba();
 	unsigned int select_snp_in_distrib_prob(float prob);
 	void snp_sampling(vector<unsigned int> &snp_table);
+	void forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
+	//void backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
 
 private:
 	string file_path;
 	Parameters_file_parsing _params;
-	int rand_seed;
+	mt19937 rand_seed;
 	ofstream _results_handler;
 	int number_of_snps;
 	blas::matrix<int> _genotypes;
