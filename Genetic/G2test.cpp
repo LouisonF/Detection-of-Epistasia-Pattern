@@ -34,8 +34,13 @@ void G2test::run_G2(){
 	}
 	g2 *= 2;
 	df = (cont_table.size1()-1)*(cont_table.size2()-1);
-	boost::math::chi_squared_distribution<double> chi2_dist(df);
-	pval = 1 - boost::math::cdf(chi2_dist, g2);
+	if (g2 != std::numeric_limits<double>::infinity()){
+		boost::math::chi_squared_distribution<double> chi2_dist(df);
+		pval = 1 - boost::math::cdf(chi2_dist, g2);
+	}
+	else {
+		pval = 1;
+	}
 }
 
 void G2test::display_g2(){

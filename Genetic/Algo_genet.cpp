@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
-#include "InitialMatrix.h"
 #include "Population.h"
 #include "Parent.h"
 #include "ContingencyTable.h"
@@ -27,11 +26,19 @@ using namespace std;
 int main () {
 	srand (time(NULL));
 
-	int_matrix_type Mgeno (5000, 10);
+	Data_input datas_geno("/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/oui_all_files/ouigenotypes1.txt", ',', 1);
+	int_matrix_type Mgeno = datas_geno.read();
+
+	Data_input datas_pheno("/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/oui_all_files/ouiphenotypes1.txt", ',', 1);
+	int_matrix_type Mpheno = datas_pheno.read();
+
+	cout << Mgeno << endl;
+	cout << Mpheno << endl;
+
+	/*int_matrix_type Mgeno (5000, 10);
 	int_matrix_type Mpheno (5000, 1);
 
 	int nb_indiv_geno = Mgeno.size1();
-	int nb_snp = Mgeno.size2();
 
 	for (int i = 0; i < nb_indiv_geno; ++ i)
 		for (int j = 0; j < nb_snp; ++ j)
@@ -42,20 +49,20 @@ int main () {
 	for (int i = 0; i < nb_indiv_pheno; ++ i)
 		Mpheno (i, 0) = rand()%2;
 
-
-	int len_pop = 120;
-	int len_pattern = 3;
-	int nb_parents = 4;
+*/
+	int nb_snp = 20;
+	int len_pop = 100;
+	int len_pattern = 2;
+	int nb_parents = 10;
 	float alpha = 0.05;
 	int nb_it = 100;
 	float P_mutation = 10;
-	float P_selection = 10;
+	float P_selection = 5;
 
 	Population population(Mgeno, Mpheno, len_pop, len_pattern);
-	//population.display_geno();
-	//population.display_pheno();
+
 	population.init_pop_geno();
-	//population.display_geno_sol();
+	population.display_geno_sol();
 
 	int_matrix_type Msol_geno(1, len_pattern); //temp solution for the loop
 	vector<float> G2_res;
@@ -149,47 +156,60 @@ int main () {
 	//FIN WHILE//
 	////////////
 
-	vector<string> list_pattern;
-	string pattern;
+	vector<vector<int>> list_pattern;
+	vector<int> pattern;
 	for (int i = 0; i < len_pop; i++){
-		pattern = "";
+		pattern.clear();
 		for (int j = 0; j < len_pattern; j++){
-			pattern += to_string(int(population.get_Mpop_geno()(i,j)));
+			pattern.push_back((int(population.get_Mpop_geno()(i,j))));
 		}
 		if (count(list_pattern.begin(), list_pattern.end(), pattern) == 0){
 			list_pattern.push_back(pattern);
 		}
 	}
 
-	vector<string> list_sol;
+	vector<vector<int>> list_sol;
+	vector<int> sol;
 	for (int i = 0; i < len_pop; i++){
-		pattern = "";
+		sol.clear();
 		for (int j = 0; j < len_pattern; j++){
-			pattern += to_string(int(population.get_Mpop_geno()(i,j)));
+			sol.push_back(int(population.get_Mpop_geno()(i,j)));
 		}
-		list_sol.push_back(pattern);
+		list_sol.push_back(sol);
 	}
 
 
-	vector<vector<string>> occ_pattern;
+	vector<int> occurences_list;
+	vector<vector<int>> best_pattern_list;
+	vector<int> best_pattern;
 	int max_occ = 0;
-	string best_pattern;
 	int cpt;
-	occ_pattern.resize(list_pattern.size(), vector<string>(2, ""));
 	for (int i = 0; i < int(list_pattern.size()); i++){
-		occ_pattern[i][0] = list_pattern[i];
 		cpt = count(list_sol.begin(), list_sol.end(), list_pattern[i]);
-		occ_pattern[i][1] = to_string(cpt);
+		occurences_list.push_back(cpt);
 		if (cpt > max_occ){
+			best_pattern_list.clear();
 			max_occ = cpt;
 			best_pattern = list_pattern[i];
+			best_pattern_list.push_back(best_pattern);
 		}
 		else if (cpt == max_occ){
-			best_pattern += (" and " + list_pattern[i]);
+			best_pattern_list.push_back(list_pattern[i]);
 		}
-		cout << "pattern " << occ_pattern[i][0] << " : " << occ_pattern[i][1] << endl;
+
+		cout << "pattern : ";
+		for (int j = 0; j < len_pattern; j++){
+			cout << list_pattern[i][j];
+		}
+		cout << " : " << occurences_list[i] << " occurence(s)"<< endl;
 	}
-	cout << "The best pattern(s) is (are) " << best_pattern << " with a frequency of " << max_occ << endl;
+	cout << "Best pattern : " << endl;
+	for (int i = 0;i < int(best_pattern_list.size()); i++){
+		for (int j = 0; j < len_pattern; j++){
+			cout << best_pattern_list[i][j] << "/";
+		}
+		cout << " with " << max_occ << " occurences." << endl;
+	}
 	cout << "THE END 12";
 }
 
