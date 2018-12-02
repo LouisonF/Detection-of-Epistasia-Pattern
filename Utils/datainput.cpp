@@ -165,23 +165,30 @@ unsigned int Data_input::count_cols()
 	unsigned int ncols=0;
 	string line = "";
 	ifstream content(filename);
+	int current_line = 0;
 
 	if(content.is_open())
 	{
-		getline(content,line);
+		while (getline(content,line))
+		{
+			if(current_line == 3) //We want to read only a genotype line not a header line (header is only the first line) so we pick 3rd line
+			{
 
-		string temp_string = line;
+				string temp_string = line;
 
-		for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it)
+				for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it)
 				{
 					if(*it == ','){continue;}
 					ncols++;
 				}
-
+			}
+			current_line++;
+		}
 	}else
 	{
 		cerr << "Error in file reading \n";
 		exit(-1);
 	}
+
 	return ncols;
 };
