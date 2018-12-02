@@ -15,7 +15,8 @@ class ContingencyTable {
 private:
 	int len_pattern;
 	int nb_col;
-	vector<string> list_pattern;
+	vector<vector<int>> list_pattern;
+	vector<int> pattern;
 	int_matrix_type Mgeno;
 	int_matrix_type Mpheno;
 	int_matrix_type Msol_geno;

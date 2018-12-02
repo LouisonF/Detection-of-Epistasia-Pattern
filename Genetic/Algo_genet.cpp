@@ -43,9 +43,9 @@ int main () {
 		Mpheno (i, 0) = rand()%2;
 
 
-	int len_pop = 1000;
-	int len_pattern = 2;
-	int nb_parents = 10;
+	int len_pop = 120;
+	int len_pattern = 3;
+	int nb_parents = 4;
 	float alpha = 0.05;
 	int nb_it = 100;
 	float P_mutation = 10;
@@ -67,11 +67,11 @@ int main () {
 		ContingencyTable cont_table_pop(Mgeno, Mpheno, Msol_geno, len_pattern);
 		cont_table_pop.set_pattern_list();
 		cont_table_pop.set_table();
-		//cont_table.display_table();
+		//cont_table_pop.display_table();
 
 		TheoricalTable theo_table_pop(len_pattern, cont_table_pop.get_cont_table());
 		theo_table_pop.set_table();
-		//theo_table.display_table();
+		//theo_table_pop.display_table();
 
 		G2test G2_pop(cont_table_pop.get_cont_table(), theo_table_pop.get_theo_table());
 		G2_pop.run_G2();
@@ -193,4 +193,5 @@ int main () {
 	cout << "THE END 12";
 }
 
+//REFAIRE AVEC VECTOR DE VECTOR SUR LA FIN
 //COMMENTER LE CODE GROS GUIGNOLE

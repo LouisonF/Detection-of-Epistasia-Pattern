@@ -23,13 +23,13 @@ Population::~Population() {
 	// TODO Auto-generated destructor stub
 }
 
-
+/*
 void Population::init_pop_geno(){
 	int nb_snp = int(Mgeno.size2());
 	vector<string> list_of_pattern (nb_sol);
 	string pattern;
 	int snp;
-	string s_snp;
+
 
 	list_of_pattern.push_back("present");
 	for (int i = 0; i < nb_sol; i++){
@@ -39,11 +39,9 @@ void Population::init_pop_geno(){
 			pattern.clear();
 			for (int j = 0; j < len_pattern; j++){
 				snp = rand()%nb_snp;  //hasard selection of n snp from an individu to form the solution
-				s_snp = to_string(snp);
-				while(count(pattern.begin(), pattern.end(), s_snp) != 0){
+				while(count(pattern.begin(), pattern.end(), ) != 0){
 					cout << "rentre" << endl;
 					snp = rand()%nb_snp;
-					s_snp = to_string(snp);
 				}
 				pattern.append(to_string(snp));
 			}
@@ -53,6 +51,37 @@ void Population::init_pop_geno(){
 		list_of_pattern.push_back(pattern);
 		for (int k = 0; k < len_pattern; k++){
 			Mpop_geno (i, k) = int(pattern[k]-'0'); //convert string into int
+			Mpop_geno (i,len_pattern) = 0;
+			Mpop_geno (i,len_pattern+1) = 0;
+		}
+	}
+}
+
+*/
+void Population::init_pop_geno(){
+	int nb_snp = int(Mgeno.size2());
+	vector<vector<int>> list_of_pattern(nb_sol);
+	vector<int> pattern(len_pattern);
+	int snp;
+
+	list_of_pattern.push_back(pattern);
+	for (int i = 0; i < nb_sol; i++){
+		cout << "initialization sol n°" << i+1 << endl;
+		pattern = {};
+		while (count(list_of_pattern.begin(), list_of_pattern.end(), pattern) != 0){
+			pattern.clear();
+			for (int j = 0; j < len_pattern; j++){
+				snp = rand()%nb_snp;  //hasard selection of n snp from an individu to form the solution
+				while(count(pattern.begin(), pattern.end(), snp) != 0){
+					snp = rand()%nb_snp;
+				}
+				pattern.push_back(snp);
+			}
+			sort(pattern.begin(), pattern.end());
+		}
+		list_of_pattern.push_back(pattern);
+		for (int k = 0; k < len_pattern; k++){
+			Mpop_geno (i, k) = pattern[k]; //convert string into int
 			Mpop_geno (i,len_pattern) = 0;
 			Mpop_geno (i,len_pattern+1) = 0;
 		}
