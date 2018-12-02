@@ -152,7 +152,7 @@ unsigned int Smmb_ACO::select_snp_in_distrib_prob(float prob)
 		if((it->second.size() == 1))
 		{
 			//We push the snp into the selected snp vector
-			return it->second;
+			return it->second.at(0);
 		}else
 		{
 			//we have to randomly select one of the SNPs pointed by this key
@@ -179,7 +179,7 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 	{
 		while(snp_in_sample == false)//while no snp added to snp_table, draw a new snp and test
 		{
-			float proba = (float) rand() % 0 + 1;
+			float proba = ((float) rand() / (RAND_MAX));
 			unsigned int drawn_snp = select_snp_in_distrib_prob(proba);
 
 			//if nothing found, the find method return the last position of the vector
@@ -207,7 +207,7 @@ void Smmb_ACO::learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_tabl
 	{
 		memory_mb = mb;
 		forward_phase(mb,snp_table);
-		backward_phase(mb,snp_table);
+		//backward_phase(mb,snp_table);
 		counter++;
 	}
 
@@ -227,8 +227,11 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 	sort(random_snps.begin(),random_snps.end());
 
 	//Generating all combinations for the snp list
-	vector<vector<unsigned int>> snps_all_comb;
-	snps_all_comb = Miscellaneous::combinator(random_snps, _params.smallest_subset_size); //TODO Check that smallest subset size is the good parameter
+	unsigned int size = 3; //TODO maximum size of a combination, ask if we need to add it in parameters file
+	vector<vector<unsigned int>> all_snps_combinations;
+	Miscellaneous::combinator(random_snps,all_snps_combinations,size);
+	Miscellaneous::link_comb_to_snp(random_snps,all_snps_combinations);
+
 
 }
 	//call backward

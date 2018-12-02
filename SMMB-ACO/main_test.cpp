@@ -8,7 +8,8 @@
  *  Modified on: 19 nov 2018
  */
 #include "datainput.hpp"
-#include "Parametersfileparsing.hpp"
+#include "Parametersfileparsing.hpp"*
+#include "Miscellaneous.hpp"
 #include "SmmbACO.hpp"
 
 #include <iostream>
@@ -21,7 +22,7 @@ using namespace std;
 
 int main()
 {
-	//Calling parameters file parsing
+	/*//Calling parameters file parsing
 	string file_path = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/SMMB-ACO-parameters.txt";
 	Parameters_file_parsing test_param(file_path);
 	test_param.Parsing();
@@ -46,6 +47,23 @@ int main()
 
 	Smmb_ACO test_smmb(genos, phenos, test_param);
 	test_smmb.run_ACO();
+*/
+	unsigned int size = 5;
+	vector<unsigned int> snp_sorted;
+	snp_sorted.push_back(1);
+	snp_sorted.push_back(2);
+	snp_sorted.push_back(3);
+	snp_sorted.push_back(4);
+	snp_sorted.push_back(5);
+	vector<vector<unsigned int>> all_snps_combinations;
+	//Miscellaneous::powerset(snp_sorted,all_index_combinations);
+	//Miscellaneous::print_powerset(all_index_combinations);
+	//
+	Miscellaneous::combinator(snp_sorted,all_snps_combinations,size);
+	Miscellaneous::link_comb_to_snp(snp_sorted,all_snps_combinations);
+
+	Miscellaneous::print_human_readable_combinations(all_snps_combinations);
+	cout << all_snps_combinations.size();
 
 
 }

@@ -74,44 +74,63 @@ void Miscellaneous::random_subset(vector<unsigned int> &in_subset, vector<unsign
 
 }
 
-vector<vector<unsigned int>> Miscellaneous::combinator(vector<unsigned int> snps_sorted, unsigned int size)
+void Miscellaneous::combinator(vector<unsigned int> snps_sorted, vector<vector<unsigned int>> &all_index_combinations, unsigned int size)
 {
     for(int s=1; s<=size; s++)
     {
-    	//cout << "size = " << s << endl;
-    	vector<unsigned int> index_combination;
-    	vector<vector<unsigned int>> all_index_combinations;
-    	vector<bool> temp_vec(snps_sorted.size());
-    	fill(temp_vec.end() - s, temp_vec.end(), true);
+    	int n = snps_sorted.size();
+       std::vector<bool> v(n);
+       std::fill(v.begin(), v.begin() + s, true);
 
-    	do {
-    		for (int i = 0; i < snps_sorted.size(); ++i)
-    		{
-    			if (temp_vec[i])
-    			{
-    				cout << "temp_vec = " << temp_vec.at(i) << endl;
-    				//cout << (i + 1) << " ";
-    				index_combination.push_back(i+1);
-    				cout << "index a i = " << index_combination.at(0) <<endl;
-    			}
-    		}
-    		cout << "\n";
-    	} while (next_permutation(temp_vec.begin(), temp_vec.end()));
-
-    	all_index_combinations.push_back(index_combination);
+       do {
+    	   vector<unsigned int> index_combination;
+           for (int i = 0; i < n; ++i)
+           {
+               if (v[i])
+               {
+                   index_combination.push_back((i+1));
+               }
+           }
+           all_index_combinations.push_back(index_combination);
+       } while (std::prev_permutation(v.begin(), v.end()));
     }
-    return all_index_combinations;
+       /*for (int x=0; x<all_index_combinations.size(); x++)
+       {
+    	   for(int y=0; y<all_index_combinations[x].size();y++)
+    	   {
+    		   cout << all_index_combinations[x][y];
+    	   }
+    	   cout << "\n";
+       }*/
+
+    //}
+
+    //}
 }
-
-vector<vector<unsigned int>> Miscellaneous::link_comb_to_snp(vector<unsigned int> snp_table, vector<vector<unsigned int>> all_index_combinations, unsigned int size)
+void Miscellaneous::link_comb_to_snp(vector<unsigned int> snps_sorted, vector<vector<unsigned int>> &all_index_combinations) //Link snp_sorted with their index
+//This method is useless if all snps are in the subset but is usefull to match a subset of size < all snps with the input matrix
 {
-	vector<vector<unsigned int>> all_snp_combinations;
-    for(int s=1; s<=size; s++)
+    for (int x=0; x<all_index_combinations.size(); x++)
     {
-    	//TODO : Faire le lien entre l'index d'un snp et sa valeur dans snp_table
-    	//TODO : Comment grouper les combinaisons ...
+ 	   for(int y=0; y<all_index_combinations[x].size();y++)
+ 	   {
+ 		  unsigned int tmp_indx =  all_index_combinations[x][y];
+ 		  all_index_combinations[x][y] = snps_sorted.at(tmp_indx-1);
+ 	   }
     }
-    return all_snp_combinations;
+}
+void Miscellaneous::print_human_readable_combinations(vector<vector<unsigned int>> all_index_combinations)
+{
+    cout << "[" << endl;
+    for(unsigned i=0; i<all_index_combinations.size(); i++)
+    {
+        vector<unsigned> const& currentV = all_index_combinations[i];
+        cout << "\t[ ";
+        for(unsigned j=0; j < currentV.size(); j++)
+            cout << currentV[j] << " ";
+        cout << "]" << endl;
+    }
+    cout << "]" << endl;
 }
 /*DEPRECATED
 vector<vector<unsigned int>>  Miscellaneous::generate_all_combinations(vector<unsigned int> &snps_sorted, int size)
@@ -153,4 +172,3 @@ void Miscellaneous::combinator(vector<vector<unsigned int>> output, vector<unsig
 		temp_combination.pop_back();
 	}
 }*/
-

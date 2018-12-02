@@ -10,6 +10,7 @@
 
 #include "Parametersfileparsing.hpp"
 #include "datainput.hpp"
+#include "Miscellaneous.hpp"
 #include <ctime>
 #include <cmath>
 #include <vector>
@@ -17,7 +18,7 @@
 #include <list> //Needed for the score map
 #include <map>
 #include <algorithm>
-#include <random>;
+#include <random>
 
 
 
@@ -36,7 +37,9 @@ public:
 	void compute_cumlative_dristrib_proba();
 	unsigned int select_snp_in_distrib_prob(float prob);
 	void snp_sampling(vector<unsigned int> &snp_table);
+	void learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
 	void forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
+	void backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
 	//void backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
 
 private:
