@@ -156,6 +156,13 @@ for i in range(1,number_file+1):
     #save the simulated genotype data file
     np.savetxt(folder+"/"+geno_file_name,np.r_[[matrix_genotype_ID], matrix_ready_save], fmt='%s', delimiter=',')
     header_pheno_file=["Class"]
+    #Perturbation process(Avoid bugs in the G2test)
+    perturbation_percentage = float(5/100) #5% of perturbation
+    number_of_changes = int(len(matrix_phenotype_case)*perturbation_percentage)
+    print("number of changes",number_of_changes)
+    for n in range(0,number_of_changes):
+        matrix_phenotype_case[randrange(0,len(matrix_phenotype_case),1)] = 0
+        matrix_phenotype_control[randrange(0,len(matrix_phenotype_control),1)] = 1
     #concatenate pheno matrix
     matrix_final_pheno = np.hstack((matrix_phenotype_case,matrix_phenotype_control))
     #save the simulated phenotype data file
