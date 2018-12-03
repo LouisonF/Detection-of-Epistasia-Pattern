@@ -14,10 +14,12 @@ def epistasis_combination(size_epistasia,list_comb):
     return all_combinations
 
 def random_betas_list(size_epistasia):
-         list_random = list()
-         for i in range(0,size_epistasia):
-             list_random.append(randrange_float(-1,1,0.1))
-         return list_random
+    list_random = list()
+    for i in range(0,size_epistasia):
+        list_random.append(randrange_float(0,1,0.1))
+    print("list random",list_random)
+    return list_random
+
 def determination_th(all_combinations,error_percentage):
      determination_th = ()
      prcentage = int(len(all_combinations)*error_percentage)
@@ -27,7 +29,7 @@ def determination_th(all_combinations,error_percentage):
           determination_th = determination_th + (int(len(all_combinations)/2+x),)
      return determination_th
 def compute_logit(list_random,combination):
-    Y = 1
+    Y = -1
     for i in range(0,len(list_random)):
       Y = Y + list_random[i]*combination[i]
          #We can't iniate multiplicators with 0, that is why at firt iteration, multiplicators take the first value for temp or beta
