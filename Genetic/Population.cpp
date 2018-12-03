@@ -66,7 +66,7 @@ void Population::init_pop_geno(){
 
 	list_of_pattern.push_back(pattern);
 	for (int i = 0; i < nb_sol; i++){
-		cout << "initialization sol n°" << i+1 << endl;
+		cout << "sol n°" << i+1 << " / ";
 		pattern = {};
 		while (count(list_of_pattern.begin(), list_of_pattern.end(), pattern) != 0){
 			pattern.clear();

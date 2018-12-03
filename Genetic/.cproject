@@ -24,8 +24,10 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1510049081" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.exe.debug.option.debugging.level.1470804466" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.368259426" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/courtin/M2/ProjetC/boost_1_68_0"/>
 									<listOptionValue builtIn="false" value="/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/includes"/>
+									<listOptionValue builtIn="false" value="/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/parsing"/>
+									<listOptionValue builtIn="false" value="/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput"/>
+									<listOptionValue builtIn="false" value="/home/courtin/Documents/M2/ProjetC/boost_1_68_0"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="true" id="gnu.cpp.compiler.option.include.files.1783913640" name="Include files (-include)" superClass="gnu.cpp.compiler.option.include.files" useByScannerDiscovery="false" valueType="includeFiles"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.253808806" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>

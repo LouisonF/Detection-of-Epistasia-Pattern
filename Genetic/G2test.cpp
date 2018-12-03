@@ -20,7 +20,6 @@ G2test::~G2test() {
 
 void G2test::run_G2(){
 
-	//    g2 = 0;      // initialized in constructor and this function is called in constructor
 	for(unsigned i=0; i<cont_table.size1(); ++i)
 	{
 		for(unsigned j=0; j<cont_table.size2(); ++j)
@@ -37,9 +36,10 @@ void G2test::run_G2(){
 	if (g2 != std::numeric_limits<double>::infinity()){
 		boost::math::chi_squared_distribution<double> chi2_dist(df);
 		pval = 1 - boost::math::cdf(chi2_dist, g2);
-	}
-	else {
-		pval = 1;
+	}else {
+		g2 = 4000; // High value of G2 instead of inf value to be able to run the cdf()
+		boost::math::chi_squared_distribution<double> chi2_dist(df);
+		pval = 1 - boost::math::cdf(chi2_dist, g2);
 	}
 }
 

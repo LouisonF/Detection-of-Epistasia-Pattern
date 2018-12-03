@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../ContingencyTable.cpp \
 ../G2test.cpp \
 ../InitialMatrix.cpp \
+../Output.cpp \
 ../Parent.cpp \
 ../Population.cpp \
 ../TheoricalTable.cpp \
@@ -21,6 +22,7 @@ OBJS += \
 ./ContingencyTable.o \
 ./G2test.o \
 ./InitialMatrix.o \
+./Output.o \
 ./Parent.o \
 ./Population.o \
 ./TheoricalTable.o \
@@ -33,6 +35,7 @@ CPP_DEPS += \
 ./ContingencyTable.d \
 ./G2test.d \
 ./InitialMatrix.d \
+./Output.d \
 ./Parent.d \
 ./Population.d \
 ./TheoricalTable.d \
@@ -44,7 +47,7 @@ CPP_DEPS += \
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I/home/courtin/M2/ProjetC/boost_1_68_0 -I/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/includes -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/includes -I/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/parsing -I/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput -I/home/courtin/Documents/M2/ProjetC/boost_1_68_0 -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

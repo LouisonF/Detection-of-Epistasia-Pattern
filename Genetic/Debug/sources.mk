@@ -25,4 +25,5 @@ C_DEPS :=
 SUBDIRS := \
 . \
 includes/datainput \
+includes/parsing \
 

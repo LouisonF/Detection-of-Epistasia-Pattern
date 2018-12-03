@@ -43,12 +43,27 @@ void Child::set_children(){
 }
 
 void Child::mutation(){
+	vector<int> muted_child; //To sort the new child
 	for (int i = 0; i < int(MChildren.size1()); i++){
 		if ((rand()%100)+1 < P_mutation){
-			MChildren(i, rand()%len_pattern) = rand()%nb_snp;
+			int muted_snp;
+			int new_snp;
+			do{
+				muted_snp = rand()%len_pattern;
+				new_snp = rand()%nb_snp;
+			}while (MChildren(i, muted_snp) == new_snp);
+			MChildren(i, muted_snp) = new_snp;
+			for (int j = 0; j < len_pattern; j++){
+				muted_child.push_back(MChildren(i, j));
+			}
+			sort(muted_child.begin(), muted_child.end());
+			for (int j = 0; j < len_pattern; j++){
+				MChildren(i, j) = muted_child[j];
+			}
 		}
 	}
 }
+
 
 void Child::display_children(){
 	cout << "children" << MChildren << endl;
