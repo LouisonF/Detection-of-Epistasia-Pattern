@@ -11,6 +11,9 @@
 #include "Parametersfileparsing.hpp"
 #include "datainput.hpp"
 #include "Miscellaneous.hpp"
+#include "Contingency.hpp"
+#include "G2_conditional_test_indep.hpp"
+#include "G2_test_indep.hpp"
 #include <ctime>
 #include <cmath>
 #include <vector>
@@ -19,6 +22,9 @@
 #include <map>
 #include <algorithm>
 #include <random>
+#include <numeric>
+
+typedef blas::matrix_column<blas::matrix<int> > blas_column;
 
 
 
@@ -40,7 +46,6 @@ public:
 	void learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
 	void forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
 	void backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
-	//void backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
 
 private:
 	string file_path;

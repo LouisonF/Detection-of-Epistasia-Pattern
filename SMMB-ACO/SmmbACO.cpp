@@ -221,6 +221,8 @@ void Smmb_ACO::learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_tabl
 void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
 	vector<unsigned int> random_snps;
+	float best_subset_pvalue;
+	unsigned int best_snp_index;
 	//New sampling phase
 	Miscellaneous::random_subset(snp_table,random_snps,_params.smallest_subset_size ,rand_seed);
 	//Sorting is important for the combination method.
@@ -231,6 +233,63 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 	vector<vector<unsigned int>> all_snps_combinations;
 	Miscellaneous::combinator(random_snps,all_snps_combinations,size);
 	Miscellaneous::link_comb_to_snp(random_snps,all_snps_combinations);
+
+	for (unsigned int i=0; i<all_snps_combinations; i++)
+	{
+		vector<unsigned int> current_combination = all_snps_combinations[i];
+		for(auto it =current_combination.begin(); it != current_combination.end(); it++)
+		{
+			vector<unsigned int> current_combination_temp = current_combination;
+			unsigned int current_SNP = *it;
+			//We merge the temporary markov blanket
+			vector<unsigned int> mb_temp = mb;
+			//erase current_SNP from temporary combination vector
+			current_combination_temp.erase(it);
+			for(auto i=0; i<current_combination_temp.end(); i++)
+			{
+				mb_temp.push_back(current_combination_temp[i]);
+			}
+
+			//On fait le g2 conditionnel
+			//On lui passe le genotype, le snp à évaluer, les phénotypes et la markov blaneket temporaire.
+			// Conditional independance test
+			blas::matrix<int> boostgenotype_column = _genotypes.data(current_SNP);
+			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp);
+			number_of_indep_test ++;
+
+			            // A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
+			            // See the method Contingency::is_reliable() for details.
+			if(cond_g2.is_reliable())
+			{
+				if(cond_g2.pval() < best_subset_pvalue)
+				{
+					best_subset_pvalue = cond_g2.pval();
+					best_snp_index = i;
+				}
+
+				scores[i].push_back(cond_g2.g2());
+			}
+			        }
+			    }
+			    // Append the best subset if alpha < threshold
+			    if(best_subset_pvalue < _params.aco_alpha)
+			    {
+			        vector<unsigned> best_subset = all_snps_combinations[best_snp_index];  //copy
+			        for(unsigned int i; i<best_subset.size(); i++)
+			        {
+				        mb.push_back(best_subset[i]);
+			        }
+
+			        for(vector<unsigned>::iterator it=best_subset.begin(); it != best_subset.end(); ++it)
+			        {
+			            snp_table.erase(it);
+			        }
+
+			    }
+
+
+		}
+	}
 
 
 }
@@ -245,9 +304,18 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 	 *
 	 * 		Il faut faire des listes
 	 */
-void Smmb_ACO::backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
+void Smmb_ACO::backward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
+	for (auto it=0; it<mb.size(); it++)
+	{
+		current_mb_comp = *it;
+		//il faut refaire des subsets
+		for(unsigned int i=0; i<all_snps_combinations; i++)
+		{
+			//faire chi 2 entre element de la MB et
+		}
 
+	}
 }
 
 //somme des tau DONE

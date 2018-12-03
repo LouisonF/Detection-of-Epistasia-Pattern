@@ -17,7 +17,6 @@ def random_betas_list(size_epistasia):
     list_random = list()
     for i in range(0,size_epistasia):
         list_random.append(randrange_float(0,1,0.1))
-    print("list random",list_random)
     return list_random
 
 def determination_th(all_combinations,error_percentage):
