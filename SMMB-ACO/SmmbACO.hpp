@@ -43,7 +43,7 @@ public:
 	void sum_tau();
 	float pheromone_for_snp(float tau_for_snp, float eta_for_snp);
 	void compute_distrib_prob();
-	void compute_cumlative_dristrib_proba();
+	void compute_cumulative_dristrib_proba();
 	unsigned int select_snp_in_distrib_prob(float prob);
 	void snp_sampling(vector<unsigned int> &snp_table);
 	void learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
@@ -70,7 +70,7 @@ private:
 	int number_executions;
 	ofstream output_file;
 	map<unsigned, vector<float> > scores;
-	map<float, vector<unsigned>> cumulated_distrib_prob;
+	map<float, vector<unsigned int>> cumulated_distrib_prob;
 
 	map<vector<unsigned int>,unsigned int > mbs_count;
 };

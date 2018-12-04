@@ -60,8 +60,10 @@ void Miscellaneous::random_subset(vector<unsigned int> &in_subset, vector<unsign
 
 	while(out_subset.size() < n_to_draw)
 	{
-
-		int random_indice = dis(rand_seed);
+		unsigned int subset_max_indice = in_subset.size();
+		//cout << "subset_max_indice" << subset_max_indice <<endl;
+		int random_indice = rand() % subset_max_indice + 0;
+		//cout << "random indice is" << random_indice;
 		if(find(out_subset.begin(), out_subset.end(), random_indice) == out_subset.end())
 		{
 			out_subset.push_back(in_subset.at(random_indice));

@@ -32,9 +32,9 @@ int main(int argc, char *argv[])
  /* string genos_file = argv[1];
     string phenos_file = argv[2];
     string param_file = argv[3];*/
-    string genos_file = "4kindiv_testgenotypes1.txt";
-    string phenos_file = "4kindiv_testphenotypes1.txt";
-    string param_file = "SMMB-ACO-parameters.txt";
+    string genos_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/Debug/4kindiv_testgenotypes1.txt";
+    string phenos_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/Debug/4kindiv_testphenotypes1.txt";
+    string param_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/Debug/SMMB-ACO-parameters.txt";
 //  PARAMETERS
     Parameters_file_parsing params(param_file);
     params.list_parameters();

@@ -25,8 +25,8 @@ Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas_column & phenos, Parameters_f
     }*/
 
 	//Random seed
-    srand(time(NULL));
-    rand_seed.seed(std::time(0));
+   /* srand(time(NULL));
+    rand_seed.seed(std::time(0));*/
 
     // Here, we count the number of independant test made during a SMMB execution.
     number_of_indep_test = 0;
@@ -64,7 +64,7 @@ void Smmb_ACO::run_ACO()
 		scores.clear();
 
 		compute_distrib_prob();
-		compute_cumlative_dristrib_proba();
+		compute_cumulative_dristrib_proba();
 
 		//Parrallel computation of each ant
 
@@ -97,7 +97,7 @@ void Smmb_ACO::sum_tau()
     // initialisation of the variable sum_of_tau at 0 (this void is called at each ACO iteration)
 	sum_of_tau= 0.0;
 	//Tried to use list type for tau and eta variable but list don't use direct access, vector does.
-    for(auto i=0; i<tau.size(); i++)
+    for(int i=0; i<tau.size(); i++)
     {
     	sum_of_tau += pow(tau.at(i), _params.aco_alpha) * pow(eta.at(i), _params.aco_beta);
     }
@@ -139,7 +139,7 @@ void Smmb_ACO::compute_distrib_prob()
 	}
 }
 //This method ad to the cumulated distribution of probabilities table, evey proba that is greater than 0
-void Smmb_ACO::compute_cumlative_dristrib_proba()
+void Smmb_ACO::compute_cumulative_dristrib_proba()
 {
 	float memory;
 	cumulated_distrib_prob.clear();
@@ -147,6 +147,7 @@ void Smmb_ACO::compute_cumlative_dristrib_proba()
 	{
 		if (pdf.at(i) >0)
 		{
+			cout << "PDF at "<< i << "  " << pdf.at(i) <<endl;
 			memory += pdf.at(i);
 			cumulated_distrib_prob[memory].push_back(i);
 		}
@@ -193,29 +194,33 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 	//SNP already in the snp_table ? true or false
 	bool snp_in_sample = false;
 	unsigned int i;
-
 	//define the size of the snp_table
 	unsigned int snp_table_size = _params.aco_set_size;
 
 	for(i=0; i<snp_table_size; i++)
 	{
+		cout << "snp_subset size " <<snp_table_size << endl;
+		cout << "i equals to" <<i<<endl;
 		while(snp_in_sample == false)//while no snp added to snp_table, draw a new snp and test
 		{
-			float proba = ((float) rand() / (RAND_MAX));
+			float proba = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 			unsigned int drawn_snp = select_snp_in_distrib_prob(proba);
+			cout << "drawn snp is" << drawn_snp <<endl;
 
 			//if nothing found, the find method return the last position of the vector
 			if(find(snp_table.begin(), snp_table.end(), drawn_snp) == snp_table.end())
 			{
 				//if drawn_snp is not in snp_table, we add it
-				snp_in_sample = true;
 				snp_table.push_back(drawn_snp);
+				cout << "snp table size" << snp_table.size() <<endl;
+				snp_in_sample = true;
 
 			}else
 			{
 				snp_in_sample = false;
 			}
 		}
+		snp_in_sample = false;
 
 	}
 
@@ -259,7 +264,7 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 
 	for (unsigned int i=0; i<all_snps_combinations.size(); i++)
 	{
-		vector<unsigned int> current_combination = all_snps_combinations[i];
+		vector<unsigned int> current_combination = all_snps_combinations.at(i);
 		for(auto it =current_combination.begin(); it != current_combination.end(); it++)
 		{
 			vector<unsigned int> current_combination_temp = current_combination;
@@ -268,10 +273,12 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 			//We merge the temporary markov blanket
 			vector<unsigned int> mb_temp = mb;
 			//erase current_SNP from temporary combination vector
-			current_combination_temp.erase(it);
+			//current_combination_temp.erase(current_combination_temp.begin() + *it);
 			for(auto i=0; i<current_combination_temp.size(); i++)
 			{
-				mb_temp.push_back(current_combination_temp[i]);
+				//mb_temp.push_back(current_combination_temp.at(i));
+				cout << "i equals to" << i<<endl; //TODO DEBUG
+				cout << "current_combination_temp at i" << current_combination_temp.at(i) <<endl;
 			}
 
 			//On fait le g2 conditionnel
