@@ -14,6 +14,7 @@
 #include "Contingency.hpp"
 #include "G2_conditional_test_indep.hpp"
 #include "G2_test_indep.hpp"
+
 #include <ctime>
 #include <cmath>
 #include <vector>
@@ -23,8 +24,10 @@
 #include <algorithm>
 #include <random>
 #include <numeric>
+#include <boost/array.hpp>
 
 typedef blas::matrix_column<blas::matrix<int> > blas_column;
+
 
 
 
@@ -34,7 +37,7 @@ using namespace std;
 
 class Smmb_ACO {
 public:
-	Smmb_ACO(blas::matrix<int> &genos, blas::matrix<int> &phenos , Parameters_file_parsing params);
+	Smmb_ACO(blas::matrix<int> &genos, blas_column &phenos , Parameters_file_parsing params);
 	virtual ~Smmb_ACO();
 	void run_ACO();
 	void sum_tau();
@@ -45,7 +48,11 @@ public:
 	void snp_sampling(vector<unsigned int> &snp_table);
 	void learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
 	void forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
-	void backward_pahse(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
+	void backward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table);
+	void evaporation_rate_update(unsigned int snp_index, float g2_score);
+	void update_tau();
+	void best_mbs(vector<vector<unsigned int>> &mbs);
+	vector<vector<unsigned int>> mbs;
 
 private:
 	string file_path;
@@ -53,8 +60,8 @@ private:
 	mt19937 rand_seed;
 	ofstream _results_handler;
 	int number_of_snps;
-	blas::matrix<int> _genotypes;
-	blas::matrix<int> _phenotypes;
+	blas::matrix<int> &_genotypes;
+	blas::matrix_column<blas::matrix<int> > &_phenotypes;
 	int number_of_indep_test;
 	float sum_of_tau;
 	vector<float> tau;
@@ -62,8 +69,10 @@ private:
 	vector<float> pdf;
 	int number_executions;
 	ofstream output_file;
-	map<unsigned, list<float> > scores;
+	map<unsigned, vector<float> > scores;
 	map<float, vector<unsigned>> cumulated_distrib_prob;
+
+	map<vector<unsigned int>,unsigned int > mbs_count;
 };
 
 #endif /* SMMBACO_HPP_ */

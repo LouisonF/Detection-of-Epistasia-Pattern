@@ -27,6 +27,7 @@ using namespace std;
 
 Data_input::Data_input(const string filename, char sep, const unsigned int header_nrows) : filename(filename), sep(sep), header_nrows(header_nrows)
 {
+	cout << "file = " << filename;
 	nrows = count_rows() - header_nrows;
 	ncols = count_cols();
 

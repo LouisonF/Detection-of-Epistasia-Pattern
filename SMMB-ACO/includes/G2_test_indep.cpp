@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath>
+#include<vector>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/math/distributions/chi_squared.hpp>
 
@@ -16,16 +17,16 @@ G2_test_indep::G2_test_indep(Contingency const& c) : _pval(1), _g2(0), _reliable
     _df = (c.size1()-1)*(c.size2()-1);
     run(c);
 }
-
-G2_test_indep::G2_test_indep(blas_column const& var, blas_column const& phenos) : _pval(1), _g2(0), _reliable(true)
+/*
+G2_test_indep::G2_test_indep(blas_column const& var, blas_matrix const& phenos) : _pval(1), _g2(0), _reliable(true)
 {
     Contingency c(phenos, var);
 
     _df = (c.size1()-1) * (c.size2()-1);
     run(c);
 }
-
-G2_test_indep::G2_test_indep(blas_column const& var, blas_vector const& phenos) : _pval(1), _g2(0), _reliable(true)
+*/
+G2_test_indep::G2_test_indep(blas_column const& var, blas_column const& phenos) : _pval(1), _g2(0), _reliable(true)
 {
     Contingency c(phenos, var);
 

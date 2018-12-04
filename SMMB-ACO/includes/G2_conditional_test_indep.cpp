@@ -13,9 +13,7 @@ using namespace std;
 // Genotypes are coded 0,1,2. Phenotypes are coded 0,1
 
 //--------- Deprecated -----------//
-G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos,
-                                                     blas_column const& phenos,
-                                                     blas_column const& cond_genos)
+G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos,blas_column const& phenos,vector<unsigned int> const& cond_genos)
 {
     G2_test_indep();
     _df = 6; // 2*1*3 -> N_Class( (geno-1) * (pheno-1) * cond_geno )
@@ -24,7 +22,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos,
     for(unsigned i=0; i<n_obs; ++i)
     {
         // Put the current observation in the correct contingency table
-        unsigned contingency_index = cond_genos(i);
+        unsigned contingency_index = cond_genos[i];
         Contingency& c = _contingencies[contingency_index];
         unsigned cr = phenos(i); // index of contingency row
         unsigned cc = genos(i);  // index of contingency column
@@ -37,9 +35,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos,
 // G2_conditional_test_indep : Constructor 2
 //----------------------------------------------------
 //--------- Deprecated -----------//
-G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos,
-                                                     blas_column const& phenos,
-                                                     blas_matrix const& v_cond_genos)
+G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos, blas_column const& phenos, blas_matrix const& v_cond_genos)
 {
     G2_test_indep();
     if(v_cond_genos.size2() != 0)
@@ -73,8 +69,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos,
 //----------------------------------------------------
 // G2_conditional_test_indep : Constructor 3
 //----------------------------------------------------
-G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos,
-                                                     blas_column const& phenos,
+G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos, blas_column const& phenos,
                                                      std::list<unsigned> const& cond_genos_indexes,
                                                      bool do_print_contingency)
 {

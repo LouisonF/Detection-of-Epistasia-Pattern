@@ -172,7 +172,7 @@ void Miscellaneous::combinator(vector<vector<unsigned int>> output, vector<unsig
 		temp_combination.pop_back();
 	}
 }*/
-
+/*
 blas::matrix<float> Miscellaneous::init_contingency_table(int row,int col)
 {
 
@@ -184,10 +184,17 @@ blas::matrix<float> Miscellaneous::init_contingency_table(int row,int col)
 		}
 	}
 }
-vector<blas::matrix<float>> Miscellaneous::contingency_table(vector<unsigned int> conditionnal_snp, )
-/*DEPRECATED
+vector<blas::matrix<float>> Miscellaneous::contingency_table(vector<unsigned int> conditionnal_snp, blas::matrix<int> _genotypes, blas::matrix<int> _phenotypes, unsigned int number_of_obs_subset)
+{
+	vector<blas::matrix<float>> contingencies_vector;
+	if(!conditionnal_snp.empty())
+	{
+		blas::matrix<int> temp
+	}
+}*/
+/*DEPRECATED*/
 	//Now we count the occurence for each possibility
-	for (int i = 0; i < int(phenotypes.size1()); i++){
+/*	for (int i = 0; i < int(phenotypes.size1()); i++){
 		for (int j = 0; j < int(genotypes.size2()); j++){
 			if (phenotypes(i, 0) == 0){
 				if(genotypes(i, j) == 0){
@@ -213,10 +220,10 @@ vector<blas::matrix<float>> Miscellaneous::contingency_table(vector<unsigned int
 		}
 	}
 	return(contingency_table);
-}
+}*/
 
 //Sum of a matrix's row
-unsigned int Miscellaneous::sum_row(blas::matrix<float> matrix, int row)
+/*unsigned int Miscellaneous::sum_row(blas::matrix<float> matrix, int row)
 {
 	float sum = 0;
 	for (int i = 0; i < int(matrix.size2()); i++){
@@ -235,10 +242,10 @@ unsigned int Miscellaneous::sum_col(blas::matrix<float> matrix, int col)
 	return(sum);
 }
 
-
+*/
 //Calcul of a theorical contingency table from a contingency table
 // i,j = (sum row i * sum col j)/total
-blas::matrix<float> Miscellaneous::theorical_table(blas::matrix<float> table_cont)
+/*blas::matrix<float> Miscellaneous::theorical_table(blas::matrix<float> table_cont)
 {
 
 	blas::matrix<float> table_theo(2, 3);
@@ -249,5 +256,4 @@ blas::matrix<float> Miscellaneous::theorical_table(blas::matrix<float> table_con
 		}
 	}
 	return(table_theo);
-}
-/*
+}*/

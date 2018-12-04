@@ -1,0 +1,77 @@
+/*
+ * main.cpp
+ *
+ *  Created on: 4 déc. 2018
+ *      Author: louison
+ */
+
+
+
+#include <iostream>
+#include <stdlib.h>
+#include <ctime>
+#include <chrono>
+
+#include "SmmbACO.hpp"
+#include "common.h"
+
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+
+   /* if(argc < 3)
+    {
+        cerr << "Missing parameter :\n"
+             << "\t./executable <path_to_genotypes> <path_to_phenotypes>"
+             << endl;
+        exit(-1);
+    }*/
+
+    // Arguments
+ /* string genos_file = argv[1];
+    string phenos_file = argv[2];
+    string param_file = argv[3];*/
+    string genos_file = "4kindiv_testgenotypes1.txt";
+    string phenos_file = "4kindiv_testphenotypes1.txt";
+    string param_file = "SMMB-ACO-parameters.txt";
+//  PARAMETERS
+    Parameters_file_parsing params(param_file);
+    params.list_parameters();
+
+    params.genos_file = genos_file;      // genotype file name (path)
+    params.phenos_file = phenos_file;    // phenotype file name (path)
+    int header = params.header_nrows;
+    char separator = params.sep;
+
+    //  DATA IMPORTATION
+    //Calling Genotype input
+    string filename = params.genos_file;
+    char sep = params.sep;
+    unsigned int header_nrows = params.header_nrows;
+
+    Data_input gen_inst(filename, sep, header_nrows);
+    blas::matrix<int> genos = gen_inst.read();
+
+	//Calling Phenotype input
+	filename = params.phenos_file;
+	Data_input phen_inst(filename, params.sep,params.header_nrows);
+	blas::matrix<int> phenos = phen_inst.read();
+	blas_column pheno_col = blas_column(phenos,1);
+
+    cout << endl << "Data imported : " << genos.size1() << " individuals X " << genos.size2() << " SNPs" << endl;
+
+    cout << "pheno size = " << phenos.size1() << endl;
+    chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
+    Smmb_ACO smmb_ACO(genos, pheno_col, params);
+    smmb_ACO.run_ACO();
+    smmb_ACO.best_mbs(smmb_ACO.mbs);
+    chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
+    double duration = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
+
+    //smmb_ACO.write_result(duration);
+    cout << "END OF THE PROGRAM"<<endl;
+
+    return 0;
+}
+

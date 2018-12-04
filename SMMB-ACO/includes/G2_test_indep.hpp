@@ -3,19 +3,20 @@
 
 #include "Contingency.hpp"
 #include <boost/numeric/ublas/matrix.hpp>
+#include <vector>
 
 namespace blas=boost::numeric::ublas;
 
 typedef blas::matrix<int> blas_matrix;
-typedef blas::matrix_column<blas::matrix<int> > blas_column;
-typedef blas::matrix_row<blas::matrix<int> > blas_row;
+typedef blas::matrix_column<blas::matrix<int>> blas_column;
+typedef blas::matrix_row<blas::matrix<int>> blas_row;
 
 class G2_test_indep
 {
 public:
     G2_test_indep(Contingency const& contingency);
+   //G2_test_indep(blas_column const& var, blas_column const& phenos);
     G2_test_indep(blas_column const& var, blas_column const& phenos);
-    G2_test_indep(blas_column const& var, blas_vector const& phenos);
     G2_test_indep();
     void run(Contingency const& c);
     void set_pval(double pval);

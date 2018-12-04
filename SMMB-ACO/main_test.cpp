@@ -20,7 +20,7 @@
 
 using namespace std;
 
-int main()
+int douze()
 {
 	/*//Calling parameters file parsing
 	string file_path = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/SMMB-ACO-parameters.txt";
@@ -64,6 +64,7 @@ int main()
 
 	Miscellaneous::print_human_readable_combinations(all_snps_combinations);
 	cout << all_snps_combinations.size();
+	return 0;
 
 
 }

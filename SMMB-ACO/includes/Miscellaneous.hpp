@@ -31,7 +31,7 @@ public:
 	//vector<vector<unsigned int>> generate_all_combinations(vector<unsigned int> &snps_sorted,  int size);
 	//void combinator(vector<vector<unsigned int>> output, vector<unsigned int> random_snp,vector<unsigned int> temp_combination, unsigned int i , int size);
 	static void print_human_readable_combinations(vector<vector<unsigned int>> all_index_combinations);
-	static blas::matrix<float> init_contingency_table(int row,int col);
+	//static blas::matrix<float> init_contingency_table(int row,int col);
 	//static unsigned int sum_row(blas::matrix<float> matrix, int row);
 	//static unsigned int sum_col(blas::matrix<float> matrix, int col);
 	//static blas::matrix<float> theorical_table(blas::matrix<float> table_cont);
