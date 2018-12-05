@@ -57,13 +57,13 @@ int main(int argc, char *argv[])
 	filename = params.phenos_file;
 	Data_input phen_inst(filename, params.sep,params.header_nrows);
 	blas::matrix<int> phenos = phen_inst.read();
-	blas_column pheno_col = blas_column(phenos,1);
+	//blas_column pheno_col = blas_column(phenos,1);
 
     cout << endl << "Data imported : " << genos.size1() << " individuals X " << genos.size2() << " SNPs" << endl;
 
     cout << "pheno size = " << phenos.size1() << endl;
     chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
-    Smmb_ACO smmb_ACO(genos, pheno_col, params);
+    Smmb_ACO smmb_ACO(genos, phenos, params);
     smmb_ACO.run_ACO();
     smmb_ACO.best_mbs(smmb_ACO.mbs);
     chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();

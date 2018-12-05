@@ -37,7 +37,7 @@ using namespace std;
 
 class Smmb_ACO {
 public:
-	Smmb_ACO(blas::matrix<int> &genos, blas_column &phenos , Parameters_file_parsing params);
+	Smmb_ACO(blas::matrix<int> &genos, blas::matrix<int> &phenos , Parameters_file_parsing params);
 	virtual ~Smmb_ACO();
 	void run_ACO();
 	void sum_tau();
@@ -61,7 +61,7 @@ private:
 	ofstream _results_handler;
 	int number_of_snps;
 	blas::matrix<int> &_genotypes;
-	blas::matrix_column<blas::matrix<int> > &_phenotypes;
+	blas::matrix<int> &_phenotypes;
 	int number_of_indep_test;
 	float sum_of_tau;
 	vector<float> tau;

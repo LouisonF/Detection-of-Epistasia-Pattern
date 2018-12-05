@@ -9,7 +9,7 @@
 using namespace std;
 
 //Constructor
-Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas_column & phenos, Parameters_file_parsing params): _genotypes(genos), _phenotypes(phenos), _params(params)
+Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas::matrix<int> & phenos, Parameters_file_parsing params): _genotypes(genos), _phenotypes(phenos), _params(params)
 {
 
 	//Output file opening
@@ -123,7 +123,7 @@ void Smmb_ACO::update_tau()
 
 float Smmb_ACO::pheromone_for_snp(float tau_for_snp, float eta_for_snp)
 {
-	float effective_proba;
+	float effective_proba = 0.0;
 	tau_for_snp = pow(tau_for_snp, _params.aco_alpha)*pow(eta_for_snp, _params.aco_beta);
 
 	effective_proba = tau_for_snp/sum_of_tau;
@@ -141,7 +141,7 @@ void Smmb_ACO::compute_distrib_prob()
 //This method ad to the cumulated distribution of probabilities table, evey proba that is greater than 0
 void Smmb_ACO::compute_cumulative_dristrib_proba()
 {
-	float memory;
+	float memory = 0.0;
 	cumulated_distrib_prob.clear();
 	for(int i=0; i<pdf.size(); i++)
 	{
@@ -249,8 +249,9 @@ void Smmb_ACO::learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_tabl
 void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
 	vector<unsigned int> random_snps;
-	float best_subset_pvalue;
-	unsigned int best_snp_index;
+	float best_subset_pvalue = 1.1;
+	unsigned int best_snp_index = 100;
+	unsigned int current_SNP = 0;
 	//New sampling phase
 	Miscellaneous::random_subset(snp_table,random_snps,_params.smallest_subset_size ,rand_seed);
 	//Sorting is important for the combination method.
@@ -262,73 +263,118 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 	Miscellaneous::combinator(random_snps,all_snps_combinations,size);
 	Miscellaneous::link_comb_to_snp(random_snps,all_snps_combinations);
 
-	for (unsigned int i=0; i<all_snps_combinations.size(); i++)
+	for (unsigned int x=0; x<all_snps_combinations.size(); x++)
 	{
-		vector<unsigned int> current_combination = all_snps_combinations.at(i);
-		for(auto it =current_combination.begin(); it != current_combination.end(); it++)
+		cout <<"x is equal to" << x<<endl;//TODO DEBUG
+		cout << "all_snps_combinations_size" << all_snps_combinations.size()<<endl;//TODO DEBUG
+		vector<unsigned int> current_combination = all_snps_combinations.at(x);
+		vector<unsigned int> current_combination_temp = current_combination;
+		cout << "current combination size "<<current_combination.size()<<endl;
+		cout<< current_combination.at(0)<<endl;
+
+		if(current_combination.size() ==1)
 		{
-			vector<unsigned int> current_combination_temp = current_combination;
-			unsigned int current_SNP = *it;
-			cout << "current SNP is :" <<*it<<endl; //TODO DEBUG
+
+			current_SNP = current_combination.at(0);
+			cout << "current SNP is :" <<current_SNP<<endl; //TODO DEBUG
 			//We merge the temporary markov blanket
 			vector<unsigned int> mb_temp = mb;
 			//erase current_SNP from temporary combination vector
-			//current_combination_temp.erase(current_combination_temp.begin() + *it);
-			for(auto i=0; i<current_combination_temp.size(); i++)
+			mb_temp.push_back(current_SNP);
+			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
+			for (unsigned int j = 0; j < _phenotypes.size1(); j++)
 			{
-				//mb_temp.push_back(current_combination_temp.at(i));
-				cout << "i equals to" << i<<endl; //TODO DEBUG
-				cout << "current_combination_temp at i" << current_combination_temp.at(i) <<endl;
-			}
 
-			//On fait le g2 conditionnel
-			//On lui passe le genotype, le snp à évaluer, les phénotypes et la markov blaneket temporaire.
-			// Conditional independance test
-			//Getting the column
-			blas::matrix_column<blas::matrix<int> > boostgenotype_column(blas_column(_genotypes,current_SNP));
-			/*for(unsigned int i=0; i<_genotypes.size2();i++)
-			{
-				if(i == current_SNP)
-				{
-					for(unsigned int j=0; j<_genotypes.size1();j++)
-					{
-						boostgenotype_column(j,i) = _genotypes(j,i);
-					}
-				}
-			}*/
+				boostgenotype_column(j,0) =  _genotypes(j,0);
+			}
+			cout << boostgenotype_column.size1();
+			cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
+
+
 			//We get the snp column number and get datas from it
 			//boostgenotype_column = boostgenotype_column(current_SNP);
-			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp);
+			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp, true);
 			number_of_indep_test ++;
 
-			// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
-			// See the method Contingency::is_reliable() for details.
 			if(cond_g2.is_reliable())
 			{
 				if(cond_g2.pval() < best_subset_pvalue)
 				{
 					best_subset_pvalue = cond_g2.pval();
-					best_snp_index = i;
+					best_snp_index = x;
 				}
 
-				scores[i].push_back(cond_g2.g2());
+				scores[x].push_back(cond_g2.g2());
+			}
+		}else
+		{
+			for(auto it =current_combination.begin(); it != current_combination.end(); it++)
+			{
+				current_SNP = *it;
+				cout << "current SNP is :" <<*it<<endl; //TODO DEBUG
+				//We merge the temporary markov blanket
+				vector<unsigned int> mb_temp = mb;
+				//erase current_SNP from temporary combination vector
+				cout << "current combination temp size "<<current_combination_temp.size()<<endl;
+				vector<unsigned int>::iterator INT_oui;
+				unsigned int current_SNP_index;
+				INT_oui = find (current_combination_temp.begin(), current_combination_temp.end(), current_SNP);
+				if (INT_oui != current_combination_temp.end())
+				{
+					cout << "Element found in current_combination_temp: " << *INT_oui << '\n';
+					current_SNP_index = distance(current_combination_temp.begin(), INT_oui);
+				}else
+				{
+					cout << "Element not found in current_combination_temp\n";
+				}
+
+				current_combination_temp.erase(current_combination_temp.begin()+current_SNP_index);
+				for(auto i=0; i<current_combination_temp.size(); i++)
+				{
+					mb_temp.push_back(current_combination_temp.at(i));
+					cout << "current_combination_temp at i" << current_combination_temp.at(i)<<endl;//TODO DEBUG
+				}
+				//We get the snp column number and get datas from it
+				blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
+				for (unsigned int j = 0; j < _phenotypes.size1(); j++)
+				{
+
+					boostgenotype_column(j,0) =  _genotypes(j,0);
+				}
+				G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp, true);
+				number_of_indep_test ++;
+
+				// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
+				// See the method Contingency::is_reliable() for details.
+				if(cond_g2.is_reliable())
+				{
+					if(cond_g2.pval() < best_subset_pvalue)
+					{
+						best_subset_pvalue = cond_g2.pval();
+						best_snp_index = x;
+					}
+
+					scores[x].push_back(cond_g2.g2());
+				}
 			}
 		}
-	}
-	// Append the best subset if alpha < threshold
-	if(best_subset_pvalue < _params.aco_alpha)
-	{
-		vector<unsigned> best_subset = all_snps_combinations[best_snp_index];  //copy
-		for(unsigned int i; i<best_subset.size(); i++)
-		{
-			mb.push_back(best_subset[i]);
-		}
 
-		for(vector<unsigned>::iterator it=best_subset.begin(); it != best_subset.end(); ++it)
-		{
-			snp_table.erase(it);
-		}
 	}
+// Append the best subset if alpha < threshold
+if(best_subset_pvalue < _params.aco_alpha)
+{
+	cout << "all snps test" << best_snp_index;
+	vector<unsigned> best_subset = all_snps_combinations.at(best_snp_index);  //copy
+	for(unsigned int i; i<best_subset.size(); i++)
+	{
+		mb.push_back(best_subset[i]);
+	}
+
+	for(vector<unsigned>::iterator it=best_subset.begin(); it != best_subset.end(); ++it)
+	{
+		snp_table.erase(it);
+	}
+}
 }
 
 	//call backward
@@ -358,10 +404,14 @@ void Smmb_ACO::backward_phase(vector<unsigned int> &mb, vector<unsigned int> &sn
 		Miscellaneous::combinator(mb_minus_elem,all_snps_combinations,size);
 		Miscellaneous::link_comb_to_snp(mb_minus_elem,all_snps_combinations);
 
-		for (unsigned int i=0; i<all_snps_combinations.size(); i++)
+		/*for (unsigned int i=0; i<all_snps_combinations.size(); i++)
 		{
 			vector<unsigned int> current_combination = all_snps_combinations[i];
-			blas_column boostgenotype_column(blas_column(_genotypes,current_mb_elem));
+			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
+			for (unsigned int j = 0; j < _phenotypes.size1(); j++)
+			{
+				boostgenotype_column(j,0) =  _genotypes(j,0);
+			}
 			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination);
 			number_of_indep_test ++;
 			//If the pvalue of the test is above accepted alpha risk, discard this snp from MB
@@ -373,7 +423,7 @@ void Smmb_ACO::backward_phase(vector<unsigned int> &mb, vector<unsigned int> &sn
 				break;
 			}
 
-		}
+		}*/
 
 		//New sampling phase but in the Markov blanket minus the current element
 
