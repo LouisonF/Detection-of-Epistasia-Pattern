@@ -4,40 +4,38 @@
 # Louison Fresnais M2BB
 # François Courtin M2BB
 
-#run : ./f_measure input_directory_path output_directory_path n_runs
+#run : ./f_measure input_directory_path output_directory_path n_runs causal_snp
 
 from utils import *
 import os, os.path
 import sys
 import re
-import glob
+
+input = sys.argv[1]
+output = sys.argv[2]
+n_runs = sys.argv[3]
+caus_snp = sys.argv[4]
 
 
+#List of directories of conditionnal dataset
+for condition in os.listdir(input):
 
+    os.mkdir(output+"/"+condition)
+    print(os.path.basename(condition))
+    #List of directories of simulated conditionnal dataset
+    for simu_file in os.listdir(input+"/"+condition):
 
+        #List of n_runs result files for one simulated conditionnal dataset
+        for res_file in os.listdir(input+"/"+condition+"/"+simu_file):
+            #Get TP or FP or FN for each result file
+            result = set_res(input+"/"+condition+"/"+simu_file+"/"+res_file, caus_snp)
 
+            #Write the result in the f_measure.txt file
+            output_file = write_res(output+"/"+condition+"/"+simu_file, result, "result")
 
-"""
-    if (inc_TP):
-        TP += 1
+        print(os.path.basename(output_file))
+        f_measure = run_f_measure(output_file)
+        write_res(output+"/"+condition, str(f_measure), "f_measure")
 
-    elif(inc_FN):
-        FN += 1
-    elif(inc_FP):
-        FP += 1
-
-print("TP : ",TP)
-print("FP : ",FP)
-print("FN : ",FN)
-
-if (FP == 0 and FN != 0):
-    FP = 1
-if (FN == 0 and FP != 0):
-    FN = 1
-
-#recall = TP/(TP+FN)
-#precision = TP/(TP+FP)
-#f_measure = 2/((1/recall)+(1/precision))
-
-#print("F-measure : ",f_measure)
-"""
+        power = run_power(output_file, int(n_runs))
+        write_res(output+"/"+condition, str(power), "power")
