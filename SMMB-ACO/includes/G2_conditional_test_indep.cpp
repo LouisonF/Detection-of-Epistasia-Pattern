@@ -99,6 +99,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
     {
         blas::matrix<unsigned int> ref_genos_matrix;
 		ref_genos_matrix = genos_column.data(); // get matrix from a column
+        //TODO check if the data method is working
         for(unsigned i=0; i<n_obs; ++i)
         {
             // Put the current observation in the correct contingency table
@@ -117,8 +118,8 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
         }
     }
     else
-    {
-        for(unsigned i=0; i<n_obs; ++i)
+    {//TODO Test to compilate wihtout adding 0 to the contingency matrix 
+        for(unsigned i=0; i<n_obs; ++i
         {
             Contingency& c = _contingencies[0];
             unsigned cr = phenos(i,0);
@@ -137,7 +138,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
 G2_conditional_test_indep::G2_conditional_test_indep(Contingency const& c, unsigned number_of_sub_contingencies)
 {
     unsigned nrows = c.size1();
-    unsigned n_cols_by_contingency = c.size2() / number_of_sub_contingencies;
+    unsigned n_cols_by_contingency = c.size2() / number_of_sub_contingencies; //TODO check the number of sub_contingency table computation
     cout << "n_cols_by_contingency = " << n_cols_by_contingency << endl;
 
     _contingencies = vector<Contingency>(number_of_sub_contingencies);
@@ -166,7 +167,7 @@ void G2_conditional_test_indep::run(bool verbose)
     for(unsigned i=0; i<_contingencies.size(); ++i)
     {
         G2_test_indep g2(_contingencies[i]);
-        if(!g2.is_reliable())
+        if(!g2.is_reliable())//TODO check if thé is.reliableb méthod is working
         {
             _g2 = 0;
             _pval = 1;
