@@ -47,7 +47,7 @@ CPP_DEPS += \
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/includes -I/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/parsing -I/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput -I/home/courtin/Documents/M2/ProjetC/boost_1_68_0 -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I/home/courtin/M2/ProjetC/boost_1_68_0 -I/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/parsing -I/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

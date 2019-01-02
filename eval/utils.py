@@ -28,6 +28,7 @@ def write_res(output, value, res_type):
 def set_res(file, caus_snp):
 
     caus_snp_array = caus_snp.split(',')
+    caus_snp_array = caus_snp_array[::-1] #Reverse the array to match the right sort
 
     res_file  = open(file, "r")
 
