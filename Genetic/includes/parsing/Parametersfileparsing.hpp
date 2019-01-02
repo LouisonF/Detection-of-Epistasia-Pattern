@@ -24,8 +24,6 @@ public:
 	string file_path;
 	unsigned int header_nrows;
 	char sep;
-	string geno_path;
-	string pheno_path;
 	int len_pop;
 	int len_pattern;
 	int nb_parents;

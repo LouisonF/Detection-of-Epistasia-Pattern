@@ -1,0 +1,32 @@
+# number of header lines in the genotype file
+header_nrows 1
+
+# separation between fields in the genotype file
+sep ,
+
+# Initial population size
+population_size 100
+
+# SNPs pattern size
+pattern_size 2
+
+# Number of parents selected at each loop (must be pair)
+number_of_parents_selected 10
+
+# Number of iterations
+number_of_iterations 1000
+
+# alpha type I error rate
+alpha 0.05
+
+# Probability of a mutation on each child (in % without char '%')
+mutation_probability 10
+
+# Probability to choose a solution with a score lesser than the population's score median
+bad_solution_selection_probability 5
+
+# Genotypes file absolut path
+genos_file_path /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testgenotypes1.txt
+
+# Phenotypes file absolut path
+phenos_file_path /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testphenotypes1.txt

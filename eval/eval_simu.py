@@ -4,7 +4,7 @@
 # Louison Fresnais M2BB
 # François Courtin M2BB
 
-#run : ./f_measure input_directory_path output_directory_path n_runs nb_snp len_pattern
+#run : ./eval_simu.py input_directory_path output_directory_path n_runs nb_snp len_pattern
 
 from utils import *
 import os, os.path
@@ -14,7 +14,7 @@ import re
 input = sys.argv[1]
 output = sys.argv[2]
 n_runs = sys.argv[3]
-nb_snp = sys.argv[4]
+nb_snp = sys.argv[4] #number of snp in the matrix
 len_pattern = sys.argv[5]
 caus_snp = ""
 

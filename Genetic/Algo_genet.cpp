@@ -28,7 +28,7 @@ using namespace std;
 int main (int argc, char *argv[]) {
 	srand (time(NULL));
 
-	Parameters_file_parsing parameters("/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/OPTION_GENETIC.txt");
+	Parameters_file_parsing parameters("/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/PARAMETERS_GENETIC.txt");
 
 
 	char sep = parameters.sep;
@@ -41,15 +41,17 @@ int main (int argc, char *argv[]) {
 	float P_mutation = parameters.P_mutation;
 	float P_selection = parameters.P_selection;
 	string namefile = argv[1];
+	string geno_path = argv[2];
+	string pheno_path = argv[3];
 
 
-	Data_input datas_geno(parameters.geno_path, sep, nb_line_header);
+	Data_input datas_geno(geno_path, sep, nb_line_header);
 	int_matrix_type Mgeno = datas_geno.read();
 
-	Data_input datas_pheno(parameters.pheno_path, sep, nb_line_header);
+	Data_input datas_pheno(pheno_path, sep, nb_line_header);
 	int_matrix_type Mpheno = datas_pheno.read();
 
-	Data_input header_line(parameters.geno_path, sep, nb_line_header);
+	Data_input header_line(geno_path, sep, nb_line_header);
 	vector<string> header = header_line.get_snps();
 
 	cout << Mgeno << endl;

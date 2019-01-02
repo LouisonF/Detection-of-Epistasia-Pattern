@@ -120,16 +120,6 @@ void Parameters_file_parsing::import_line(string const line)
     	P_selection = atof(value.c_str());
     	cout << "selection" << endl;
     }
-    else if(key == "genos_file_path")
-    {
-    	geno_path = value.c_str();
-    	cout << "geno" << endl;
-    }
-    else if(key == "phenos_file_path")
-    {
-    	pheno_path = value.c_str();
-    	cout << "pheno" << endl;
-    }
     else
     {
     	cout << "parameter unknown"<<endl;
@@ -166,7 +156,5 @@ void Parameters_file_parsing::list_parameters()
 	<< "alpha => " << alpha << endl
     << "mutation_probability => " << P_mutation << endl
     << "bad_solution_selection_probability => " << P_selection << endl
-	<< "genos_file_path => " << geno_path << endl
-	<< "phenos_file_path => " << pheno_path << endl
     << "#################################" << endl;
 }
