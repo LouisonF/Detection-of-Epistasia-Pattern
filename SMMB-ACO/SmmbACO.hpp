@@ -46,9 +46,9 @@ public:
 	void compute_cumulative_dristrib_proba();
 	unsigned int select_snp_in_distrib_prob(float prob);
 	void snp_sampling(vector<unsigned int> &snp_table);
-	void learn_mb(vector<unsigned int> mb, vector<unsigned int> &snp_table);
-	void forward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_table);
-	void backward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_table);
+	void learn_mb(list<unsigned int> &mb, vector<unsigned int> &snp_table);
+	void forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_table);
+	void backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_table);
 	void evaporation_rate_update(unsigned int snp_index, float g2_score);
 	void update_tau();
 	void best_mbs(vector<vector<unsigned int>> &mbs);

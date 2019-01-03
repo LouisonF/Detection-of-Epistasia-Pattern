@@ -76,16 +76,27 @@ void Smmb_ACO::run_ACO()
             snp_sampling(snp_table);
 
             // learn MB from these SNPS
-            vector<unsigned int> mb(0);
+            list<unsigned int> mb;
             learn_mb(mb,snp_table);
-
             // add candidate mb to _mbs
             if(!mb.empty())
             {
-            	mbs.push_back(mb);
+    			vector<unsigned int> mb_temp;
+    			for(auto i = mb.begin();i!= mb.end();i++)
+    			{
+    				mb_temp.push_back(*i);
+    			}
+            	mbs.push_back(mb_temp);
             }
+            cout << "FIN DUNE FOURMI"<<endl;
+            cout << "FIN DUNE FOURMI"<<endl;
+            cout << "FIN DUNE FOURMI"<<endl;
+
         }
         update_tau(); //TODO
+  	  cout <<"**********************************************"<<endl;
+  	  cout <<"**********************************************"<<endl;
+  	  cout << "fin d'une iteration ACO"<<endl;
 
 
 	 }
@@ -226,19 +237,24 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 
 }
 
-void Smmb_ACO::learn_mb(vector<unsigned int> mb, vector<unsigned int> &snp_table)
+void Smmb_ACO::learn_mb(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
+	cout << "ENTREE DANS LA FONCTION LEARN MB" <<endl; //TODO DEBUG
 	unsigned int counter = 0;
-	vector<unsigned int> memory_mb; //This a the vector of all the trials to learn a mb during this void
+	list<unsigned int> memory_mb; //This a the vector of all the trials to learn a mb during this void
 	while(counter < _params.max_trials_learn_mb )
 	{
         cout << "hello, i am learning a markov blanket" <<endl; //TODO DEBUG
 		memory_mb = mb;
+		cout << "passage premiere etape"<<endl;
 		forward_phase(mb,snp_table);
+		cout << "passage seconde etape"<<endl;
 		backward_phase(mb,snp_table);
+		cout << "passage troisieme etape"<<endl;
 		counter++;
 	}
 	backward_phase(mb,snp_table);
+	cout << "passage quatrieme etape"<<endl;
 	//call forward
 	/*
 	 * échantillonnage sur snp_table, selon taille sous-ensemble
@@ -246,7 +262,7 @@ void Smmb_ACO::learn_mb(vector<unsigned int> mb, vector<unsigned int> &snp_table
 	 *
 	 */
 }
-void Smmb_ACO::forward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_table)
+void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
 	vector<unsigned int> random_snps;
 	float best_subset_pvalue = 1.1;
@@ -295,7 +311,11 @@ void Smmb_ACO::forward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_
 			current_SNP = current_combination.at(0);
 			cout << "current SNP is :" <<current_SNP<<endl; //TODO DEBUG
 			//We merge the temporary markov blanket
-			vector<unsigned int> mb_temp = mb;
+			vector<unsigned int> mb_temp;
+			for(auto i = mb.begin();i!= mb.end();i++)
+			{
+				mb_temp.push_back(*i);
+			}
 			//erase current_SNP from temporary combination vector
 			mb_temp.push_back(current_SNP);
 			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
@@ -341,7 +361,11 @@ void Smmb_ACO::forward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_
 				current_SNP = *it;
 				cout << "current SNP is :" <<*it<<endl; //TODO DEBUG
 				//We merge the temporary markov blanket
-				vector<unsigned int> mb_temp = mb;
+				vector<unsigned int> mb_temp;
+				for(auto i = mb.begin();i!= mb.end();i++)
+				{
+					mb_temp.push_back(*i);
+				}
 				//erase current_SNP from temporary combination vector
 				cout << "current combination temp size "<<current_combination_temp.size()<<endl;
 				vector<unsigned int>::iterator INT_oui;
@@ -415,8 +439,8 @@ void Smmb_ACO::forward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_
 				cout<<best_subset.size()<<endl;
 				//best_subset.push_back(12);
 				cout << best_subset.at(i)<< "value to push at the end of the MB" <<endl;
-				unsigned int value = 12;
-				mb.push_back(value); //TODO push_back is the best option but not working
+				mb.push_back(best_subset.at(i)); //TODO push_back is the best option but not working
+				snp_table.erase(remove(snp_table.begin(), snp_table.end(), best_subset.at(i)), snp_table.end());
 			}
 
 		}
@@ -451,23 +475,29 @@ void Smmb_ACO::forward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_
 	 *
 	 * 		Il faut faire des listes
 	 */
-void Smmb_ACO::backward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_table)
+void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
+
 	for (auto it =mb.begin(); it != mb.end(); it++)
 	{
 		unsigned int current_mb_elem = *it;
 		vector<unsigned int> current_comb;
 		unsigned int size = 3; //TODO maximum size of a combination, ask if we need to add it in parameters file
 		vector<vector<unsigned int>> all_snps_combinations;
-		vector<unsigned int> mb_minus_elem = mb;
-		mb_minus_elem.erase(it);
+        vector<unsigned int> mb_minus_elem;
+    	//TODO: The list container is not the more optimized choice but its the working one atm
+        for(auto i = mb.begin();i!= mb.end();i++)
+        {
+        	if(*i != current_mb_elem)
+        		mb_minus_elem.push_back(*i);
+        }
 		//We sort for the combination, not sure if it is usefull ...
 		sort(mb_minus_elem.begin(),mb_minus_elem.end());
 		//We run all combinations on the mb_minus_elem index
 		Miscellaneous::combinator(mb_minus_elem,all_snps_combinations,size);
 		Miscellaneous::link_comb_to_snp(mb_minus_elem,all_snps_combinations);
 
-		/*for (unsigned int i=0; i<all_snps_combinations.size(); i++)
+		for (unsigned int i=0; i<all_snps_combinations.size(); i++)
 		{
 			vector<unsigned int> current_combination = all_snps_combinations[i];
 			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
@@ -486,7 +516,7 @@ void Smmb_ACO::backward_phase(vector<unsigned int> mb, vector<unsigned int> &snp
 				break;
 			}
 
-		}*/
+		}
 
 		//New sampling phase but in the Markov blanket minus the current element
 
@@ -523,6 +553,9 @@ void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 
 
 	      }
+	  cout <<"#########################################################################"<<endl;
+	  cout <<"#########################################################################"<<endl;
+	  cout << "fin de best mbs"<<endl;
 }
 
 //somme des tau DONE
