@@ -71,7 +71,6 @@ private:
 	ofstream output_file;
 	map<unsigned, vector<float> > scores;
 	map<float, vector<unsigned int>> cumulated_distrib_prob;
-
 	map<vector<unsigned int>,unsigned int > mbs_count;
 };
 

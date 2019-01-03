@@ -15,6 +15,9 @@ alpha 0.05
 # precision used in adaptative permutations
 precision 0.1
 
+# number of SNP to be drawn
+aco_set_size 12
+
 # size of the smallest subset, k (draw in Algorithm 2)
 smallest_subset_size 3
 

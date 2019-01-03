@@ -7,75 +7,6 @@
 using namespace std;
 
 //----------------------------------------------------
-// G2_conditional_test_indep : Constructor 1
-//----------------------------------------------------
-
-// Genotypes are coded 0,1,2. Phenotypes are coded 0,1
-
-//--------- Deprecated -----------//
-G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> const& genos,blas::matrix<int> const& phenos,vector<unsigned int> const& cond_genos)
-{
-    G2_test_indep();
-    _df = 6; // 2*1*3 -> N_Class( (geno-1) * (pheno-1) * cond_geno )
-    _contingencies = vector<Contingency>(3);
-    unsigned n_obs = cond_genos.size();
-    cout <<"n_obs equals to" << n_obs<<endl; //TODO DEBUG
-    cout <<"genos sizes: " << genos.size1()<<"   "<< genos.size2()<<endl; //TODO DEBUG
-    cout <<"phenos sizes: " << phenos.size1()<<"   "<< phenos.size2()<<endl; //TODO DEBUG
-    for(unsigned i=0; i<n_obs; ++i)
-    {
-        // Put the current observation in the correct contingency table
-    	cout << "i equals to" << i <<endl; //TODO DEBUG
-        unsigned contingency_index = cond_genos[i];
-        cout << "contingency index equals to" << contingency_index<<endl;//TODO DEBUG
-        Contingency c = _contingencies[contingency_index];
-        unsigned cr = phenos(i,0); // index of contingency row
-        cout << "cr is equal to" << cr<<endl;//TODO DEBUG
-        unsigned cc = genos(i,0);  // index of contingency column
-        cout << "cc is equal to" << cc<<endl;//TODO DEBUG
-        cout << "contingency size1 equals to" << c.size1()<<endl;//TODO DEBUG
-        cout << "contingency size2 equals to" << c.size2()<<endl;//TODO DEBUG
-        c(cr, cc) += 1;
-    }
-    run();
-}
-
-//----------------------------------------------------
-// G2_conditional_test_indep : Constructor 2
-//----------------------------------------------------
-//--------- Deprecated -----------//
-G2_conditional_test_indep::G2_conditional_test_indep(blas_column const& genos, blas_column const& phenos, blas_matrix const& v_cond_genos)
-{
-    G2_test_indep();
-    if(v_cond_genos.size2() != 0)
-    {
-        unsigned n_obs = v_cond_genos.size1();
-        unsigned n_cond_genos = v_cond_genos.size2();
-        unsigned n_contingencies = pow(3, n_cond_genos);
-//        cout << "There are " << n_contingencies << " contingency tables" << endl;
-        _df = 2*3*n_cond_genos;
-        _contingencies = vector<Contingency>(n_contingencies);
-
-        for(unsigned i=0; i<n_obs; ++i)
-        {
-            // Put the current observation in the correct contingency table
-            unsigned contingency_index = 0;
-            for(unsigned j=0; j<n_cond_genos; ++j)
-                contingency_index += pow(3, j) * v_cond_genos(i,j);
-            Contingency& c = _contingencies[contingency_index];
-            unsigned cr = phenos(i);
-            unsigned cc = genos(i);
-            c(cr, cc) += 1;
-        }
-        run();
-    }
-    else
-        cerr << "Error::G2_conditional_test_indep: empty conditional set of variables." << endl;
-}
-//-------- END Deprecated --------//
-
-
-//----------------------------------------------------
 // G2_conditional_test_indep : Constructor 3
 //----------------------------------------------------
 G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, blas::matrix<int> phenos,
@@ -118,8 +49,9 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
         }
     }
     else
-    {//TODO Test to compilate wihtout adding 0 to the contingency matrix 
-        for(unsigned i=0; i<n_obs; ++i
+    {
+    	//TODO Test to compilate wihtout adding 0 to the contingency matrix
+        for(unsigned i=0; i<n_obs; ++i)
         {
             Contingency& c = _contingencies[0];
             unsigned cr = phenos(i,0);
@@ -167,7 +99,7 @@ void G2_conditional_test_indep::run(bool verbose)
     for(unsigned i=0; i<_contingencies.size(); ++i)
     {
         G2_test_indep g2(_contingencies[i]);
-        if(!g2.is_reliable())//TODO check if thé is.reliableb méthod is working
+        if(!g2.is_reliable())//TODO check if the is.reliableb method is working
         {
             _g2 = 0;
             _pval = 1;

@@ -64,7 +64,7 @@ void Miscellaneous::random_subset(vector<unsigned int> &in_subset, vector<unsign
 		//cout << "subset_max_indice" << subset_max_indice <<endl;
 		int random_indice = rand() % subset_max_indice + 0;
 		//cout << "random indice is" << random_indice;
-		if(find(out_subset.begin(), out_subset.end(), random_indice) == out_subset.end())
+		if(find(out_subset.begin(), out_subset.end(), in_subset.at(random_indice)) == out_subset.end())
 		{
 			out_subset.push_back(in_subset.at(random_indice));
 			value_in_vector = true;
@@ -73,16 +73,17 @@ void Miscellaneous::random_subset(vector<unsigned int> &in_subset, vector<unsign
 			value_in_vector = false;
 		}
 	}
+	value_in_vector = false;
 
 }
 
 void Miscellaneous::combinator(vector<unsigned int> snps_sorted, vector<vector<unsigned int>> &all_index_combinations, unsigned int size)
 {
+    int n = snps_sorted.size();
     for(int s=1; s<=size; s++)
     {
-    	int n = snps_sorted.size();
-       std::vector<bool> v(n);
-       std::fill(v.begin(), v.begin() + s, true);
+        std::vector<bool> v(n);
+        std::fill(v.begin(), v.begin() + s, true);
 
        do {
     	   vector<unsigned int> index_combination;
@@ -96,14 +97,15 @@ void Miscellaneous::combinator(vector<unsigned int> snps_sorted, vector<vector<u
            all_index_combinations.push_back(index_combination);
        } while (std::prev_permutation(v.begin(), v.end()));
     }
-       /*for (int x=0; x<all_index_combinations.size(); x++)
+    //TODO comment following block to remove combination verbose
+       for (int x=0; x<all_index_combinations.size(); x++)
        {
     	   for(int y=0; y<all_index_combinations[x].size();y++)
     	   {
     		   cout << all_index_combinations[x][y];
     	   }
     	   cout << "\n";
-       }*/
+       }
 
     //}
 

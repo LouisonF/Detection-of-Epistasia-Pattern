@@ -76,7 +76,7 @@ void Smmb_ACO::run_ACO()
             snp_sampling(snp_table);
 
             // learn MB from these SNPS
-            vector<unsigned int> mb;
+            vector<unsigned int> mb(0);
             learn_mb(mb,snp_table);
 
             // add candidate mb to _mbs
@@ -199,8 +199,8 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 
 	for(i=0; i<snp_table_size; i++)
 	{
-		cout << "snp_subset size " <<snp_table_size << endl;
-		cout << "i equals to" <<i<<endl;
+		//cout << "snp_subset size " <<snp_table_size << endl;
+		//cout << "i equals to" <<i<<endl;
 		while(snp_in_sample == false)//while no snp added to snp_table, draw a new snp and test
 		{
 			float proba = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -254,15 +254,31 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 	unsigned int current_SNP = 0;
 	//New sampling phase
 	Miscellaneous::random_subset(snp_table,random_snps,_params.smallest_subset_size ,rand_seed);
+	for(int i = 0; i<random_snps.size(); i++)
+	{
+		cout << "snp NOT SORTED at pos : " << i << "     " << random_snps.at(i)<<endl;
+	}
 	//Sorting is important for the combination method.
 	sort(random_snps.begin(),random_snps.end());
-
+	for(int i = 0; i<random_snps.size(); i++)
+	{
+		cout << "snp sorted at pos : " << i << "     " << random_snps.at(i)<<endl;
+	}
 	//Generating all combinations for the snp list
 	unsigned int size = 3; //TODO maximum size of a combination, ask if we need to add it in parameters file
 	vector<vector<unsigned int>> all_snps_combinations;
 	Miscellaneous::combinator(random_snps,all_snps_combinations,size);
 	Miscellaneous::link_comb_to_snp(random_snps,all_snps_combinations);
 
+	for (unsigned int x=0; x<all_snps_combinations.size(); x++)
+	{
+		cout << "x is equal to : "<<x<<endl;
+		vector<unsigned int> current_combination = all_snps_combinations.at(x);
+		for (unsigned int y=0; y<current_combination.size(); y++)
+		{
+			cout << "snp at pos y " << y << "is " << current_combination.at(y)<<endl;
+		}
+	}
 	for (unsigned int x=0; x<all_snps_combinations.size(); x++)
 	{
 		cout <<"x is equal to" << x<<endl;//TODO DEBUG
@@ -274,7 +290,8 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 
 		if(current_combination.size() ==1)
 		{
-
+			cout <<"Current combination size equals to 1 phase" <<endl;
+			cout << "----------------------------------------------------"<<endl;
 			current_SNP = current_combination.at(0);
 			cout << "current SNP is :" <<current_SNP<<endl; //TODO DEBUG
 			//We merge the temporary markov blanket
@@ -282,12 +299,15 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 			//erase current_SNP from temporary combination vector
 			mb_temp.push_back(current_SNP);
 			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
+			cout << "pheno size" << _phenotypes.size1() << endl;
 			for (unsigned int j = 0; j < _phenotypes.size1(); j++)
 			{
 
 				boostgenotype_column(j,0) =  _genotypes(j,0);
 			}
+			cout << "boostgenotype column size 1 =  "<<endl;
 			cout << boostgenotype_column.size1();
+			cout << "boostgenotype column size 2 =  "<<endl;
 			cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
 
 
@@ -298,16 +318,24 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 
 			if(cond_g2.is_reliable())
 			{
+				cout << "Entering condg2 reliable"<<endl;
+				cout << "-------------------------------------------"<<endl;
 				if(cond_g2.pval() < best_subset_pvalue)
 				{
+					cout << "entering the new pval is better than older"<<endl;
+					cout <<"x is equal to" << x<<endl;//TODO DEBUG
+					cout << "---------------------------------------"<<endl;
 					best_subset_pvalue = cond_g2.pval();
 					best_snp_index = x;
+					cout << "current best snp index is : " << best_snp_index<<endl;
 				}
 
 				scores[x].push_back(cond_g2.g2());
 			}
 		}else
 		{
+			cout <<"Current combination size MOOORREE phase" <<endl;
+			cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<endl;
 			for(auto it =current_combination.begin(); it != current_combination.end(); it++)
 			{
 				current_SNP = *it;
@@ -348,33 +376,68 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 				// See the method Contingency::is_reliable() for details.
 				if(cond_g2.is_reliable())
 				{
+					cout << "Entering condg2 reliable"<<endl;
+					cout << "-------------------------------------------"<<endl;
 					if(cond_g2.pval() < best_subset_pvalue)
 					{
+						cout << "entering the new pval is better than older"<<endl;
+						cout <<"x is equal to" << x<<endl;//TODO DEBUG
+						cout << "---------------------------------------"<<endl;
 						best_subset_pvalue = cond_g2.pval();
+						cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
+						cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
 						best_snp_index = x;
+						cout << "current best snp index is : " << best_snp_index <<endl;
 					}
 
 					scores[x].push_back(cond_g2.g2());
 				}
 			}
 		}
-
 	}
-// Append the best subset if alpha < threshold
-if(best_subset_pvalue < _params.aco_alpha)
-{
-	cout << "all snps test" << best_snp_index;
-	vector<unsigned> best_subset = all_snps_combinations.at(best_snp_index);  //copy
-	for(unsigned int i; i<best_subset.size(); i++)
+	cout << best_snp_index<<endl;
+	// Append the best subset if alpha < threshold
+	if(best_subset_pvalue < _params.aco_alpha)
 	{
-		mb.push_back(best_subset[i]);
+		cout << "ENTERING BEST SUBSET PVALUE UNDER ACO ALPHA"<<endl;
+		cout << "all snps test  " << best_snp_index; //TODO DEBUG, SNP index is too high
+		vector<unsigned> best_subset;
+		for(unsigned int j= 0; j<all_snps_combinations[best_snp_index].size();j++)
+		{
+			best_subset.push_back(all_snps_combinations.at(best_snp_index).at(j));
+		}
+		if(!best_subset.empty())
+		{
+			cout << "ENTERING BEST SUBSET NOT EMPTY"<<endl;
+			for(unsigned int i=0; i<best_subset.size(); i++)
+			{
+				cout << "i equals to : "<<i<<endl;
+				cout<<best_subset.size()<<endl;
+				//best_subset.push_back(12);
+				cout << best_subset.at(i)<< "value to push at the end of the MB" <<endl;
+				unsigned int value = 12;
+				mb.push_back(value); //TODO push_back is the best option but not working
+			}
+
+		}
+
+		/*for(vector<unsigned>::iterator it=best_subset.begin(); it != best_subset.end(); ++it)
+			{
+				vector<unsigned int>::iterator find_it;
+				unsigned int current_SNP_index;
+				find_it = find(snp_table.begin(), snp_table.end(), it*);
+
+				if (find_it != snp_table.end())
+				{
+					cout << "Element found in current_combination_temp: " << *find_it << '\n';
+					current_SNP_index = distance(snp_table.begin(), find_it);
+				}else
+				{
+					cout << "Element not found in current_combination_temp\n";
+				}
+			}*/
 	}
 
-	for(vector<unsigned>::iterator it=best_subset.begin(); it != best_subset.end(); ++it)
-	{
-		snp_table.erase(it);
-	}
-}
 }
 
 	//call backward
