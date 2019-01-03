@@ -226,7 +226,7 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 
 }
 
-void Smmb_ACO::learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
+void Smmb_ACO::learn_mb(vector<unsigned int> mb, vector<unsigned int> &snp_table)
 {
 	unsigned int counter = 0;
 	vector<unsigned int> memory_mb; //This a the vector of all the trials to learn a mb during this void
@@ -246,7 +246,7 @@ void Smmb_ACO::learn_mb(vector<unsigned int> &mb, vector<unsigned int> &snp_tabl
 	 *
 	 */
 }
-void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
+void Smmb_ACO::forward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_table)
 {
 	vector<unsigned int> random_snps;
 	float best_subset_pvalue = 1.1;
@@ -451,7 +451,7 @@ void Smmb_ACO::forward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp
 	 *
 	 * 		Il faut faire des listes
 	 */
-void Smmb_ACO::backward_phase(vector<unsigned int> &mb, vector<unsigned int> &snp_table)
+void Smmb_ACO::backward_phase(vector<unsigned int> mb, vector<unsigned int> &snp_table)
 {
 	for (auto it =mb.begin(); it != mb.end(); it++)
 	{
