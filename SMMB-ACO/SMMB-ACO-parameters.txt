@@ -16,7 +16,7 @@ alpha 0.05
 precision 0.1
 
 # number of SNP to be drawn
-aco_set_size 12
+aco_set_size 4
 
 # size of the smallest subset, k (draw in Algorithm 2)
 smallest_subset_size 3
@@ -27,19 +27,19 @@ max_trials_smmb 30
 # Maximal number of iterations allowed to learn one Markov blanket, #for one given large subset K, to escape the issue of non-modified MB.
 # If the sampling of k variables among K variables does not allow to #identify a candidate subset s which is actually added to the growing #MB, then the MB would not be modified and learnMB (inner level #procedure of SMMB algorithm) would stop.
 # To palliate this problem, one coerces the exploration of the subset #of K variables through max_trials_learn_mb.
-max_trials_learn_mb 100
+max_trials_learn_mb 12
 
 # number of consecutive runs of SMMB-ACO
 number_smmbaco_runs 1
 
 # Number of ants (500 or more (antEpiSeeker))
-number_ants 100
+number_ants 2
 
 # Number of snps sampled in each ant
 number_snp_per_ant 10
 
 # Number of iterations in ACO
-number_aco_iter 40
+number_aco_iter 2
 
 # Parameters for ACO optimization
 #   Parameters related to evaporation rates

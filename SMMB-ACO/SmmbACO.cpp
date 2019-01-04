@@ -252,6 +252,12 @@ void Smmb_ACO::learn_mb(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 		backward_phase(mb,snp_table);
 		cout << "passage troisieme etape"<<endl;
 		counter++;
+		cout <<"000000000000000000000000"<<endl;
+		cout <<"000000000000000000000000"<<endl;
+		cout <<"000000000000000000000000"<<endl;
+		cout <<"COUNTER EQUALS TO"<<counter<<endl;
+		cout <<"000000000000000000000000"<<endl;
+		cout <<"000000000000000000000000"<<endl;
 	}
 	backward_phase(mb,snp_table);
 	cout << "passage quatrieme etape"<<endl;
@@ -440,7 +446,7 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				//best_subset.push_back(12);
 				cout << best_subset.at(i)<< "value to push at the end of the MB" <<endl;
 				mb.push_back(best_subset.at(i)); //TODO push_back is the best option but not working
-				snp_table.erase(remove(snp_table.begin(), snp_table.end(), best_subset.at(i)), snp_table.end());
+				random_snps.erase(remove(random_snps.begin(), random_snps.end(), best_subset.at(i)), random_snps.end());
 			}
 
 		}
