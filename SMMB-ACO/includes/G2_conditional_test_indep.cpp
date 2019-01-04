@@ -30,19 +30,29 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
     {
         blas::matrix<unsigned int> ref_genos_matrix;
 		ref_genos_matrix = genos_column.data(); // get matrix from a column
-        //TODO check if the data method is working
+        cout << "size of ref_genos_matrix" << ref_genos_matrix.size1()<<endl;
+        cout << "size of ref_genos_matrix2" << ref_genos_matrix.size2()<<endl;
+       // int val = ref_genos_matrix.size2();
+        cout << ref_genos_matrix<<endl;
+        /*for(int h=0;h<=val;h++)
+        {
+        	cout << "#" << ref_genos_matrix(0,h)<<"#";
+        }*/
+		//TODO check if the data method is working
         for(unsigned i=0; i<n_obs; ++i)
         {
             // Put the current observation in the correct contingency table
             unsigned contingency_index = 0;
             unsigned j=0;
+            //cout <<"size of con_genos_indexes : "<<cond_genos_indexes.size()<<endl;
             for(vector<unsigned int>::const_iterator it=cond_genos_indexes.begin(); it!=cond_genos_indexes.end(); ++it, ++j)
             {
-            	//cout << "it equals to   " << it << "   i equals to   " << i<<endl;
+            	//cout << "it equals to   " << *it << "   i equals to   " << i<<endl;
+            	//cout << "j equals to    " << j<<endl;
                 contingency_index += pow(3, j) * ref_genos_matrix(i, 0);
             }
 
-            Contingency& c = _contingencies[contingency_index];
+            Contingency& c = _contingencies[0];
             unsigned cr = phenos(i,0);
             unsigned cc = genos(i,0);
             c(cr, cc) += 1;

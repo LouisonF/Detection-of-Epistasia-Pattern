@@ -323,13 +323,14 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				mb_temp.push_back(*i);
 			}
 			//erase current_SNP from temporary combination vector
-			mb_temp.push_back(current_SNP);
+			mb_temp.erase(remove(mb_temp.begin(), mb_temp.end(), current_SNP), mb_temp.end());
+
 			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
 			cout << "pheno size" << _phenotypes.size1() << endl;
 			for (unsigned int j = 0; j < _phenotypes.size1(); j++)
 			{
 
-				boostgenotype_column(j,0) =  _genotypes(j,0);
+				boostgenotype_column(j,0) =  _genotypes(j,current_SNP);
 			}
 			cout << "boostgenotype column size 1 =  "<<endl;
 			cout << boostgenotype_column.size1();
@@ -381,47 +382,62 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				{
 					cout << "Element found in current_combination_temp: " << *INT_oui << '\n';
 					current_SNP_index = distance(current_combination_temp.begin(), INT_oui);
+					current_combination_temp.erase(current_combination_temp.begin()+current_SNP_index);
 				}else
 				{
 					cout << "Element not found in current_combination_temp\n";
 				}
 
-				current_combination_temp.erase(current_combination_temp.begin()+current_SNP_index);
+				//Adding the current_combination whitout the current SNP to mb_temp
 				for(auto i=0; i<current_combination_temp.size(); i++)
 				{
 					mb_temp.push_back(current_combination_temp.at(i));
+
 					cout << "current_combination_temp at i" << current_combination_temp.at(i)<<endl;//TODO DEBUG
-				}
-				//We get the snp column number and get datas from it
-				blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
-				for (unsigned int j = 0; j < _phenotypes.size1(); j++)
-				{
 
-					boostgenotype_column(j,0) =  _genotypes(j,0);
 				}
-				G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp, true);
-				number_of_indep_test ++;
-
-				// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
-				// See the method Contingency::is_reliable() for details.
-				if(cond_g2.is_reliable())
+				for(auto i=0; i<current_combination_temp.size(); i++)
 				{
-					cout << "Entering condg2 reliable"<<endl;
-					cout << "-------------------------------------------"<<endl;
-					if(cond_g2.pval() < best_subset_pvalue)
+					//Create a matrix of size number of patient and one SNP
+					blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
+
+					for (unsigned int j = 0; j < _phenotypes.size1(); j++)
 					{
-						cout << "entering the new pval is better than older"<<endl;
-						cout <<"x is equal to" << x<<endl;//TODO DEBUG
-						cout << "---------------------------------------"<<endl;
-						best_subset_pvalue = cond_g2.pval();
-						cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
-						cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
-						best_snp_index = x;
-						cout << "current best snp index is : " << best_snp_index <<endl;
+
+						boostgenotype_column(j,0) =  _genotypes(j,current_SNP);
+					}
+					cout << "boostgenotype column size 1 =  "<<endl;
+					cout << boostgenotype_column.size1();
+					cout << "boostgenotype column size 2 =  "<<endl;
+					cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
+					G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp, true);
+					number_of_indep_test ++;
+
+					//We get the snp column number and get datas from it
+
+					// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
+					// See the method Contingency::is_reliable() for details.
+					if(cond_g2.is_reliable())
+					{
+						cout << "Entering condg2 reliable"<<endl;
+						cout << "-------------------------------------------"<<endl;
+						if(cond_g2.pval() < best_subset_pvalue)
+						{
+							cout << "entering the new pval is better than older"<<endl;
+							cout <<"x is equal to" << x<<endl;//TODO DEBUG
+							cout << "---------------------------------------"<<endl;
+							best_subset_pvalue = cond_g2.pval();
+							cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
+							cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
+							best_snp_index = x;
+							cout << "current best snp index is : " << best_snp_index <<endl;
+						}
+
+						scores[x].push_back(cond_g2.g2());
 					}
 
-					scores[x].push_back(cond_g2.g2());
 				}
+
 			}
 		}
 	}
@@ -494,10 +510,11 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
     	//TODO: The list container is not the more optimized choice but its the working one atm
         for(auto i = mb.begin();i!= mb.end();i++)
         {
-        	if(*i != current_mb_elem)
+        	if((*i != current_mb_elem)||(mb.size()==1))
         		mb_minus_elem.push_back(*i);
         }
-		//We sort for the combination, not sure if it is usefull ...
+        cout <<"size of the markov blanket" << mb.size()<<endl;
+        cout << "size of the mb_minus_elem vector" << mb_minus_elem.size()<<endl;
 		sort(mb_minus_elem.begin(),mb_minus_elem.end());
 		//We run all combinations on the mb_minus_elem index
 		Miscellaneous::combinator(mb_minus_elem,all_snps_combinations,size);
