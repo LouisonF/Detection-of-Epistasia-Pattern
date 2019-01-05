@@ -508,10 +508,30 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 		vector<vector<unsigned int>> all_snps_combinations;
         vector<unsigned int> mb_minus_elem;
     	//TODO: The list container is not the more optimized choice but its the working one atm
-        for(auto i = mb.begin();i!= mb.end();i++)
+		vector<unsigned int> mb_temp;
+		for(auto i = mb.begin();i!= mb.end();i++)
+		{
+			mb_temp.push_back(*i);
+		}
+		//Erase duplicate values in the markov_blanket
+        sort(mb_temp.begin(), mb_temp.end());
+        mb_temp.erase(unique(mb_temp.begin(), mb_temp.end()), mb_temp.end());
+
+
+        for(auto i = mb_temp.begin();i!= mb_temp.end();i++)
         {
-        	if((*i != current_mb_elem)||(mb.size()==1))
+        	if(mb_temp.size()==1)
+        	{
         		mb_minus_elem.push_back(*i);
+        		break;
+        	}else if(*i != current_mb_elem)
+        	{
+        		mb_minus_elem.push_back(*i);
+        	}else
+        	{
+        		cout << "else block, i equals to " << *i <<endl;
+        	}
+
         }
         cout <<"size of the markov blanket" << mb.size()<<endl;
         cout << "size of the mb_minus_elem vector" << mb_minus_elem.size()<<endl;
