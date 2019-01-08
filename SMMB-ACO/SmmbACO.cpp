@@ -340,7 +340,7 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 
 			//We get the snp column number and get datas from it
 			//boostgenotype_column = boostgenotype_column(current_SNP);
-			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination, true);
+			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
 			number_of_indep_test ++;
 
 			if(cond_g2.is_reliable())
@@ -410,7 +410,7 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 					cout << boostgenotype_column.size1();
 					cout << "boostgenotype column size 2 =  "<<endl;
 					cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
-					G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination, true);
+					G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
 					number_of_indep_test ++;
 
 					//We get the snp column number and get datas from it
@@ -443,7 +443,7 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 	}
 	cout << best_snp_index<<endl;
 	// Append the best subset if alpha < threshold
-	if(best_subset_pvalue < _params.aco_alpha)
+	if(best_subset_pvalue < _params.alpha)
 	{
 		cout << "ENTERING BEST SUBSET PVALUE UNDER ACO ALPHA"<<endl;
 		cout << "all snps test  " << best_snp_index; //TODO DEBUG, SNP index is too high
@@ -535,6 +535,10 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         }
         cout <<"size of the markov blanket" << mb.size()<<endl;
         cout << "size of the mb_minus_elem vector" << mb_minus_elem.size()<<endl;
+        if(mb.size()==0)
+        {
+        	break;
+        }
 		sort(mb_minus_elem.begin(),mb_minus_elem.end());
 		//We run all combinations on the mb_minus_elem index
 		Miscellaneous::combinator(mb_minus_elem,all_snps_combinations,size);
@@ -542,16 +546,18 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 
 		for (unsigned int i=0; i<all_snps_combinations.size(); i++)
 		{
-			vector<unsigned int> current_combination = all_snps_combinations[i];
+			vector<unsigned int> current_combination;
+            for(unsigned const& elem: all_snps_combinations[i])
+            	current_combination.push_back(elem);
 			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
 			for (unsigned int j = 0; j < _phenotypes.size1(); j++)
 			{
 				boostgenotype_column(j,0) =  _genotypes(j,0);
 			}
-			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination);
+			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination,_genotypes,false);
 			number_of_indep_test ++;
 			//If the pvalue of the test is above accepted alpha risk, discard this snp from MB
-			if(cond_g2.pval() > _params.aco_alpha)
+			if(cond_g2.pval() > _params.alpha)
 			{
 				//If the SNP is removed from the MB, we won't test it over different combinations,
 				//so we stop this loop instance and start the next one

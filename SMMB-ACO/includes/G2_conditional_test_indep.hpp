@@ -19,15 +19,19 @@ public:
 
     G2_conditional_test_indep(blas::matrix<int> genos,
     		blas::matrix<int> phenos,
-            vector<unsigned int> const& cond_genos_indexes, bool print_contingency=false);
+            vector<unsigned int> const& cond_genos_indexes,
+			blas::matrix<int> ref_matrix,
+			bool print_contingency=false);
 
     G2_conditional_test_indep(Contingency const& c, unsigned number_of_sub_contingencies);
 
     void run(bool verbose=false);
     void print_contingencies();
+    bool get_reliable();
 
 protected:
     std::vector<Contingency> _contingencies;
+    bool reliable;
 };
 
 #endif // G2_CONDITIONAL_TEST_INDEP_HPP
