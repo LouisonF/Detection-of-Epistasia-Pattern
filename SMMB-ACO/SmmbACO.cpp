@@ -340,7 +340,7 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 
 			//We get the snp column number and get datas from it
 			//boostgenotype_column = boostgenotype_column(current_SNP);
-			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp, true);
+			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination, true);
 			number_of_indep_test ++;
 
 			if(cond_g2.is_reliable())
@@ -410,7 +410,7 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 					cout << boostgenotype_column.size1();
 					cout << "boostgenotype column size 2 =  "<<endl;
 					cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
-					G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp, true);
+					G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination, true);
 					number_of_indep_test ++;
 
 					//We get the snp column number and get datas from it

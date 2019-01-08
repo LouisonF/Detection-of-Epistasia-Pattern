@@ -17,7 +17,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
     unsigned n_obs = genos.size1();
     unsigned n_cond_genos = cond_genos_indexes.size();
     cout << "there is : "<< n_cond_genos<< "conditional snps"<<endl;
-    unsigned n_contingencies = n_cond_genos;
+    unsigned n_contingencies = pow(3,n_cond_genos);
     cout << "the number of contigency table is : "<<n_contingencies<<endl;
     if (n_contingencies == 0)
     {
@@ -55,10 +55,10 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
             {
             	//cout << "it equals to   " << *it << "   i equals to   " << i<<endl;
             	//cout << "j equals to    " << j<<endl;
-                contingency_index += pow(3, j) * ref_genos_matrix(i, 0);
+                contingency_index += pow(3, j) * ref_genos_matrix(i, *it);
             }
 
-            Contingency& c = _contingencies[0];
+            Contingency& c = _contingencies[contingency_index];
             unsigned cr = phenos(i,0);
             unsigned cc = genos(i,0);
             c(cr, cc) += 1;
