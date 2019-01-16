@@ -8,7 +8,7 @@
 #include "ContingencyTable.h"
 #include <string>
 
-ContingencyTable::ContingencyTable(int_matrix_type Mgeno, int_matrix_type Mpheno, int_matrix_type Msol_geno, int len_pattern) : len_pattern(len_pattern), Mgeno(Mgeno), Mpheno(Mpheno), Msol_geno(Msol_geno){
+ContingencyTable::ContingencyTable(int_matrix_type &Mgeno, int_matrix_type &Mpheno, int_matrix_type Msol_geno, int len_pattern) : len_pattern(len_pattern), Mgeno(Mgeno), Mpheno(Mpheno), Msol_geno(Msol_geno){
 	nb_col = pow(3, len_pattern);
 	int_matrix_type table_cont_temp(2, nb_col);
 	cont_table = table_cont_temp;

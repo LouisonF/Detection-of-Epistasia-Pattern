@@ -43,7 +43,11 @@ int main (int argc, char *argv[]) {
 	string namefile = argv[1];
 	string geno_path = argv[2];
 	string pheno_path = argv[3];
-
+	/*
+	string namefile = "res";
+	string geno_path = "/home/courtin/Documents/M2/ProjetC/Simu_naive_2snp_0.25/Naif_1_Genotype.txt";
+	string pheno_path = "/home/courtin/Documents/M2/ProjetC/Simu_naive_2snp_0.25/Naif_1_Phenotype.txt";
+*/
 
 	Data_input datas_geno(geno_path, sep, nb_line_header);
 	int_matrix_type Mgeno = datas_geno.read();
@@ -54,7 +58,7 @@ int main (int argc, char *argv[]) {
 	Data_input header_line(geno_path, sep, nb_line_header);
 	vector<string> header = header_line.get_snps();
 
-	cout << Mgeno << endl;
+	//cout << Mgeno << endl;
 	Population population(Mgeno, Mpheno, len_pop, len_pattern);
 
 	population.init_pop_geno();
@@ -62,6 +66,8 @@ int main (int argc, char *argv[]) {
 
 	int_matrix_type Msol_geno(1, len_pattern); //temp solution for the loop
  	vector<float> G2_res;
+
+ 	int not_reliable_compt = 0;
 
 	for (int i = 0; i < len_pop; i++){
 		for (int j = 0; j < len_pattern; j++){
@@ -77,7 +83,7 @@ int main (int argc, char *argv[]) {
 		//theo_table_pop.display_table();
 
 		G2test G2_pop(cont_table_pop.get_cont_table(), theo_table_pop.get_theo_table());
-		G2_pop.run_G2();
+		G2_pop.run_G2(not_reliable_compt, false);
 		//G2_pop.display_g2();
 		G2_res.push_back(G2_pop.get_g2());
 		population.set_Mpop_geno(i,len_pattern,G2_pop.get_g2());
@@ -123,10 +129,10 @@ int main (int argc, char *argv[]) {
 			//theo_table_child.display_table();
 
 			G2test G2_child(cont_table_child.get_cont_table(), theo_table_child.get_theo_table());
-			G2_child.run_G2();
+			G2_child.run_G2(not_reliable_compt, true);
 			//G2_child.display_g2();
 
-			if ((G2_child.get_g2() > population.get_Mpop_geno()(parents.get_MParents()(i,0), len_pattern)) and (G2_child.get_pval() < alpha)){
+			if ((G2_child.get_g2() > population.get_Mpop_geno()(parents.get_MParents()(i,0), len_pattern)) and (G2_child.get_pval() < population.get_Mpop_geno()(parents.get_MParents()(i,0), len_pattern+1))){
 				for (int j = 0; j < len_pattern; j++){
 					population.set_Mpop_geno( parents.get_MParents()(i,0) , j , children.get_MChildren()(i,j) );
 				}
@@ -142,15 +148,16 @@ int main (int argc, char *argv[]) {
 		median = G2_res[G2_res.size()/2]; //Median of the solutions' G2
 
 		iterator++;
-		cout << iterator << "/" << endl;
+		cout << iterator << "/";
 	}
 
 
 	Output output(population.get_Mpop_geno(), header, len_pattern, len_pop, namefile);
+
 	output.set_list_pattern();
-	output.set_list_sol();
 	output.set_best_sol();
 	output.write_best_sol();
 
-	cout << "THE END 12";
+	cout << "Number of not reliable G test : " << not_reliable_compt << endl;
+	cout << "THE END 12" << endl;
 }

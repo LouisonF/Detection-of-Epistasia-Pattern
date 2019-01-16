@@ -17,6 +17,48 @@ Output::~Output() {
 	// TODO Auto-generated destructor stub
 }
 
+int Output::cut(vector<vector<float>> & vect, int start, int end) {
+	float pivot = vect[start][len_pattern+1];
+	unsigned int from_left = start+1;
+	unsigned int from_right = end;
+	float tmp;
+
+	//cout << "Vector entering partition:";
+	//print (a,start,end);
+	//cout << endl;
+
+	while (from_left != from_right) {
+		if (vect[from_left][len_pattern+1]  <= pivot) from_left++;
+		else {
+			while (( from_left != from_right)  && (pivot < vect[from_right][len_pattern+1])) from_right--;
+			//cout << "swaping " << a[from_left] << " with "<< a[from_right] << endl;
+			tmp =  vect[from_right][len_pattern+1];
+			vect[from_right][len_pattern+1] = vect[from_left][len_pattern+1];
+			vect[from_left][len_pattern+1] = tmp;
+		}
+	}
+
+	if (vect[from_left][len_pattern+1]>pivot) from_left--;
+	vect[start][len_pattern+1] = vect[from_left][len_pattern+1];
+	vect[from_left][len_pattern+1] = pivot;
+
+	//cout << "Vector after partition:   ";
+	//print (a,start,end);
+	//cout << endl;
+
+	return (from_left);
+}
+
+
+void Output::quickSort(vector<vector<float>> & vect, int p, int r) {
+  if (p < r) {
+    int q = cut(vect, p, r);
+    quickSort(vect, p, q - 1);
+    quickSort(vect, q + 1, r);
+  }
+}
+
+
 void Output::set_list_pattern(){
 	vector<float> pattern;
 	for (int i = 0; i < len_pop; i++){
@@ -30,6 +72,7 @@ void Output::set_list_pattern(){
 	}
 }
 
+/*
 void Output::set_list_sol(){
 
 	vector<float> sol;
@@ -41,9 +84,9 @@ void Output::set_list_sol(){
 		list_sol.push_back(sol);
 	}
 }
-
+*/
 void Output::set_best_sol(){
-	vector<int> occurences_list;
+	/*vector<int> occurences_list;
 	vector<float> best_pattern;
 	int max_occ = 0;
 	int cpt;
@@ -72,23 +115,34 @@ void Output::set_best_sol(){
 			cout << best_pattern_list[i][j] << "/";
 		}
 		cout << " with " << max_occ << " occurences, " << "score : " << best_pattern_list[i][len_pattern] << " P_value : " << best_pattern_list[i][len_pattern+1] << endl;
+	}*/
+
+	set_list_pattern();
+	quickSort(list_pattern, 0, list_pattern.size()-1);
+
+	cout << "List of solutions : " << endl;
+	for (int i = 0; i < list_pattern.size(); i++){
+		for (int j = 0; j < len_pattern; j++){
+			cout << list_pattern[i][j] << "/";
+		}
+		cout << "\t score : " << list_pattern[i][len_pattern] << "\t p-value : " << list_pattern[i][len_pattern+1] << endl;
 	}
 }
 
 void Output::write_best_sol(){
-	ofstream file("Genetic_results/" + filename + ".txt", ios::out);
+	ofstream file("/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic_results/" + filename + ".txt", ios::out);
 
 	if(file)
 	{
-		for (int i = 0;i < int(best_pattern_list.size()); i++){
+		for (int i = 0;i < int(list_pattern.size()); i++){
 			file << "{";
 			for (int j = 0; j < len_pattern+2; j++){
 				if (j == len_pattern -1 ){
-					file << header[best_pattern_list[i][j]] << "}\t";
+					file << header[list_pattern[i][j]] << "}\t";
 				}else if (j >= len_pattern){
-					file << best_pattern_list[i][j] << "\t";
+					file << list_pattern[i][j] << "\t";
 				}else{
-					file << header[best_pattern_list[i][j]] << ",";
+					file << header[list_pattern[i][j]] << ",";
 				}
 			}
 			file << endl;

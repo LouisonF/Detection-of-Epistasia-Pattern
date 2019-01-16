@@ -21,7 +21,8 @@ private:
 public:
 	G2test(int_matrix_type,int_matrix_type);
 	virtual ~G2test();
-	void run_G2();
+	bool reliable_test(int_matrix_type & c);
+	void run_G2(int &not_reliable, bool child);
 	void display_g2();
 	float get_g2();
 	float get_pval();

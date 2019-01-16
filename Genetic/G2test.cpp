@@ -18,13 +18,26 @@ G2test::~G2test() {
 	// TODO Auto-generated destructor stub
 }
 
-void G2test::run_G2(){
+bool G2test::reliable_test(int_matrix_type & c)
+{
+	for(unsigned i=0; i<c.size1(); ++i)
+	{
+	   for(unsigned j=0; j<c.size2(); ++j)
+	   {
+           if(c(i,j) < 5)
+			   return false;
+	   }
+	}
+	return true;
+}
+
+void G2test::run_G2(int &not_reliable, bool child){
 
 	for(unsigned i=0; i<cont_table.size1(); ++i)
 	{
 		for(unsigned j=0; j<cont_table.size2(); ++j)
 		{
-			if(cont_table(i,j) != 0 /*and cont_table(i,j) >= 5*/)
+			if(cont_table(i,j) != 0)
 			{
 				double div = (double) cont_table(i,j) / theo_table(i,j);
 				g2 += cont_table(i,j) * log(div);
@@ -40,6 +53,10 @@ void G2test::run_G2(){
 		g2 = 4000; // High value of G2 instead of inf value to be able to run the cdf()
 		boost::math::chi_squared_distribution<double> chi2_dist(df);
 		pval = 1 - boost::math::cdf(chi2_dist, g2);
+	}
+
+	if (!reliable_test(cont_table) and child){
+		not_reliable ++;
 	}
 }
 

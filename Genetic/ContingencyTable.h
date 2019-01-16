@@ -22,7 +22,7 @@ private:
 	int_matrix_type Msol_geno;
 	int_matrix_type cont_table;
 public:
-	ContingencyTable(int_matrix_type, int_matrix_type, int_matrix_type, int);
+	ContingencyTable(int_matrix_type &Mgeno, int_matrix_type &Mpheno, int_matrix_type, int);
 	virtual ~ContingencyTable();
 	void set_pattern_list();
 	void set_table();
