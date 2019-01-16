@@ -15,18 +15,18 @@ Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas::matrix<int> & phenos, Parame
 	//Output file opening
     string file_basename = basename((char*)_params.genos_file.c_str());
     string result_filename = "outputs/RESULT_" + file_basename;
-    //output_file.open(result_filename.c_str(), ios::trunc);
+    ofstream output_file(file_basename+"12", ios::out);
     cout << "file_basename : "<< file_basename << "result_filename : " << result_filename << endl;
 
-    /*if(!output_file)
+    if(!output_file)
     {
         std::cerr << "Error while opening output.txt (by writing access) !\n";
         exit(-1);
-    }*/
+    }
 
 	//Random seed
-   /* srand(time(NULL));
-    rand_seed.seed(std::time(0));*/
+    srand(time(NULL));
+    rand_seed.seed(std::time(0));
 
     // Here, we count the number of independant test made during a SMMB execution.
     number_of_indep_test = 0;
@@ -81,11 +81,13 @@ void Smmb_ACO::run_ACO()
             // add candidate mb to _mbs
             if(!mb.empty())
             {
+    			cout << "SIZE OF MB is : "<<mb.size()<<endl;
     			vector<unsigned int> mb_temp;
     			for(auto i = mb.begin();i!= mb.end();i++)
     			{
     				mb_temp.push_back(*i);
     			}
+    			cout << "SIZE OF MB_TEMP is : "<<mb_temp.size()<<endl;
             	mbs.push_back(mb_temp);
             }
             cout << "FIN DUNE FOURMI"<<endl;
@@ -108,7 +110,7 @@ void Smmb_ACO::sum_tau()
     // initialisation of the variable sum_of_tau at 0 (this void is called at each ACO iteration)
 	sum_of_tau= 0.0;
 	//Tried to use list type for tau and eta variable but list don't use direct access, vector does.
-    for(int i=0; i<tau.size(); i++)
+    for(unsigned int i=0; i<tau.size(); i++)
     {
     	sum_of_tau += pow(tau.at(i), _params.aco_alpha) * pow(eta.at(i), _params.aco_beta);
     }
@@ -144,7 +146,7 @@ float Smmb_ACO::pheromone_for_snp(float tau_for_snp, float eta_for_snp)
 //This method compute the distribution of probability
 void Smmb_ACO::compute_distrib_prob()
 {
-	for(int i=0; i<tau.size(); i++)
+	for(unsigned int i=0; i<tau.size(); i++)
 	{
 		pdf.at(i) = pheromone_for_snp(tau.at(i),eta.at(i));
 	}
@@ -154,7 +156,7 @@ void Smmb_ACO::compute_cumulative_dristrib_proba()
 {
 	float memory = 0.0;
 	cumulated_distrib_prob.clear();
-	for(int i=0; i<pdf.size(); i++)
+	for(unsigned int i=0; i<pdf.size(); i++)
 	{
 		if (pdf.at(i) >0)
 		{
@@ -242,7 +244,7 @@ void Smmb_ACO::learn_mb(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 	cout << "ENTREE DANS LA FONCTION LEARN MB" <<endl; //TODO DEBUG
 	unsigned int counter = 0;
 	list<unsigned int> memory_mb; //This a the vector of all the trials to learn a mb during this void
-	while(counter < _params.max_trials_learn_mb )
+	while((counter < _params.max_trials_learn_mb) && (mb.empty() && (memory_mb != mb)));
 	{
         cout << "hello, i am learning a markov blanket" <<endl; //TODO DEBUG
 		memory_mb = mb;
@@ -276,20 +278,19 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 	unsigned int current_SNP = 0;
 	//New sampling phase
 	Miscellaneous::random_subset(snp_table,random_snps,_params.smallest_subset_size ,rand_seed);
-	for(int i = 0; i<random_snps.size(); i++)
+	for(unsigned int i = 0; i<random_snps.size(); i++)
 	{
 		cout << "snp NOT SORTED at pos : " << i << "     " << random_snps.at(i)<<endl;
 	}
 	//Sorting is important for the combination method.
 	sort(random_snps.begin(),random_snps.end());
-	for(int i = 0; i<random_snps.size(); i++)
+	for(unsigned int i = 0; i<random_snps.size(); i++)
 	{
 		cout << "snp sorted at pos : " << i << "     " << random_snps.at(i)<<endl;
 	}
 	//Generating all combinations for the snp list
-	unsigned int size = 3; //TODO maximum size of a combination, ask if we need to add it in parameters file
 	vector<vector<unsigned int>> all_snps_combinations;
-	Miscellaneous::combinator(random_snps,all_snps_combinations,size);
+	Miscellaneous::combinator(random_snps,all_snps_combinations,_params.size);
 	Miscellaneous::link_comb_to_snp(random_snps,all_snps_combinations);
 
 	for (unsigned int x=0; x<all_snps_combinations.size(); x++)
@@ -389,14 +390,14 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				}
 
 				//Adding the current_combination whitout the current SNP to mb_temp
-				for(auto i=0; i<current_combination_temp.size(); i++)
+				for(unsigned int i=0; i<current_combination_temp.size(); i++)
 				{
 					mb_temp.push_back(current_combination_temp.at(i));
 
 					cout << "current_combination_temp at i" << current_combination_temp.at(i)<<endl;//TODO DEBUG
 
 				}
-				for(auto i=0; i<current_combination_temp.size(); i++)
+				for(unsigned int i=0; i<current_combination_temp.size(); i++)
 				{
 					//Create a matrix of size number of patient and one SNP
 					blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
@@ -410,6 +411,8 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 					cout << boostgenotype_column.size1();
 					cout << "boostgenotype column size 2 =  "<<endl;
 					cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
+		            if(mb_temp.size()==0)
+		            	break;
 					G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
 					number_of_indep_test ++;
 
@@ -455,33 +458,15 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 		if(!best_subset.empty())
 		{
 			cout << "ENTERING BEST SUBSET NOT EMPTY"<<endl;
+			Miscellaneous::append_vector_to_list(mb, best_subset);
 			for(unsigned int i=0; i<best_subset.size(); i++)
 			{
-				cout << "i equals to : "<<i<<endl;
-				cout<<best_subset.size()<<endl;
-				//best_subset.push_back(12);
-				cout << best_subset.at(i)<< "value to push at the end of the MB" <<endl;
-				mb.push_back(best_subset.at(i)); //TODO push_back is the best option but not working
+				//Erase best_subset values from the random_snps vector
 				random_snps.erase(remove(random_snps.begin(), random_snps.end(), best_subset.at(i)), random_snps.end());
 			}
 
 		}
 
-		/*for(vector<unsigned>::iterator it=best_subset.begin(); it != best_subset.end(); ++it)
-			{
-				vector<unsigned int>::iterator find_it;
-				unsigned int current_SNP_index;
-				find_it = find(snp_table.begin(), snp_table.end(), it*);
-
-				if (find_it != snp_table.end())
-				{
-					cout << "Element found in current_combination_temp: " << *find_it << '\n';
-					current_SNP_index = distance(snp_table.begin(), find_it);
-				}else
-				{
-					cout << "Element not found in current_combination_temp\n";
-				}
-			}*/
 	}
 
 }
@@ -500,11 +485,15 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
 
-	for (auto it =mb.begin(); it != mb.end(); it++)
+	for(unsigned int i = 0; i<mb.size();i++)
 	{
+
+		//TESTING ALTERNATIVE METHOD
+		std::list<unsigned int>::iterator it = mb.begin();
+		std::advance(it, i);
 		unsigned int current_mb_elem = *it;
+		//END OF ALTERNATIVE METHOD
 		vector<unsigned int> current_comb;
-		unsigned int size = 3; //TODO maximum size of a combination, ask if we need to add it in parameters file
 		vector<vector<unsigned int>> all_snps_combinations;
         vector<unsigned int> mb_minus_elem;
     	//TODO: The list container is not the more optimized choice but its the working one atm
@@ -513,6 +502,7 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 		{
 			mb_temp.push_back(*i);
 		}
+		cout << "mb_temb_backward equals to" << mb_temp.size()<<endl;
 		//Erase duplicate values in the markov_blanket
         sort(mb_temp.begin(), mb_temp.end());
         mb_temp.erase(unique(mb_temp.begin(), mb_temp.end()), mb_temp.end());
@@ -541,29 +531,42 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         }
 		sort(mb_minus_elem.begin(),mb_minus_elem.end());
 		//We run all combinations on the mb_minus_elem index
-		Miscellaneous::combinator(mb_minus_elem,all_snps_combinations,size);
+		Miscellaneous::combinator(mb_minus_elem,all_snps_combinations,_params.size);
 		Miscellaneous::link_comb_to_snp(mb_minus_elem,all_snps_combinations);
 
+        //Create a matrix of size number of patient and one SNP
+        blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
+
+        for (unsigned int j = 0; j < _phenotypes.size1(); j++)
+        {
+
+        	boostgenotype_column(j,0) =  _genotypes(j,current_mb_elem);
+        }
+        cout << "number of combinations"<<endl;
 		for (unsigned int i=0; i<all_snps_combinations.size(); i++)
 		{
 			vector<unsigned int> current_combination;
+			cout << "size of the snp combination" << all_snps_combinations[i].size()<<endl;
             for(unsigned const& elem: all_snps_combinations[i])
+            {
             	current_combination.push_back(elem);
-			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
-			for (unsigned int j = 0; j < _phenotypes.size1(); j++)
-			{
-				boostgenotype_column(j,0) =  _genotypes(j,0);
-			}
-			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination,_genotypes,false);
-			number_of_indep_test ++;
-			//If the pvalue of the test is above accepted alpha risk, discard this snp from MB
-			if(cond_g2.pval() > _params.alpha)
-			{
-				//If the SNP is removed from the MB, we won't test it over different combinations,
-				//so we stop this loop instance and start the next one
-				mb.erase(it);
-				break;
-			}
+            	cout << "current elem equals to"<<elem<<endl;
+            }
+            if(mb_temp.size()==0)
+            	break;
+            G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination,_genotypes, true);
+            number_of_indep_test ++;
+            //If the pvalue of the test is above accepted alpha risk, discard this snp from MB
+
+            cout << "the backward p_value is : "<<cond_g2.pval()<<endl;
+            if(cond_g2.pval() > _params.alpha)
+            {
+            	//If the SNP is removed from the MB, we won't test it over different combinations,
+            	//so we stop this loop instance and start the next one
+            	mb.remove(current_mb_elem);
+            	mb_temp.erase(remove(mb_temp.begin(), mb_temp.end(), current_mb_elem), mb_temp.end());
+            	break;
+            }
 
 		}
 
@@ -577,13 +580,31 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 {
 	  vector<vector<unsigned int>>::iterator uniq_it;
-	  vector<vector<unsigned int>> uniq_mbs;
 	  cout << "unique markov blankets:";
+
+	  cout << "mbs size one" << mbs.size()<<endl;
+
+	  for(unsigned int i = 0; i<mbs.size(); i++)
+	  {
+		  vector<unsigned int> temp_test = mbs[i];
+		  for (unsigned int j =0; j<temp_test.size();j++)
+		  {
+			  cout << temp_test[j] << " ";
+		  }
+		  cout << " ### "<<endl;
+	  }
 
 	  for (uniq_it=mbs.begin(); uniq_it!=mbs.end(); uniq_it++)
 	  {
 		  pair<map<vector<unsigned int>,unsigned int>::iterator,bool> current_mb;
 		  current_mb = mbs_count.insert(pair<vector<unsigned int> ,unsigned int>(*uniq_it,0));
+		  vector<unsigned int>temp_mb = *uniq_it;
+
+		  for (auto it = temp_mb.begin(); it != temp_mb.end(); it++)
+		  {
+			  cout << *it<<endl;
+		  }
+
 		  if (current_mb.second==false)
 		  {
 		    cout << "element "<< current_mb.first->second << " already existed";
@@ -605,6 +626,20 @@ void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 	  cout <<"#########################################################################"<<endl;
 	  cout <<"#########################################################################"<<endl;
 	  cout << "fin de best mbs"<<endl;
+}
+
+void Smmb_ACO::write_results()
+{
+
+	for (auto& t : mbs_count)
+	{
+		for(auto it = t.first.begin();it != t.first.end();it++)
+		{
+		    cout << *it << " ";
+		}
+		cout << t.second <<"\n";
+	}
+
 }
 
 //somme des tau DONE

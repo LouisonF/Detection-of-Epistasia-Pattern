@@ -104,6 +104,10 @@ void Parameters_file_parsing::import_line(string const line)
     {
     	smallest_subset_size = atoi(value.c_str());
     }
+    else if(key == "epistasia_size")
+    {
+    	size = atoi(value.c_str());
+    }
     else if(key == "max_trials_smmb")
     {
     	max_trials_smmb = atoi(value.c_str());

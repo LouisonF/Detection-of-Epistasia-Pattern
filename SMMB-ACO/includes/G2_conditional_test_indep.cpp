@@ -14,10 +14,9 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
 													 blas::matrix<int> ref_matrix,
                                                      bool do_print_contingency)
 {
-//    cout << "METHOD G2_conditional_test_indep" << endl;
+    cout << "METHOD G2_conditional_test_indep" << endl;
     unsigned n_obs = ref_matrix.size1();
     unsigned n_snp = ref_matrix.size2();
-    cout << "LES SNPS OUI" << n_snp<<endl;
     unsigned n_cond_genos = cond_genos_indexes.size();
     cout << "there is : "<< n_cond_genos<< "conditional snps"<<endl;
     unsigned n_contingencies = pow(3,n_cond_genos);
@@ -73,7 +72,6 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
     }
     else
     {
-    	//TODO Test to compilate wihtout adding 0 to the contingency matrix
         for(unsigned i=0; i<n_obs; ++i)
         {
             Contingency& c = _contingencies[0];
@@ -84,7 +82,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
     }
 
     run(do_print_contingency);
-//    cout << "METHOD G2_conditional_test_indep finished" << endl;
+    cout << "METHOD G2_conditional_test_indep finished" << endl;
 }
 
 //----------------------------------------------------
@@ -122,7 +120,7 @@ void G2_conditional_test_indep::run(bool verbose)
     for(unsigned i=0; i<_contingencies.size(); ++i)
     {
         G2_test_indep g2(_contingencies[i]);
-        if(!g2.is_reliable())//TODO check if the is.reliableb method is working
+        if(!g2.is_reliable())
         {
             _g2 = 0;
             _pval = 1;

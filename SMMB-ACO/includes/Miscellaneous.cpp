@@ -137,6 +137,12 @@ void Miscellaneous::print_human_readable_combinations(vector<vector<unsigned int
     }
     cout << "]" << endl;
 }
+
+void Miscellaneous::append_vector_to_list(list<unsigned> & l, vector<unsigned> const& v)
+{
+    for(unsigned const& i: v)
+        l.push_back(i);
+}
 /*DEPRECATED
 vector<vector<unsigned int>>  Miscellaneous::generate_all_combinations(vector<unsigned int> &snps_sorted, int size)
 {

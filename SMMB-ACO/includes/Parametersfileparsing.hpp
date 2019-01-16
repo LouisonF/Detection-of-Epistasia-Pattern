@@ -33,6 +33,7 @@ public:
 	unsigned int number_ants;
 	unsigned int number_snp_per_ant;
 	unsigned int smallest_subset_size;
+	unsigned int size;
 	unsigned int max_trials_smmb;
 	unsigned int max_trials_learn_mb;
 	//evaporation rate parameter
