@@ -56,6 +56,7 @@ public:
 	vector<vector<unsigned int>> mbs;
 
 private:
+	string file_basename;
 	string file_path;
 	Parameters_file_parsing _params;
 	mt19937 rand_seed;
@@ -70,7 +71,9 @@ private:
 	vector<float> pdf;
 	int number_executions;
 	ofstream output_file;
-	map<unsigned, vector<float> > scores;
+	map<unsigned int, vector<double> > scores;
+	map<vector<unsigned int>, vector<float> > results;
+	vector<vector<double>> results_v;
 	map<float, vector<unsigned int>> cumulated_distrib_prob;
 	map<vector<unsigned int>,unsigned int > mbs_count;
 };

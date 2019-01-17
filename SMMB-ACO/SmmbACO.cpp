@@ -13,16 +13,8 @@ Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas::matrix<int> & phenos, Parame
 {
 
 	//Output file opening
-    string file_basename = basename((char*)_params.genos_file.c_str());
-    string result_filename = "outputs/RESULT_" + file_basename;
-    ofstream output_file(file_basename+"12", ios::out);
-    cout << "file_basename : "<< file_basename << "result_filename : " << result_filename << endl;
-
-    if(!output_file)
-    {
-        std::cerr << "Error while opening output.txt (by writing access) !\n";
-        exit(-1);
-    }
+    file_basename = basename((char*)_params.genos_file.c_str());
+    cout << "file_basename : "<< file_basename <<endl;
 
 	//Random seed
     srand(time(NULL));
@@ -62,6 +54,7 @@ void Smmb_ACO::run_ACO()
 		sum_tau();
 		//We clear the score map(key > value) for the new iteration
 		scores.clear();
+		results.clear();
 
 		compute_distrib_prob();
 		compute_cumulative_dristrib_proba();
@@ -126,7 +119,7 @@ void Smmb_ACO::update_tau()
 	for(auto it = scores.begin(); it != scores.end(); it++)
 	{
 		unsigned int snp_index = it->first;
-		vector<float> scores_vec = it->second;
+		vector<double> scores_vec = it->second;
 		for(unsigned int i = 0; i < scores_vec.size(); i++)
 		{
 			evaporation_rate_update(snp_index,scores_vec[i]);
@@ -311,12 +304,12 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 		cout << "current combination size "<<current_combination.size()<<endl;
 		cout<< current_combination.at(0)<<endl;
 
-		if(current_combination.size() ==1)
+		cout <<"Current combination size MOOORREE phase" <<endl;
+		cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<endl;
+		for(auto it =current_combination.begin(); it != current_combination.end(); it++)
 		{
-			cout <<"Current combination size equals to 1 phase" <<endl;
-			cout << "----------------------------------------------------"<<endl;
-			current_SNP = current_combination.at(0);
-			cout << "current SNP is :" <<current_SNP<<endl; //TODO DEBUG
+			current_SNP = *it;
+			cout << "current SNP is :" <<*it<<endl; //TODO DEBUG
 			//We merge the temporary markov blanket
 			vector<unsigned int> mb_temp;
 			for(auto i = mb.begin();i!= mb.end();i++)
@@ -324,124 +317,100 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				mb_temp.push_back(*i);
 			}
 			//erase current_SNP from temporary combination vector
-			mb_temp.erase(remove(mb_temp.begin(), mb_temp.end(), current_SNP), mb_temp.end());
-
-			blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
-			cout << "pheno size" << _phenotypes.size1() << endl;
-			for (unsigned int j = 0; j < _phenotypes.size1(); j++)
+			cout << "current combination temp size "<<current_combination_temp.size()<<endl;
+			vector<unsigned int>::iterator INT_oui;
+			unsigned int current_SNP_index;
+			INT_oui = find (current_combination_temp.begin(), current_combination_temp.end(), current_SNP);
+			if (INT_oui != current_combination_temp.end())
 			{
-
-				boostgenotype_column(j,0) =  _genotypes(j,current_SNP);
+				cout << "Element found in current_combination_temp: " << *INT_oui << '\n';
+				current_SNP_index = distance(current_combination_temp.begin(), INT_oui);
+				current_combination_temp.erase(current_combination_temp.begin()+current_SNP_index);
+			}else
+			{
+				cout << "Element not found in current_combination_temp\n";
 			}
-			cout << "boostgenotype column size 1 =  "<<endl;
-			cout << boostgenotype_column.size1();
-			cout << "boostgenotype column size 2 =  "<<endl;
-			cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
 
-
-			//We get the snp column number and get datas from it
-			//boostgenotype_column = boostgenotype_column(current_SNP);
-			G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
-			number_of_indep_test ++;
-
-			if(cond_g2.is_reliable())
+			//Adding the current_combination whitout the current SNP to mb_temp
+			for(unsigned int i=0; i<current_combination_temp.size(); i++)
 			{
-				cout << "Entering condg2 reliable"<<endl;
-				cout << "-------------------------------------------"<<endl;
-				if(cond_g2.pval() < best_subset_pvalue)
-				{
-					cout << "entering the new pval is better than older"<<endl;
-					cout <<"x is equal to" << x<<endl;//TODO DEBUG
-					cout << "---------------------------------------"<<endl;
-					best_subset_pvalue = cond_g2.pval();
-					best_snp_index = x;
-					cout << "current best snp index is : " << best_snp_index<<endl;
-				}
+				mb_temp.push_back(current_combination_temp.at(i));
 
-				scores[x].push_back(cond_g2.g2());
+				cout << "current_combination_temp at i" << current_combination_temp.at(i)<<endl;//TODO DEBUG
+
 			}
-		}else
-		{
-			cout <<"Current combination size MOOORREE phase" <<endl;
-			cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<endl;
-			for(auto it =current_combination.begin(); it != current_combination.end(); it++)
+			for(unsigned int i=0; i<current_combination_temp.size(); i++)
 			{
-				current_SNP = *it;
-				cout << "current SNP is :" <<*it<<endl; //TODO DEBUG
-				//We merge the temporary markov blanket
-				vector<unsigned int> mb_temp;
-				for(auto i = mb.begin();i!= mb.end();i++)
+				//Create a matrix of size number of patient and one SNP
+				blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
+
+				for (unsigned int j = 0; j < _phenotypes.size1(); j++)
 				{
-					mb_temp.push_back(*i);
+
+					boostgenotype_column(j,0) =  _genotypes(j,current_SNP);
 				}
-				//erase current_SNP from temporary combination vector
-				cout << "current combination temp size "<<current_combination_temp.size()<<endl;
-				vector<unsigned int>::iterator INT_oui;
-				unsigned int current_SNP_index;
-				INT_oui = find (current_combination_temp.begin(), current_combination_temp.end(), current_SNP);
-				if (INT_oui != current_combination_temp.end())
-				{
-					cout << "Element found in current_combination_temp: " << *INT_oui << '\n';
-					current_SNP_index = distance(current_combination_temp.begin(), INT_oui);
-					current_combination_temp.erase(current_combination_temp.begin()+current_SNP_index);
-				}else
-				{
-					cout << "Element not found in current_combination_temp\n";
-				}
+				cout << "boostgenotype column size 1 =  "<<endl;
+				cout << boostgenotype_column.size1();
+				cout << "boostgenotype column size 2 =  "<<endl;
+				cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
+				if(mb_temp.size()==0)
+					break;
+				G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
+				number_of_indep_test ++;
 
-				//Adding the current_combination whitout the current SNP to mb_temp
-				for(unsigned int i=0; i<current_combination_temp.size(); i++)
+				//We get the snp column number and get datas from it
+
+				// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
+				// See the method Contingency::is_reliable() for details.
+				#pragma omp critical
+				if(cond_g2.is_reliable())
 				{
-					mb_temp.push_back(current_combination_temp.at(i));
-
-					cout << "current_combination_temp at i" << current_combination_temp.at(i)<<endl;//TODO DEBUG
-
-				}
-				for(unsigned int i=0; i<current_combination_temp.size(); i++)
-				{
-					//Create a matrix of size number of patient and one SNP
-					blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
-
-					for (unsigned int j = 0; j < _phenotypes.size1(); j++)
+					cout << "Entering condg2 reliable"<<endl;
+					cout << "-------------------------------------------"<<endl;
+					if(cond_g2.pval() < best_subset_pvalue)
 					{
-
-						boostgenotype_column(j,0) =  _genotypes(j,current_SNP);
-					}
-					cout << "boostgenotype column size 1 =  "<<endl;
-					cout << boostgenotype_column.size1();
-					cout << "boostgenotype column size 2 =  "<<endl;
-					cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
-		            if(mb_temp.size()==0)
-		            	break;
-					G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
-					number_of_indep_test ++;
-
-					//We get the snp column number and get datas from it
-
-					// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
-					// See the method Contingency::is_reliable() for details.
-					if(cond_g2.is_reliable())
-					{
-						cout << "Entering condg2 reliable"<<endl;
-						cout << "-------------------------------------------"<<endl;
-						if(cond_g2.pval() < best_subset_pvalue)
+						vector<double> current_comb_as_dble(current_combination_temp.begin(),current_combination_temp.end());
+						vector<double> g2_results_temp;
+						cout << "DEBUG SIZE current_comb as dble" << current_comb_as_dble.size()<<endl;
+						for(unsigned int i=0; i<current_comb_as_dble.size();i++)
 						{
-							cout << "entering the new pval is better than older"<<endl;
-							cout <<"x is equal to" << x<<endl;//TODO DEBUG
-							cout << "---------------------------------------"<<endl;
-							best_subset_pvalue = cond_g2.pval();
-							cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
-							cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
-							best_snp_index = x;
-							cout << "current best snp index is : " << best_snp_index <<endl;
+							g2_results_temp.push_back(current_comb_as_dble[i]);
 						}
+						cout << "entering the new pval is better than older"<<endl;
+						cout <<"x is equal to" << x<<endl;//TODO DEBUG
+						cout << "---------------------------------------"<<endl;
+						best_subset_pvalue = cond_g2.pval();
+						cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
+						cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
+						best_snp_index = x;
+						cout << "current best snp index is : " << current_SNP <<endl;
+						g2_results_temp.push_back(cond_g2.pval());
+						g2_results_temp.push_back(cond_g2.g2());
+						for(unsigned int y=0;y<g2_results_temp.size();y++)
+						{
+							cout << "DEBUG g2_results_vector"<< g2_results_temp.at(y)<<endl;
+						}
+						results_v.push_back(g2_results_temp);
+					unsigned int pos_results = 0;
+					for(auto it = results[current_combination_temp].begin(); it != results[current_combination_temp].begin(); it++,pos_results++)
+					{
+						cout << "DEBUG" << pos_results;
+						if(pos_results == 0)
+						{
+							if(*it > cond_g2.pval())
+							{
+								results[current_combination_temp].insert(it,cond_g2.pval());
+								results[current_combination_temp].insert(it+1,cond_g2.g2());
 
-						scores[x].push_back(cond_g2.g2());
+							}
+						}
 					}
-
+					scores[current_SNP].push_back(cond_g2.g2());
+					}
 				}
 
 			}
+
 		}
 	}
 	cout << best_snp_index<<endl;
@@ -628,20 +597,48 @@ void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 	  cout << "fin de best mbs"<<endl;
 }
 
-void Smmb_ACO::write_results()
-{
+void Smmb_ACO::write_results(){
+	ofstream file("/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO_results" + file_basename + ".txt", ios::out);
 
-	for (auto& t : mbs_count)
+	if(file)
 	{
-		for(auto it = t.first.begin();it != t.first.end();it++)
+		cout << results_v.size();
+		/*cout << results.size()<<"size of results"<<endl;
+		for (auto& t : results)
 		{
-		    cout << *it << " ";
+			cout << "{";
+			for(unsigned int i =0; i<t.first.size();i++)
+			{
+				cout << "i equals to" << i<<endl;
+				cout << t.first[i]<<" ";
+			}
+			cout << " second ";
+			for(auto it = t.second.begin();it != t.second.end();it++)
+			{
+			    cout << *it << " ";
+			}
+			cout <<"   }"<<endl;
+
+		}*/
+		{
+			for(unsigned int i = 0; i<results_v.size();i++)
+			{
+				cout << "i equals to" << i<<endl;
+				cout <<"{ ";
+				for(auto it = results_v[i].begin(); it != results_v[i].end(); it++)
+				{
+					cout << *it << ", ";
+				}
+				cout << " }";
+			}
 		}
-		cout << t.second <<"\n";
-	}
 
+
+
+		file.close();
+	}else
+		cerr << "Cannot open file." << endl;
 }
-
 //somme des tau DONE
 
 // calcul des distributions de proba et des proba de chaque snp DONE
