@@ -5,7 +5,7 @@ header_nrows 1
 sep ,
 
 # Initial population size
-population_size 100
+population_size 500
 
 # SNPs pattern size
 pattern_size 2
@@ -14,7 +14,7 @@ pattern_size 2
 number_of_parents_selected 10
 
 # Number of iterations
-number_of_iterations 1000
+number_of_iterations 100
 
 # alpha type I error rate
 alpha 0.05
