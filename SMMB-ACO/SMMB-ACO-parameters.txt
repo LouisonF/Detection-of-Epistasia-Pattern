@@ -16,7 +16,7 @@ alpha 0.05
 precision 0.1
 
 # number of SNP to be drawn
-aco_set_size 4
+aco_set_size 6
 
 # size of the smallest subset, k (draw in Algorithm 2)
 smallest_subset_size 3
@@ -42,7 +42,7 @@ number_ants 100
 number_snp_per_ant 10
 
 # Number of iterations in ACO
-number_aco_iter 10
+number_aco_iter 100
 
 # Parameters for ACO optimization
 #   Parameters related to evaporation rates

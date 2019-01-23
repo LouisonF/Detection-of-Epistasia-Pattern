@@ -61,7 +61,7 @@ void Smmb_ACO::run_ACO()
 
 		//Parrallel computation of each ant
 
-		//#pragma omp parallel for
+		#pragma omp parallel for
         for(unsigned int ant=0; ant<_params.number_ants; ant++)
         {
             // Define a SNP set which is going to be selected by the sampling function
@@ -83,8 +83,6 @@ void Smmb_ACO::run_ACO()
     			cout << "SIZE OF MB_TEMP is : "<<mb_temp.size()<<endl;
             	mbs.push_back(mb_temp);
             }
-            cout << "FIN DUNE FOURMI"<<endl;
-            cout << "FIN DUNE FOURMI"<<endl;
             cout << "FIN DUNE FOURMI"<<endl;
 
         }
@@ -239,7 +237,7 @@ void Smmb_ACO::learn_mb(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 	list<unsigned int> memory_mb; //This a the vector of all the trials to learn a mb during this void
 	while((counter < _params.max_trials_learn_mb) && (mb.empty() && (memory_mb != mb)));
 	{
-        cout << "hello, i am learning a markov blanket" <<endl; //TODO DEBUG
+		cout << "hello, i am learning a markov blanket" <<endl; //TODO DEBUG
 		memory_mb = mb;
 		cout << "passage premiere etape"<<endl;
 		forward_phase(mb,snp_table);
@@ -247,12 +245,6 @@ void Smmb_ACO::learn_mb(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 		backward_phase(mb,snp_table);
 		cout << "passage troisieme etape"<<endl;
 		counter++;
-		cout <<"000000000000000000000000"<<endl;
-		cout <<"000000000000000000000000"<<endl;
-		cout <<"000000000000000000000000"<<endl;
-		cout <<"COUNTER EQUALS TO"<<counter<<endl;
-		cout <<"000000000000000000000000"<<endl;
-		cout <<"000000000000000000000000"<<endl;
 	}
 	backward_phase(mb,snp_table);
 	cout << "passage quatrieme etape"<<endl;
@@ -277,10 +269,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 	}
 	//Sorting is important for the combination method.
 	sort(random_snps.begin(),random_snps.end());
-	for(unsigned int i = 0; i<random_snps.size(); i++)
-	{
-		cout << "snp sorted at pos : " << i << "     " << random_snps.at(i)<<endl;
-	}
 	//Generating all combinations for the snp list
 	vector<vector<unsigned int>> all_snps_combinations;
 	Miscellaneous::combinator(random_snps,all_snps_combinations,_params.size);
@@ -303,9 +291,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 		vector<unsigned int> current_combination_temp = current_combination;
 		cout << "current combination size "<<current_combination.size()<<endl;
 		cout<< current_combination.at(0)<<endl;
-
-		cout <<"Current combination size MOOORREE phase" <<endl;
-		cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<endl;
 		for(auto it =current_combination.begin(); it != current_combination.end(); it++)
 		{
 			current_SNP = *it;
@@ -363,94 +348,90 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
 				// See the method Contingency::is_reliable() for details.
 				#pragma omp critical
-				if(cond_g2.is_reliable())
-				{
-					cout << "Entering condg2 reliable"<<endl;
-					cout << "-------------------------------------------"<<endl;
-					if(cond_g2.pval() < best_subset_pvalue)
-					{
-						vector<double> current_comb_as_dble(current_combination_temp.begin(),current_combination_temp.end());
-						vector<double> g2_results_temp;
-						cout << "DEBUG SIZE current_comb as dble" << current_comb_as_dble.size()<<endl;
-						for(unsigned int i=0; i<current_comb_as_dble.size();i++)
-						{
-							g2_results_temp.push_back(current_comb_as_dble[i]);
-						}
-						cout << "entering the new pval is better than older"<<endl;
-						cout <<"x is equal to" << x<<endl;//TODO DEBUG
-						cout << "---------------------------------------"<<endl;
-						best_subset_pvalue = cond_g2.pval();
-						cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
-						cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
-						best_snp_index = x;
-						cout << "current best snp index is : " << current_SNP <<endl;
-						g2_results_temp.push_back(cond_g2.pval());
-						g2_results_temp.push_back(cond_g2.g2());
-						for(unsigned int y=0;y<g2_results_temp.size();y++)
-						{
-							cout << "DEBUG g2_results_vector"<< g2_results_temp.at(y)<<endl;
-						}
-						results_v.push_back(g2_results_temp);
-					unsigned int pos_results = 0;
-					for(auto it = results[current_combination_temp].begin(); it != results[current_combination_temp].begin(); it++,pos_results++)
-					{
-						cout << "DEBUG" << pos_results;
-						if(pos_results == 0)
-						{
-							if(*it > cond_g2.pval())
-							{
-								results[current_combination_temp].insert(it,cond_g2.pval());
-								results[current_combination_temp].insert(it+1,cond_g2.g2());
 
+				cout << "Entering condg2 reliable"<<endl;
+				cout << "-------------------------------------------"<<endl;
+				if(cond_g2.pval() < best_subset_pvalue)
+				{
+					vector<double> g2_results_temp;
+					cout << "entering the new pval is better than older"<<endl;
+					cout <<"x is equal to" << x<<endl;//TODO DEBUG
+					cout << "---------------------------------------"<<endl;
+					best_subset_pvalue = cond_g2.pval();
+					cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
+					cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
+					best_snp_index = x;
+					cout << "current best snp index is : " << current_SNP <<endl;
+					g2_results_temp.push_back(cond_g2.pval());
+					g2_results_temp.push_back(cond_g2.g2());
+					if(cond_g2.is_reliable())
+					{
+						g2_results_temp.push_back(1); //if reliable, add 1
+					}else
+					{
+						g2_results_temp.push_back(0); // if no, add 0
+					}
+					map<vector<unsigned int>,vector<double>>::iterator it;
+					it = results.find(current_combination_temp); //search for the current combination
+					if (it != results.end()) //if this combination exist in results
+					{
+						int k = 0;
+						for (auto key_it = it->second.cbegin(); key_it != it->second.cend(); key_it++)
+						{
+							cout << *key_it << "VS"<< g2_results_temp[k] << endl;
+							if ((*key_it < g2_results_temp[k]) && (k < 1))
+							{
+								#pragma omp critical
+								results[current_combination_temp][k] = g2_results_temp[k];
+								results[current_combination_temp][k+1] = g2_results_temp[k+1];
+								results[current_combination_temp][k+2] = g2_results_temp[k+2];
 							}
+
+							k++;
 						}
+					}else
+					{
+						#pragma omp critical
+						results[current_combination_temp] = g2_results_temp;
 					}
+					#pragma omp critical
 					scores[current_SNP].push_back(cond_g2.g2());
+
+				}
+
+			}
+		cout << best_snp_index<<endl;
+		// Append the best subset if alpha < threshold
+		if(best_subset_pvalue < _params.alpha)
+		{
+			cout << "ENTERING BEST SUBSET PVALUE UNDER ACO ALPHA"<<endl;
+			cout << "all snps test  " << best_snp_index; //TODO DEBUG, SNP index is too high
+			vector<unsigned> best_subset;
+			for(unsigned int j= 0; j<all_snps_combinations[best_snp_index].size();j++)
+			{
+				best_subset.push_back(all_snps_combinations.at(best_snp_index).at(j));
+			}
+			if(!best_subset.empty())
+			{
+				cout << "ENTERING BEST SUBSET NOT EMPTY"<<endl;
+				for(unsigned int i=0; i<best_subset.size(); i++)
+				{
+					list<unsigned int>::iterator findIter = find(mb.begin(), mb.end(), best_subset.at(i));
+					if(findIter == mb.end())
+					{
+						mb.push_back(best_subset.at(i)); // Add snps from best_subset to the MB is not already find
 					}
+					//Erase best_subset values from the random_snps vector
+					random_snps.erase(remove(random_snps.begin(), random_snps.end(), best_subset.at(i)), random_snps.end());
 				}
 
 			}
 
 		}
-	}
-	cout << best_snp_index<<endl;
-	// Append the best subset if alpha < threshold
-	if(best_subset_pvalue < _params.alpha)
-	{
-		cout << "ENTERING BEST SUBSET PVALUE UNDER ACO ALPHA"<<endl;
-		cout << "all snps test  " << best_snp_index; //TODO DEBUG, SNP index is too high
-		vector<unsigned> best_subset;
-		for(unsigned int j= 0; j<all_snps_combinations[best_snp_index].size();j++)
-		{
-			best_subset.push_back(all_snps_combinations.at(best_snp_index).at(j));
-		}
-		if(!best_subset.empty())
-		{
-			cout << "ENTERING BEST SUBSET NOT EMPTY"<<endl;
-			Miscellaneous::append_vector_to_list(mb, best_subset);
-			for(unsigned int i=0; i<best_subset.size(); i++)
-			{
-				//Erase best_subset values from the random_snps vector
-				random_snps.erase(remove(random_snps.begin(), random_snps.end(), best_subset.at(i)), random_snps.end());
-			}
-
-		}
 
 	}
-
 }
-
-	//call backward
-	/*
-	 * pour tout X element de la MB
-	 * 	pour toute combinaison S non vide, element de la MB
-	 * 		test G2 entre X et T conditionnellement à S
-	 * 		si p-valeur > alpha
-	 * 			On enlève X de la MB, break;
-	 * 		finsi
-	 *
-	 * 		Il faut faire des listes
-	 */
+}
 void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
 
@@ -548,92 +529,48 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 
 void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 {
-	  vector<vector<unsigned int>>::iterator uniq_it;
-	  cout << "unique markov blankets:";
+	vector<vector<unsigned int>>::iterator uniq_it;
+	cout << "unique markov blankets:";
 
-	  cout << "mbs size one" << mbs.size()<<endl;
+	cout << "mbs size one" << mbs.size()<<endl;
 
-	  for(unsigned int i = 0; i<mbs.size(); i++)
-	  {
-		  vector<unsigned int> temp_test = mbs[i];
-		  for (unsigned int j =0; j<temp_test.size();j++)
-		  {
-			  cout << temp_test[j] << " ";
-		  }
-		  cout << " ### "<<endl;
-	  }
-
-	  for (uniq_it=mbs.begin(); uniq_it!=mbs.end(); uniq_it++)
-	  {
-		  pair<map<vector<unsigned int>,unsigned int>::iterator,bool> current_mb;
-		  current_mb = mbs_count.insert(pair<vector<unsigned int> ,unsigned int>(*uniq_it,0));
-		  vector<unsigned int>temp_mb = *uniq_it;
-
-		  for (auto it = temp_mb.begin(); it != temp_mb.end(); it++)
-		  {
-			  cout << *it<<endl;
-		  }
-
-		  if (current_mb.second==false)
-		  {
-		    cout << "element "<< current_mb.first->second << " already existed";
-		  }
-	  }
-	  for (auto it = mbs_count.begin(); it != mbs_count.end(); ++it )
-	      {
-		  for(unsigned int it_next = 0; it_next<mbs.size(); it_next++)
-		 		  {
-		 			  vector<unsigned int> mbs_temp = mbs[it_next];
-		 			 if (it->first == mbs_temp)
-		 			 {
-		 				 it->second += 1;
-		 			 }
-		 		  }
-
-
-	      }
-	  cout <<"#########################################################################"<<endl;
-	  cout <<"#########################################################################"<<endl;
-	  cout << "fin de best mbs"<<endl;
+	for (uniq_it=mbs.begin(); uniq_it!=mbs.end(); uniq_it++)
+	{
+		vector<unsigned int>temp_mb = *uniq_it;
+		mbs_count.push_back(temp_mb);
+	}
+	for (unsigned int i = 0; i<mbs_count.size(); i++)
+	{
+		for(auto it = mbs_count[i].begin(); it != mbs_count[i].end(); it++)
+		{
+			cout << *it << " ";
+		}
+		cout << "##" << endl;
+	}
+	cout <<"#########################################################################"<<endl;
+	cout <<"#########################################################################"<<endl;
+	cout << "fin de best mbs"<<endl;
 }
 
 void Smmb_ACO::write_results(){
-	ofstream file("/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO_results" + file_basename + ".txt", ios::out);
-
+	ofstream file;
+	file.open("/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO_results/"+ file_basename);
 	if(file)
 	{
-		cout << results_v.size();
-		/*cout << results.size()<<"size of results"<<endl;
-		for (auto& t : results)
+		file << results.size();
+		//TODO : Link the SNP index with the Phenotype header !
 		{
-			cout << "{";
-			for(unsigned int i =0; i<t.first.size();i++)
+			for(auto it = results.cbegin();it != results.cend(); it++)
 			{
-				cout << "i equals to" << i<<endl;
-				cout << t.first[i]<<" ";
-			}
-			cout << " second ";
-			for(auto it = t.second.begin();it != t.second.end();it++)
-			{
-			    cout << *it << " ";
-			}
-			cout <<"   }"<<endl;
-
-		}*/
-		{
-			for(unsigned int i = 0; i<results_v.size();i++)
-			{
-				cout << "i equals to" << i<<endl;
-				cout <<"{ ";
-				for(auto it = results_v[i].begin(); it != results_v[i].end(); it++)
+				file << "size of key" << it->first.size()<<endl;
+				file << "{";
+				for (auto key_it = it->first.cbegin(); key_it != it->first.cend(); key_it++)
 				{
-					cout << *it << ", ";
+					file << *key_it << " ";
 				}
-				cout << " }";
+				file << "}" << endl;
 			}
 		}
-
-
 
 		file.close();
 	}else

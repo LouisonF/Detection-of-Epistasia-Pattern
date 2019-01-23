@@ -72,10 +72,10 @@ private:
 	int number_executions;
 	ofstream output_file;
 	map<unsigned int, vector<double> > scores;
-	map<vector<unsigned int>, vector<float> > results;
+	map<vector<unsigned int>, vector<double> > results;
 	vector<vector<double>> results_v;
 	map<float, vector<unsigned int>> cumulated_distrib_prob;
-	map<vector<unsigned int>,unsigned int > mbs_count;
+	vector<vector<unsigned int>> mbs_count;
 };
 
 #endif /* SMMBACO_HPP_ */
