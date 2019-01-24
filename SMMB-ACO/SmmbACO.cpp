@@ -486,73 +486,73 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 
         //Create a matrix of size number of patient and one SNP
         blas::matrix<int> boostgenotype_column(_genotypes.size1(),1);
-
+        vector<double> g2_results_temp;
         for (unsigned int j = 0; j < _phenotypes.size1(); j++)
         {
 
         	boostgenotype_column(j,0) =  _genotypes(j,current_mb_elem);
         }
         cout << "number of combinations"<<endl;
-		for (unsigned int i=0; i<all_snps_combinations.size(); i++)
-		{
-			vector<unsigned int> current_combination;
-			cout << "size of the snp combination" << all_snps_combinations[i].size()<<endl;
-            for(unsigned const& elem: all_snps_combinations[i])
-            {
-            	current_combination.push_back(elem);
-            	cout << "current elem equals to"<<elem<<endl;
-            }
-            if(mb_temp.size()==0)
-            	break;
-            G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination,_genotypes, true);
-            number_of_indep_test ++;
-            //If the pvalue of the test is above accepted alpha risk, discard this snp from MB
-            //TODO TRYING TO ADD THE RESULTS IN THE MARKOV BLANKET
-            g2_results_temp.push_back(cond_g2.pval());
-  					g2_results_temp.push_back(cond_g2.g2());
-  					if(cond_g2.is_reliable())
-  					{
-  						g2_results_temp.push_back(1); //if reliable, add 1
-  					}else
-  					{
-  						g2_results_temp.push_back(0); // if no, add 0
-  					}
-  					map<vector<unsigned int>,vector<double>>::iterator it;
-  					it = results.find(current_combination_temp); //search for the current combination
-  					if (it != results.end()) //if this combination exist in results
-  					{
-  						int k = 0;
-  						for (auto key_it = it->second.cbegin(); key_it != it->second.cend(); key_it++)
-  						{
-  							cout << *key_it << "VS"<< g2_results_temp[k] << endl;
-  							if ((*key_it < g2_results_temp[k]) && (k < 1))
-  							{
-  								#pragma omp critical
-  								results[current_combination_temp][k] = g2_results_temp[k];
-  								results[current_combination_temp][k+1] = g2_results_temp[k+1];
-  								results[current_combination_temp][k+2] = g2_results_temp[k+2];
-  							}
+        for (unsigned int i=0; i<all_snps_combinations.size(); i++)
+        {
+        	vector<unsigned int> current_combination;
+        	cout << "size of the snp combination" << all_snps_combinations[i].size()<<endl;
+        	for(unsigned const& elem: all_snps_combinations[i])
+        	{
+        		current_combination.push_back(elem);
+        		cout << "current elem equals to"<<elem<<endl;
+        	}
+        	if(mb_temp.size()==0)
+        		break;
+        	G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination,_genotypes, true);
+        	number_of_indep_test ++;
+        	//If the pvalue of the test is above accepted alpha risk, discard this snp from MB
+        	//TODO TRYING TO ADD THE RESULTS IN THE MARKOV BLANKET
+        	g2_results_temp.push_back(cond_g2.pval());
+        	g2_results_temp.push_back(cond_g2.g2());
+        	if(cond_g2.is_reliable())
+        	{
+        		g2_results_temp.push_back(1); //if reliable, add 1
+        	}else
+        	{
+        		g2_results_temp.push_back(0); // if no, add 0
+        	}
+        	map<vector<unsigned int>,vector<double>>::iterator it;
+        	it = results.find(current_combination); //search for the current combination
+        	if (it != results.end()) //if this combination exist in results
+        	{
+        		int k = 0;
+        		for (auto key_it = it->second.cbegin(); key_it != it->second.cend(); key_it++)
+        		{
+        			cout << *key_it << "VS"<< g2_results_temp[k] << endl;
+        			if ((*key_it < g2_results_temp[k]) && (k < 1))
+        			{
+#pragma omp critical
+        				results[current_combination][k] = g2_results_temp[k];
+        				results[current_combination][k+1] = g2_results_temp[k+1];
+        				results[current_combination][k+2] = g2_results_temp[k+2];
+        			}
 
-  							k++;
-  						}
-  					}else
-  					{
-  						#pragma omp critical
-  						results[current_combination_temp] = g2_results_temp;
-  					}
-            cout << "the backward p_value is : "<<cond_g2.pval()<<endl;
-            if(cond_g2.pval() > _params.alpha)
-            {
-            	//If the SNP is removed from the MB, we won't test it over different combinations,
-            	//so we stop this loop instance and start the next one
-            	mb.remove(current_mb_elem);
-            	mb_temp.erase(remove(mb_temp.begin(), mb_temp.end(), current_mb_elem), mb_temp.end());
-            	break;
-            }
+        			k++;
+        		}
+        	}else
+        	{
+#pragma omp critical
+        		results[current_combination] = g2_results_temp;
+        	}
+        	cout << "the backward p_value is : "<<cond_g2.pval()<<endl;
+        	if(cond_g2.pval() > _params.alpha)
+        	{
+        		//If the SNP is removed from the MB, we won't test it over different combinations,
+        		//so we stop this loop instance and start the next one
+        		mb.remove(current_mb_elem);
+        		mb_temp.erase(remove(mb_temp.begin(), mb_temp.end(), current_mb_elem), mb_temp.end());
+        		break;
+        	}
 
-		}
+        }
 
-		//New sampling phase but in the Markov blanket minus the current element
+        //New sampling phase but in the Markov blanket minus the current element
 
 
 	}
