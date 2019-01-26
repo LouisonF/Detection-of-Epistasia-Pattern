@@ -7,7 +7,7 @@ _debut=$(date +%s)
 
 for j in {1..100}
 do
-  for i in {1..20}
+  for i in {1..100}
   do
     debut=$(date +%s)
     echo "FILE NUMBER : $j"

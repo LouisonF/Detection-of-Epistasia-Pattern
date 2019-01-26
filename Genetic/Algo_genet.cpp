@@ -36,18 +36,19 @@ int main (int argc, char *argv[]) {
 	int len_pop = parameters.len_pop;
 	int len_pattern = parameters.len_pattern;
 	int nb_parents = parameters.nb_parents;
-	float alpha = parameters.alpha;
+	double alpha = parameters.alpha;
 	int nb_it = parameters.nb_it;
-	float P_mutation = parameters.P_mutation;
-	float P_selection = parameters.P_selection;
+	double P_mutation = parameters.P_mutation;
+	double P_selection = parameters.P_selection;
 	string namefile = argv[1];
 	string geno_path = argv[2];
 	string pheno_path = argv[3];
-	/*
-	string namefile = "res";
-	string geno_path = "/home/courtin/Documents/M2/ProjetC/Simu_naive_2snp_0.25/Naif_1_Genotype.txt";
-	string pheno_path = "/home/courtin/Documents/M2/ProjetC/Simu_naive_2snp_0.25/Naif_1_Phenotype.txt";
-*/
+
+	//string namefile = "res";
+	//string geno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/geno_gamete/geno_model1_0_01p_0005h_005m_001.txt";
+	//string pheno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/pheno_gamete/pheno_model1_0_01p_0005h_005m_001.txt";
+	//string geno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testgenotypes1.txt";
+	//string pheno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testphenotypes1.txt";
 
 	Data_input datas_geno(geno_path, sep, nb_line_header);
 	int_matrix_type Mgeno = datas_geno.read();
@@ -65,7 +66,7 @@ int main (int argc, char *argv[]) {
 	population.display_geno_sol();
 
 	int_matrix_type Msol_geno(1, len_pattern); //temp solution for the loop
- 	vector<float> G2_res;
+ 	vector<double> G2_res;
 
  	int not_reliable_compt = 0;
 
@@ -92,7 +93,7 @@ int main (int argc, char *argv[]) {
 	}
 
 
-	float median;
+	double median;
 
 	sort(G2_res.begin(), G2_res.end());
 
@@ -102,7 +103,7 @@ int main (int argc, char *argv[]) {
 
 	int iterator = 0;
 	while (iterator < nb_it){
-
+		srand (time(NULL));
 		Parent parents(len_pop, nb_parents, len_pattern, median, P_selection, population.get_Mpop_geno());
 		parents.parents_selection();
 		//parents.display_parents();
