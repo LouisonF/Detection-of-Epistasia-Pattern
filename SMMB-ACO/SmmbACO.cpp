@@ -61,7 +61,7 @@ void Smmb_ACO::run_ACO()
 
 		//Parrallel computation of each ant
 
-		#pragma omp parallel for
+		//#pragma omp parallel for
         for(unsigned int ant=0; ant<_params.number_ants; ant++)
         {
             // Define a SNP set which is going to be selected by the sampling function
@@ -347,7 +347,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 
 				// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
 				// See the method Contingency::is_reliable() for details.
-				#pragma omp critical
 
 				cout << "Entering condg2 reliable"<<endl;
 				cout << "-------------------------------------------"<<endl;
@@ -518,7 +517,7 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         		g2_results_temp.push_back(0); // if no, add 0
         	}
         	map<vector<unsigned int>,vector<double>>::iterator it;
-        	it = results.find(current_combination); //search for the current combination
+        	it = results.find(mb_temp); //search for the current combination
         	if (it != results.end()) //if this combination exist in results
         	{
         		int k = 0;
@@ -527,18 +526,26 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         			cout << *key_it << "VS"<< g2_results_temp[k] << endl;
         			if ((*key_it < g2_results_temp[k]) && (k < 1))
         			{
-#pragma omp critical
-        				results[current_combination][k] = g2_results_temp[k];
-        				results[current_combination][k+1] = g2_results_temp[k+1];
-        				results[current_combination][k+2] = g2_results_temp[k+2];
+        				for(auto it = mb_temp.begin(); it != mb_temp.end(); it++)
+        				{
+            				cout << "current combination is actually "<< *it<<endl;
+        				}
+						#pragma omp critical
+        				results[mb_temp][k] = g2_results_temp[k];
+        				results[mb_temp][k+1] = g2_results_temp[k+1];
+        				results[mb_temp][k+2] = g2_results_temp[k+2];
         			}
 
         			k++;
         		}
         	}else
         	{
-#pragma omp critical
-        		results[current_combination] = g2_results_temp;
+				for(auto it = mb_temp.begin(); it != mb_temp.end(); it++)
+				{
+    				cout << "current combination is actually "<< *it<<endl;
+				}
+				#pragma omp critical
+        		results[mb_temp] = g2_results_temp;
         	}
         	cout << "the backward p_value is : "<<cond_g2.pval()<<endl;
         	if(cond_g2.pval() > _params.alpha)
@@ -583,25 +590,54 @@ void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 	cout <<"#########################################################################"<<endl;
 	cout << "fin de best mbs"<<endl;
 }
-
 void Smmb_ACO::write_results(){
 	ofstream file;
 	file.open("/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO_results/"+ file_basename);
+
+	/* Map order*/
+	vector<pair<vector<unsigned>, vector<double>>> _optimum_set_vector;
+	for (auto pattern : results)
+	{
+	    pair<vector<unsigned>, vector<double>> pair_sort(pattern.first, pattern.second);
+	    _optimum_set_vector.push_back(pair_sort);
+	}
+	sort(_optimum_set_vector.begin(), _optimum_set_vector.end(), Miscellaneous::compareFunc);
+
 	if(file)
 	{
-		file << results.size();
+		file << endl;
+		file << "Epistasis Pattern      p-value      score      reliable" <<endl;
 		//TODO : Link the SNP index with the Phenotype header !
-		{
+		/*{
 			for(auto it = results.cbegin();it != results.cend(); it++)
 			{
-				file << "size of key" << it->first.size()<<endl;
 				file << "{";
 				for (auto key_it = it->first.cbegin(); key_it != it->first.cend(); key_it++)
 				{
 					file << *key_it << " ";
 				}
-				file << "}" << endl;
+				file << "}        ";
+				for (auto val_it = it->second.cbegin(); val_it != it->second.cend(); val_it++)
+				{
+					file << *val_it << "      ";
+				}
+				file << endl;
 			}
+		}*/
+
+		for(int i = 0 ; i<_optimum_set_vector.size() ; i++)
+		{
+			file << "{";
+			for (auto key_it = _optimum_set_vector[i].first.cbegin(); key_it != _optimum_set_vector[i].first.cend(); key_it++)
+			{
+				file << *key_it << " ";
+			}
+			file << "}        ";
+			for (auto val_it = _optimum_set_vector[i].second.cbegin(); val_it != _optimum_set_vector[i].second.cend(); val_it++)
+			{
+				file << *val_it << "      ";
+			}
+			file << endl;
 		}
 
 		file.close();

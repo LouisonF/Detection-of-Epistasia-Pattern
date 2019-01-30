@@ -32,6 +32,7 @@ public:
 	//void combinator(vector<vector<unsigned int>> output, vector<unsigned int> random_snp,vector<unsigned int> temp_combination, unsigned int i , int size);
 	static void print_human_readable_combinations(vector<vector<unsigned int>> all_index_combinations);
 	static void append_vector_to_list(list<unsigned> & l, vector<unsigned> const& v);
+	static bool compareFunc(pair<vector<unsigned>, vector<double>> const& a, pair<vector<unsigned>, vector<double>> const& b);
 	//static blas::matrix<float> init_contingency_table(int row,int col);
 	//static unsigned int sum_row(blas::matrix<float> matrix, int row);
 	//static unsigned int sum_col(blas::matrix<float> matrix, int col);

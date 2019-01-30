@@ -25,7 +25,7 @@
 #include <random>
 #include <numeric>
 #include <boost/array.hpp>
-
+#include <set>
 typedef blas::matrix_column<blas::matrix<int> > blas_column;
 
 
@@ -73,7 +73,6 @@ private:
 	ofstream output_file;
 	map<unsigned int, vector<double> > scores;
 	map<vector<unsigned int>, vector<double> > results;
-	vector<vector<double>> results_v;
 	map<float, vector<unsigned int>> cumulated_distrib_prob;
 	vector<vector<unsigned int>> mbs_count;
 };

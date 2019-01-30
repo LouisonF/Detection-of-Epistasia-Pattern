@@ -143,128 +143,15 @@ void Miscellaneous::append_vector_to_list(list<unsigned> & l, vector<unsigned> c
     for(unsigned const& i: v)
         l.push_back(i);
 }
-/*DEPRECATED
-vector<vector<unsigned int>>  Miscellaneous::generate_all_combinations(vector<unsigned int> &snps_sorted, int size)
+
+bool Miscellaneous::compareFunc(pair<vector<unsigned>, vector<double>> const& a, pair<vector<unsigned>, vector<double>> const& b)
 {
-	cout << "ALL COMBINATIONS" <<endl;
-	vector<vector<unsigned int>> all_combinations;
-	vector<unsigned int> temp_combinations;
-	unsigned int i = 0;
-	combinator(all_combinations,snps_sorted,temp_combinations,i,size);
-	return all_combinations;
-}*/
-/*DEPRECATED
-void Miscellaneous::combinator(vector<vector<unsigned int>> output, vector<unsigned int> random_snp,vector<unsigned int> temp_combination, unsigned int i ,int size)
-{
-	cout << "COMBINATOOORRR" << endl;
-	//if the combination is at the required size, we push it in the output vector.
-	//size that -1 at each call of the recursive method
-	if (size == 0)
-	{
-		output.push_back(temp_combination);
-		cout << "condition de fin trouvée" << endl;
-		return;
-	}
-
-	for (auto i=0; i != random_snp.size(); i++)
-	{
-
-		unsigned int tmp = random_snp.at(i);
-		cout <<"temp = " << tmp << endl;
-		cout << "i = " << i << endl;
-		temp_combination.push_back(tmp);
-		cout << "size = " << size << endl;
-
-
-		combinator(output,random_snp,temp_combination,i+1,size-1);
-
-		// Popping out last inserted element
-		// from the vector
-		temp_combination.pop_back();
-	}
-}*/
-/*
-blas::matrix<float> Miscellaneous::init_contingency_table(int row,int col)
-{
-
-	blas::matrix<float> contingency_table(row,col);
-	//Here we initialize the matrix with 0 in every cell
-	for (int i = 0; i < int(contingency_table.size1()); i++){
-		for (int j = 0; j < int(contingency_table.size2()); j++){
-			contingency_table(i, j) = 0;
-		}
-	}
+    if (a.second[0] < b.second[0])
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
-vector<blas::matrix<float>> Miscellaneous::contingency_table(vector<unsigned int> conditionnal_snp, blas::matrix<int> _genotypes, blas::matrix<int> _phenotypes, unsigned int number_of_obs_subset)
-{
-	vector<blas::matrix<float>> contingencies_vector;
-	if(!conditionnal_snp.empty())
-	{
-		blas::matrix<int> temp
-	}
-}*/
-/*DEPRECATED*/
-	//Now we count the occurence for each possibility
-/*	for (int i = 0; i < int(phenotypes.size1()); i++){
-		for (int j = 0; j < int(genotypes.size2()); j++){
-			if (phenotypes(i, 0) == 0){
-				if(genotypes(i, j) == 0){
-					contingency_table(0, 0) += 1;
-				}
-				if(genotypes(i, j) == 1){
-					contingency_table(0, 1) += 1;
-				}
-				if(genotypes(i, j) == 2){
-					contingency_table(0, 2) += 1;
-				}
-			}else{
-				if(genotypes(i, j) == 0){
-					contingency_table(1, 0) += 1;
-				}
-				if(genotypes(i, j) == 1){
-					contingency_table(1, 1) += 1;
-				}
-				if(genotypes(i, j) == 2){
-					contingency_table(1, 2) += 1;
-				}
-			}
-		}
-	}
-	return(contingency_table);
-}*/
-
-//Sum of a matrix's row
-/*unsigned int Miscellaneous::sum_row(blas::matrix<float> matrix, int row)
-{
-	float sum = 0;
-	for (int i = 0; i < int(matrix.size2()); i++){
-		sum += matrix(row, i);
-	}
-	return(sum);
-}
-
-//sum of a matrix's column
-unsigned int Miscellaneous::sum_col(blas::matrix<float> matrix, int col)
-{
-	float sum = 0;
-	for (int i = 0; i < int(matrix.size1()); i++){
-		sum += matrix(i, col);
-	}
-	return(sum);
-}
-
-*/
-//Calcul of a theorical contingency table from a contingency table
-// i,j = (sum row i * sum col j)/total
-/*blas::matrix<float> Miscellaneous::theorical_table(blas::matrix<float> table_cont)
-{
-
-	blas::matrix<float> table_theo(2, 3);
-	unsigned int total = sum_row(table_cont, 0) + sum_row(table_cont, 1);
-	for (int i = 0; i < int(table_theo.size1()); i++){
-		for (int j = 0; j < int(table_theo.size2()); j++){
-			table_theo(i, j) = (sum_row(table_cont, i) * sum_col(table_cont, j))/total;
-		}
-	}
-	return(table_theo);
-}*/
