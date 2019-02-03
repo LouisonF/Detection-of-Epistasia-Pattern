@@ -5,6 +5,9 @@
 # François Courtin M2BB
 
 #run : ./eval_simu.py input_directory_path output_directory_path n_runs nb_snp len_pattern
+#The input directory path must be <Model_results_directory>/<Jeu_donnees_x_directory> with a directory /<fichier_simulé_x> inside containing the n itération for that file.
+
+
 
 from utils import *
 import os, os.path
@@ -13,13 +16,13 @@ import re
 
 input = sys.argv[1]
 output = sys.argv[2]
-n_runs = sys.argv[3]
+n_runs = sys.argv[3] #number of run by simulated file
 nb_snp = sys.argv[4] #number of snp in the matrix
 len_pattern = sys.argv[5]
 caus_snp = ""
 
 for i in range(int(len_pattern)):
-    caus_snp += "N"+str(int(nb_snp) - int(i))+","
+    caus_snp += str(int(nb_snp) - int(i))+","
 
 caus_snp = caus_snp[0:(len(caus_snp)-1)] #pop the "," at the end of the string
 

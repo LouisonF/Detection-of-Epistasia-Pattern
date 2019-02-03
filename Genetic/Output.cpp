@@ -129,8 +129,8 @@ void Output::set_best_sol(){
 	}
 }
 
-void Output::write_best_sol(){
-	ofstream file("/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic_results/" + filename + ".txt", ios::out);
+/*void Output::write_best_sol(){
+	ofstream file("/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Genetic_results/" + filename + ".txt", ios::out);
 
 	if(file)
 	{
@@ -143,6 +143,32 @@ void Output::write_best_sol(){
 					file << list_pattern[i][j] << "\t";
 				}else{
 					file << header[list_pattern[i][j]] << ",";
+				}
+			}
+			file << endl;
+		}
+
+
+		file.close();
+	}
+	else
+		cerr << "Cannot open file." << endl;
+}*/
+
+void Output::write_best_sol(){
+	ofstream file(filename + ".txt", ios::out);
+
+	if(file)
+	{
+		for (int i = 0;i < int(list_pattern.size()); i++){
+			file << "{";
+			for (int j = 0; j < len_pattern+2; j++){
+				if (j == len_pattern -1 ){
+					file << list_pattern[i][j] << "}\t";
+				}else if (j >= len_pattern){
+					file << list_pattern[i][j] << "\t";
+				}else{
+					file << list_pattern[i][j] << ",";
 				}
 			}
 			file << endl;

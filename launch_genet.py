@@ -7,12 +7,16 @@
 import os, os.path
 import sys
 
-geno_path = sys.argv[2]
-pheno_path = sys.argv[3]
+geno_path = sys.argv[1]
+pheno_path = sys.argv[2]
+dataset = sys.argv[3] #nom du jeu de données
+os.mkdir("Genetic_results/"+dataset)
 
 for geno in os.listdir(geno_path):
-    for i in range(1,21):
-        pheno = "pheno" + geno[4:]
+    geno_dir = "Genetic_results/"+ dataset + "/" + geno[:-13]
+    os.mkdir(geno_dir)
+    for i in range(1,2):
+        pheno = geno[:-12] + "Phenotype.txt"
         print(geno)
         print(pheno)
-        os.system("./Genetic/Debug/Genetic res_"+os.path.basename(geno)+"_"+str(i)+" "+geno_path+"/"+geno+" "+pheno_path+"/"+pheno)
+        os.system("./Genetic/Debug/Genetic "+geno_dir+"/res_"+os.path.basename(geno)+"_"+str(i)+" "+geno_path+"/"+geno+" "+pheno_path+"/"+pheno)
