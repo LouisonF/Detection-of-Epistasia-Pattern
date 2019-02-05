@@ -15,7 +15,7 @@ os.mkdir("Genetic_results/"+dataset)
 for geno in os.listdir(geno_path):
     geno_dir = "Genetic_results/"+ dataset + "/" + geno[:-13]
     os.mkdir(geno_dir)
-    for i in range(1,2):
+    for i in range(1,21):
         pheno = geno[:-12] + "Phenotype.txt"
         print(geno)
         print(pheno)

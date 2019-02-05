@@ -8,7 +8,7 @@
 #include "Output.h"
 #include <fstream>
 
-Output::Output(float_matrix_type Mpop_geno, vector<string>header, int len_pattern, int len_pop, string filename) : Mpop_geno(Mpop_geno), header(header), len_pattern(len_pattern), len_pop(len_pop), filename(filename) {
+Output::Output(double_matrix_type Mpop_geno, vector<string>header, int len_pattern, int len_pop, string filename) : Mpop_geno(Mpop_geno), header(header), len_pattern(len_pattern), len_pop(len_pop), filename(filename) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -17,12 +17,16 @@ Output::~Output() {
 	// TODO Auto-generated destructor stub
 }
 
-int Output::cut(vector<vector<float>> & vect, int start, int end) {
-	float pivot = vect[start][len_pattern+1];
+int Output::cut(vector<vector<double>> & vect, int start, int end) {
+	double pivot = vect[start][len_pattern+1];
+	vector<double> vect_pivot(len_pattern+2);
 	unsigned int from_left = start+1;
 	unsigned int from_right = end;
-	float tmp;
+	double tmp;
 
+	for (int i = 0; i < len_pattern+2; i++){
+		vect_pivot[i] = vect[start][i];
+	}
 	//cout << "Vector entering partition:";
 	//print (a,start,end);
 	//cout << endl;
@@ -32,16 +36,24 @@ int Output::cut(vector<vector<float>> & vect, int start, int end) {
 		else {
 			while (( from_left != from_right)  && (pivot < vect[from_right][len_pattern+1])) from_right--;
 			//cout << "swaping " << a[from_left] << " with "<< a[from_right] << endl;
-			tmp =  vect[from_right][len_pattern+1];
-			vect[from_right][len_pattern+1] = vect[from_left][len_pattern+1];
-			vect[from_left][len_pattern+1] = tmp;
+			for (int i = 0; i < len_pattern+2; i++){
+				tmp =  vect[from_right][i];
+				vect[from_right][i] = vect[from_left][i];
+				vect[from_left][i] = tmp;
+
+			}
 		}
 	}
 
 	if (vect[from_left][len_pattern+1]>pivot) from_left--;
-	vect[start][len_pattern+1] = vect[from_left][len_pattern+1];
-	vect[from_left][len_pattern+1] = pivot;
+	for (int i = 0; i < len_pattern+2; i++){
+		vect[start][i] = vect[from_left][i];
+	}
 
+	for (int i = 0; i < len_pattern+2; i++){
+		vect[from_left][i] = vect_pivot[i];
+	}
+	//vect[from_left][len_pattern+1] = pivot;
 	//cout << "Vector after partition:   ";
 	//print (a,start,end);
 	//cout << endl;
@@ -50,7 +62,7 @@ int Output::cut(vector<vector<float>> & vect, int start, int end) {
 }
 
 
-void Output::quickSort(vector<vector<float>> & vect, int p, int r) {
+void Output::quickSort(vector<vector<double>> & vect, int p, int r) {
   if (p < r) {
     int q = cut(vect, p, r);
     quickSort(vect, p, q - 1);
@@ -60,7 +72,8 @@ void Output::quickSort(vector<vector<float>> & vect, int p, int r) {
 
 
 void Output::set_list_pattern(){
-	vector<float> pattern;
+	cout << "Set list pattern for output..." << endl;
+	vector<double> pattern;
 	for (int i = 0; i < len_pop; i++){
 		pattern.clear();
 		for (int j = 0; j < len_pattern+2; j++){
@@ -75,7 +88,7 @@ void Output::set_list_pattern(){
 /*
 void Output::set_list_sol(){
 
-	vector<float> sol;
+	vector<double> sol;
 	for (int i = 0; i < len_pop; i++){
 		sol.clear();
 		for (int j = 0; j < len_pattern+2; j++){
@@ -87,7 +100,7 @@ void Output::set_list_sol(){
 */
 void Output::set_best_sol(){
 	/*vector<int> occurences_list;
-	vector<float> best_pattern;
+	vector<double> best_pattern;
 	int max_occ = 0;
 	int cpt;
 	for (int i = 0; i < int(list_pattern.size()); i++){
@@ -118,6 +131,7 @@ void Output::set_best_sol(){
 	}*/
 
 	set_list_pattern();
+	cout << "Quick sorting..." << endl;
 	quickSort(list_pattern, 0, list_pattern.size()-1);
 
 	cout << "List of solutions : " << endl;
@@ -129,8 +143,11 @@ void Output::set_best_sol(){
 	}
 }
 
-/*void Output::write_best_sol(){
-	ofstream file("/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Genetic_results/" + filename + ".txt", ios::out);
+/*
+void Output::write_best_sol(){
+	cout << "Write solutions..." << endl;
+
+	ofstream file("/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic_results/" + filename + ".txt", ios::out);
 
 	if(file)
 	{
@@ -153,9 +170,12 @@ void Output::set_best_sol(){
 	}
 	else
 		cerr << "Cannot open file." << endl;
-}*/
+}
+*/
 
 void Output::write_best_sol(){
+
+	cout << "Write solutions..." << endl;
 	ofstream file(filename + ".txt", ios::out);
 
 	if(file)

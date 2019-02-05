@@ -13,15 +13,15 @@ using namespace std;
 class Child{
 private:
 
-	float_matrix_type Mpop_geno;
+	double_matrix_type Mpop_geno;
 	int_matrix_type MParents;
 	int_matrix_type MChildren;
 	int len_pattern;
-	float P_mutation;
+	double P_mutation;
 	int nb_snp;
 
 public:
-	Child(float_matrix_type, int_matrix_type, int, float, int);
+	Child(double_matrix_type, int_matrix_type, int, double, int);
 	~Child();
 	void set_children();
 	void mutation();

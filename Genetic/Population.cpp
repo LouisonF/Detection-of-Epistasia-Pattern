@@ -14,7 +14,7 @@ using namespace std;
 
 Population::Population(int_matrix_type Mgeno, int_matrix_type Mpheno, int len_pop, int len_pattern) : InitialMatrix(Mgeno, Mpheno), nb_sol(len_pop), len_pattern(len_pattern)
 {
-	float_matrix_type Mpop(nb_sol, len_pattern+2); //row : sol index		col : snp 1 / snp 2 / g2 / pval
+	double_matrix_type Mpop(nb_sol, len_pattern+2); //row : sol index		col : snp 1 / snp 2 / g2 / pval
 	Mpop_geno = Mpop;
 
 }
@@ -59,6 +59,8 @@ void Population::init_pop_geno(){
 
 */
 void Population::init_pop_geno(){
+	cout << "Population initialization..." << endl;
+
 	int nb_snp = int(Mgeno.size2());
 	vector<vector<int>> list_of_pattern(nb_sol);
 	vector<int> pattern(len_pattern);
@@ -89,13 +91,13 @@ void Population::init_pop_geno(){
 }
 
 void Population::display_geno_sol(){
-	cout << " population : " << Mpop_geno << endl;
+	cout << endl << " population : " << Mpop_geno << endl;
 }
 
-float_matrix_type Population::get_Mpop_geno(){
+double_matrix_type Population::get_Mpop_geno(){
 	return(Mpop_geno);
 }
 
-void Population::set_Mpop_geno(int row, int col, float val){
+void Population::set_Mpop_geno(int row, int col, double val){
 	Mpop_geno(row, col) = val;
 }

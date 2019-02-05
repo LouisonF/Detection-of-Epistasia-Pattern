@@ -14,7 +14,7 @@ pattern_size 2
 number_of_parents_selected 10
 
 # Number of iterations
-number_of_iterations 1000
+number_of_iterations 100
 
 # alpha type I error rate
 alpha 0.05
@@ -24,4 +24,3 @@ mutation_probability 10
 
 # Probability to choose a solution with a score lesser than the population's score median
 bad_solution_selection_probability 5
-

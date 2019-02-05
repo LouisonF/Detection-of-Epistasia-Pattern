@@ -45,6 +45,7 @@ Data_input::~Data_input() {
 
 blas::matrix<int> Data_input::read()
 {
+	cout << "Reading the input data..." << endl;
 	blas::matrix<int> matrix(nrows,ncols);
 	ifstream content(filename);
 

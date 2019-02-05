@@ -28,7 +28,7 @@ using namespace std;
 int main (int argc, char *argv[]) {
 	srand (time(NULL));
 
-	Parameters_file_parsing parameters("/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/PARAMETERS_GENETIC.txt");
+	Parameters_file_parsing parameters("/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/PARAMETERS_GENETIC.txt");
 
 
 	char sep = parameters.sep;
@@ -45,10 +45,10 @@ int main (int argc, char *argv[]) {
 	string pheno_path = argv[3];
 
 	//string namefile = "res";
-	//string geno_path = "/home/courtin/M2/ProjetC/Simu_naive/Simu_naive_2snp_0.5/Naif_1_Genotype.txt";
-	//string pheno_path = "/home/courtin/M2/ProjetC/Simu_naive/Simu_naive_2snp_0.5/Naif_1_Phenotype.txt";
-	//string geno_path = "/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testgenotypes1.txt";
-	//string pheno_path = "/home/courtin/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testphenotypes1.txt";
+	//string geno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/geno_gamete/geno_model1_0_01p_0005h_005m_001.txt";
+	//string pheno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/pheno_gamete/pheno_model1_0_01p_0005h_005m_001.txt";
+	//string geno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testgenotypes1.txt";
+	//string pheno_path = "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Utils/data_simulation/4kindiv_test_all_files/4kindiv_testphenotypes1.txt";
 
 	Data_input datas_geno(geno_path, sep, nb_line_header);
 	int_matrix_type Mgeno = datas_geno.read();
@@ -63,7 +63,7 @@ int main (int argc, char *argv[]) {
 	Population population(Mgeno, Mpheno, len_pop, len_pattern);
 
 	population.init_pop_geno();
-	//population.display_geno_sol();
+	population.display_geno_sol();
 
 	int_matrix_type Msol_geno(1, len_pattern); //temp solution for the loop
  	vector<double> G2_res;
@@ -95,6 +95,7 @@ int main (int argc, char *argv[]) {
 
 	double median;
 
+	sort(G2_res.begin(), G2_res.end());
 
 	median = G2_res[G2_res.size()/2]; //Median of the solutions' G2
 
@@ -148,12 +149,13 @@ int main (int argc, char *argv[]) {
 		median = G2_res[G2_res.size()/2]; //Median of the solutions' G2
 
 		iterator++;
+		cout << iterator << "/";
 	}
 
 
 	Output output(population.get_Mpop_geno(), header, len_pattern, len_pop, namefile);
 
-	output.set_list_pattern();
+	//output.set_list_pattern();
 	output.set_best_sol();
 	output.write_best_sol();
 

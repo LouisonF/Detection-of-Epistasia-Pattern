@@ -20,8 +20,8 @@ public:
 public:
 	TheoricalTable(int, int_matrix_type);
 	virtual ~TheoricalTable();
-	float sum_row(int);
-	float sum_col(int);
+	double sum_row(int);
+	double sum_col(int);
 	void set_table();
 	void display_table();
 	int_matrix_type get_theo_table();

@@ -15,20 +15,20 @@ using namespace std;
 
 class Output {
 private:
-	float_matrix_type Mpop_geno;
+	double_matrix_type Mpop_geno;
 	vector<string> header;
 	int len_pattern;
 	int len_pop;
 	string filename;
-	vector<vector<float>> list_pattern;
-	//vector<vector<float>> list_sol;
-	//vector<vector<float>> best_pattern_list;
+	vector<vector<double>> list_pattern;
+	//vector<vector<double>> list_sol;
+	//vector<vector<double>> best_pattern_list;
 
 public:
-	Output(float_matrix_type Mpop_geno, vector<string> header, int len_pattern, int len_pop, string filename);
+	Output(double_matrix_type Mpop_geno, vector<string> header, int len_pattern, int len_pop, string filename);
 	virtual ~Output();
-	int cut(vector<vector<float>> & vect, int start, int end);
-	void quickSort(vector<vector<float>> & vect, int p, int r);
+	int cut(vector<vector<double>> & vect, int start, int end);
+	void quickSort(vector<vector<double>> & vect, int p, int r);
 	void set_list_pattern();
 	//void set_list_sol();
 	void set_best_sol();

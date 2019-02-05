@@ -14,8 +14,8 @@ using namespace std;
 class G2test {
 private:
 	int df;
-	float pval;
-	float g2;
+	double pval;
+	double g2;
 	int_matrix_type cont_table;
 	int_matrix_type theo_table;
 public:
@@ -24,8 +24,8 @@ public:
 	bool reliable_test(int_matrix_type & c);
 	void run_G2(int &not_reliable, bool child);
 	void display_g2();
-	float get_g2();
-	float get_pval();
+	double get_g2();
+	double get_pval();
 };
 
 #endif /* G2TEST_H_ */

@@ -20,6 +20,7 @@ ContingencyTable::~ContingencyTable() {
 }
 
 void ContingencyTable::set_pattern_list(){
+	cout << "Set pattern list..." << endl;
 
 	int x1 = 0;
 	int x2;
@@ -52,6 +53,8 @@ void ContingencyTable::set_pattern_list(){
 }
 
 void ContingencyTable::set_table(){
+	cout << "Set contingency table..." << endl;
+
 	for (int i = 0; i < int(cont_table.size1()); i++){
 		for (int j = 0; j < int(cont_table.size2()); j++){
 			cont_table(i, j) = 0;

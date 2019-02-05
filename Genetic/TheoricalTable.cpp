@@ -18,23 +18,24 @@ TheoricalTable::~TheoricalTable() {
 	// TODO Auto-generated destructor stub
 }
 
-float TheoricalTable::sum_row(int row){
-	float sum = 0;
+double TheoricalTable::sum_row(int row){
+	double sum = 0;
 	for (int i = 0; i < nb_col; i++){
 		sum += cont_table(row, i);
 	}
 	return(sum);
 }
 
-float TheoricalTable::sum_col(int col){
-	float sum = 0;
+double TheoricalTable::sum_col(int col){
+	double sum = 0;
 	for (int i = 0; i < cont_table.size1(); i++){
 		sum += cont_table(i, col);
 	}
 	return(sum);
 }
 void TheoricalTable::set_table(){
-	float total = sum_row(0) + sum_row(1);
+	cout << "Set theorical table..." << endl;
+	double total = sum_row(0) + sum_row(1);
 	for (int i = 0; i < int(theo_table.size1()); i++){
 		for (int j = 0; j < int(theo_table.size2()); j++){
 			theo_table(i, j) = (sum_row(i) * sum_col(j))/total;

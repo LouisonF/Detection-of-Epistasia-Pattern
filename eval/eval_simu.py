@@ -7,8 +7,6 @@
 #run : ./eval_simu.py input_directory_path output_directory_path n_runs nb_snp len_pattern
 #The input directory path must be <Model_results_directory>/<Jeu_donnees_x_directory> with a directory /<fichier_simulé_x> inside containing the n itération for that file.
 
-
-
 from utils import *
 import os, os.path
 import sys

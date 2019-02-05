@@ -6,7 +6,7 @@
  */
 #include "Child.h"
 
-Child::Child(float_matrix_type Mpop_geno, int_matrix_type MParents, int len_pattern, float P_mutation, int nb_snp) : Mpop_geno(Mpop_geno), MParents(MParents), len_pattern(len_pattern), P_mutation(P_mutation), nb_snp(nb_snp)
+Child::Child(double_matrix_type Mpop_geno, int_matrix_type MParents, int len_pattern, double P_mutation, int nb_snp) : Mpop_geno(Mpop_geno), MParents(MParents), len_pattern(len_pattern), P_mutation(P_mutation), nb_snp(nb_snp)
 {
 	int_matrix_type MChlidren_temp(MParents.size1(), len_pattern);
 	MChildren = MChlidren_temp;
@@ -17,6 +17,7 @@ Child::~Child() {
 }
 
 void Child::set_children(){
+	cout << "Crossing over..." << endl;
 	int it = 0;
 
 
@@ -43,6 +44,7 @@ void Child::set_children(){
 }
 
 void Child::mutation(){
+	cout << "Mutation..." << endl;
 	vector<int> muted_child; //To sort the new child
 	for (int i = 0; i < int(MChildren.size1()); i++){
 		if ((rand()%100)+1 < P_mutation){
