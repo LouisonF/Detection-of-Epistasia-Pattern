@@ -1,3 +1,13 @@
+/*
+ * datainput.h
+ *
+ *  Created on: 9 nov. 2018
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *      Imported from Clément Niel's code
+ *  Modified on: 05 fev 2018
+ */
 #ifndef CONTINGENCY_HPP
 #define CONTINGENCY_HPP
 
@@ -8,10 +18,6 @@
 
 namespace blas=boost::numeric::ublas;
 
-//typedef blas::matrix<int> blas_matrix;
-//typedef blas::matrix<double> blas_dmatrix;
-//typedef blas::matrix_column<blas::matrix<int> > blas_column;
-//typedef blas::matrix_row<blas::matrix<int> > blas_row;
 
 class Contingency : public blas_dmatrix
 {

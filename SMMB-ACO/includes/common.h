@@ -1,3 +1,12 @@
+/*
+ * common.h
+ *
+ *  Created on: 9 nov. 2018
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *  Modified on: 05 fev 2018
+ */
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -7,7 +16,6 @@
 
 #include <queue>
 #include <vector>
-#include "Scoring.hpp"
 
 namespace blas=boost::numeric::ublas;
 
@@ -19,7 +27,5 @@ typedef blas::matrix_row<blas::matrix<int> > blas_row;
 typedef blas::vector<int> blas_vector;
 typedef blas::vector<unsigned> blas_uvector;
 typedef blas::vector<double> blas_dvector;
-
-typedef std::priority_queue<Scoring, std::vector<Scoring>, std::greater<Scoring> > scoring_queue;
 
 #endif // COMMON_H

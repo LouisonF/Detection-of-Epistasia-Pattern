@@ -1,3 +1,12 @@
+/*
+ * G2_test_indep.cpp
+ *
+ *  Created on: 9 nov. 2018
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *  Modified on: 05 fev 2018
+ */
 #include "G2_test_indep.hpp"
 #include "Contingency.hpp"
 #include <iostream>
@@ -17,15 +26,7 @@ G2_test_indep::G2_test_indep(Contingency const& c) : _pval(1), _g2(0), _reliable
     _df = (c.size1()-1)*(c.size2()-1);
     run(c);
 }
-/*
-G2_test_indep::G2_test_indep(blas_column const& var, blas_matrix const& phenos) : _pval(1), _g2(0), _reliable(true)
-{
-    Contingency c(phenos, var);
 
-    _df = (c.size1()-1) * (c.size2()-1);
-    run(c);
-}
-*/
 G2_test_indep::G2_test_indep(blas_column const& var, blas_column const& phenos) : _pval(1), _g2(0), _reliable(true)
 {
     Contingency c(phenos, var);
@@ -41,12 +42,6 @@ G2_test_indep::G2_test_indep(): _pval(1), _g2(0), _reliable(true), _df(0) {}
 //-----------------------------------------
 void G2_test_indep::run(Contingency const& c)
 {
-//    if(reliable_test(c) == false)
-//    {
-//        _reliable = false;
-//        _pval = 1;
-//        return;
-//    }
     Contingency e(c);
     int n = c.sum();
 
@@ -154,8 +149,6 @@ bool G2_test_indep::deprecated_reliable_test(Contingency const& e)
                 count_inf_5 ++;
                 if((double)count_inf_5 / ncells > 0.2)
                 {
-//                    cout << "Not reliable test, ";
-//                    cout << "expected: " << e << endl;
                     return false;
                 }
             }

@@ -1,8 +1,11 @@
 /*
  * SmmbACO.cpp
  *
- *  Created on: 24 nov. 2018
- *      Author: louison
+ *  Created on: 9 nov. 2018
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *  Modified on: 05 fev 2018
  */
 
 #include "SmmbACO.hpp"
@@ -41,20 +44,18 @@ Smmb_ACO::~Smmb_ACO()
 	// TODO Auto-generated destructor stub
 }
 
-/*Tentative de définition de la marche à suivre ... */
-
 void Smmb_ACO::run_ACO()
 {
 	cout << "SMMB is currently running" << endl;
 	for(unsigned number_aco_it=0; number_aco_it< _params.number_aco_iter; number_aco_it++)
 	 {
 		cout << "ACO iteration number: " << number_aco_it << endl;
-	 //Computation of the probability distribution
+
 		//Sum of pheromones
 		sum_tau();
-		//We clear the score map(key > value) for the new iteration
+		//We clear the score map(key > value) for the new ACO iteration
 		scores.clear();
-
+		//Computation of the probability distribution
 		compute_distrib_prob();
 		compute_cumulative_dristrib_proba();
 
@@ -73,31 +74,28 @@ void Smmb_ACO::run_ACO()
             // add candidate mb to _mbs
             if(!mb.empty())
             {
-    			cout << "SIZE OF MB is : "<<mb.size()<<endl;
     			vector<unsigned int> mb_temp;
     			for(auto i = mb.begin();i!= mb.end();i++)
     			{
     				mb_temp.push_back(*i);
     			}
-    			cout << "SIZE OF MB_TEMP is : "<<mb_temp.size()<<endl;
             	mbs.push_back(mb_temp);
             }
-            cout << "FIN DUNE FOURMI"<<endl;
+            cout << "END OF ANT"<<endl;
 
         }
         update_tau(); //TODO
   	  cout <<"**********************************************"<<endl;
-  	  cout <<"**********************************************"<<endl;
-  	  cout << "fin d'une iteration ACO"<<endl;
+  	  cout << "END OF ACO ITERATIN"<<endl;
 
 
 	 }
 }
 
-//BOUCLE FOR QUI FAIT TOURNER LA SMMB AVEC NMAX = LE NOMBRE D ITERATION
+
 void Smmb_ACO::sum_tau()
 {
-    // initialisation of the variable sum_of_tau at 0 (this void is called at each ACO iteration)
+    // sum_of_tau initialisation at 0 (this void is called at each ACO iteration)
 	sum_of_tau= 0.0;
 	//Tried to use list type for tau and eta variable but list don't use direct access, vector does.
     for(unsigned int i=0; i<tau.size(); i++)
@@ -133,6 +131,7 @@ float Smmb_ACO::pheromone_for_snp(float tau_for_snp, float eta_for_snp)
 
 	return effective_proba;
 }
+
 //This method compute the distribution of probability
 void Smmb_ACO::compute_distrib_prob()
 {
@@ -141,7 +140,8 @@ void Smmb_ACO::compute_distrib_prob()
 		pdf.at(i) = pheromone_for_snp(tau.at(i),eta.at(i));
 	}
 }
-//This method ad to the cumulated distribution of probabilities table, evey proba that is greater than 0
+
+//This method ad to the cumulated distribution of probabilities table, every proba that is greater than 0
 void Smmb_ACO::compute_cumulative_dristrib_proba()
 {
 	float memory = 0.0;
@@ -202,8 +202,7 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 
 	for(i=0; i<snp_table_size; i++)
 	{
-		//cout << "snp_subset size " <<snp_table_size << endl;
-		//cout << "i equals to" <<i<<endl;
+
 		while(snp_in_sample == false)//while no snp added to snp_table, draw a new snp and test
 		{
 			float proba = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -231,28 +230,16 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 
 void Smmb_ACO::learn_mb(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
-	cout << "ENTREE DANS LA FONCTION LEARN MB" <<endl; //TODO DEBUG
 	unsigned int counter = 0;
 	list<unsigned int> memory_mb; //This a the vector of all the trials to learn a mb during this void
 	while((counter < _params.max_trials_learn_mb) && (mb.empty() && (memory_mb != mb)));
 	{
-		cout << "hello, i am learning a markov blanket" <<endl; //TODO DEBUG
 		memory_mb = mb;
-		cout << "passage premiere etape"<<endl;
 		forward_phase(mb,snp_table);
-		cout << "passage seconde etape"<<endl;
 		backward_phase(mb,snp_table);
-		cout << "passage troisieme etape"<<endl;
 		counter++;
 	}
 	backward_phase(mb,snp_table);
-	cout << "passage quatrieme etape"<<endl;
-	//call forward
-	/*
-	 * échantillonnage sur snp_table, selon taille sous-ensemble
-	 * tri: tri pour pouvoir sort ensuite
-	 *
-	 */
 }
 void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_table)
 {
@@ -262,10 +249,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 	unsigned int current_SNP = 0;
 	//New sampling phase
 	Miscellaneous::random_subset(snp_table,random_snps,_params.smallest_subset_size ,rand_seed);
-	for(unsigned int i = 0; i<random_snps.size(); i++)
-	{
-		cout << "snp NOT SORTED at pos : " << i << "     " << random_snps.at(i)<<endl;
-	}
 	//Sorting is important for the combination method.
 	sort(random_snps.begin(),random_snps.end());
 	//Generating all combinations for the snp list
@@ -275,25 +258,15 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 
 	for (unsigned int x=0; x<all_snps_combinations.size(); x++)
 	{
-		cout << "x is equal to : "<<x<<endl;
 		vector<unsigned int> current_combination = all_snps_combinations.at(x);
-		for (unsigned int y=0; y<current_combination.size(); y++)
-		{
-			cout << "snp at pos y " << y << "is " << current_combination.at(y)<<endl;
-		}
 	}
 	for (unsigned int x=0; x<all_snps_combinations.size(); x++)
 	{
-		cout <<"x is equal to" << x<<endl;//TODO DEBUG
-		cout << "all_snps_combinations_size" << all_snps_combinations.size()<<endl;//TODO DEBUG
 		vector<unsigned int> current_combination = all_snps_combinations.at(x);
 		vector<unsigned int> current_combination_temp = current_combination;
-		cout << "current combination size "<<current_combination.size()<<endl;
-		cout<< current_combination.at(0)<<endl;
 		for(auto it =current_combination.begin(); it != current_combination.end(); it++)
 		{
 			current_SNP = *it;
-			cout << "current SNP is :" <<*it<<endl; //TODO DEBUG
 			//We merge the temporary markov blanket
 			vector<unsigned int> mb_temp;
 			for(auto i = mb.begin();i!= mb.end();i++)
@@ -301,13 +274,11 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				mb_temp.push_back(*i);
 			}
 			//erase current_SNP from temporary combination vector
-			cout << "current combination temp size "<<current_combination_temp.size()<<endl;
 			vector<unsigned int>::iterator INT_oui;
 			unsigned int current_SNP_index;
 			INT_oui = find (current_combination_temp.begin(), current_combination_temp.end(), current_SNP);
 			if (INT_oui != current_combination_temp.end())
 			{
-				cout << "Element found in current_combination_temp: " << *INT_oui << '\n';
 				current_SNP_index = distance(current_combination_temp.begin(), INT_oui);
 				current_combination_temp.erase(current_combination_temp.begin()+current_SNP_index);
 			}else
@@ -319,9 +290,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 			for(unsigned int i=0; i<current_combination_temp.size(); i++)
 			{
 				mb_temp.push_back(current_combination_temp.at(i));
-
-				cout << "current_combination_temp at i" << current_combination_temp.at(i)<<endl;//TODO DEBUG
-
 			}
 			for(unsigned int i=0; i<current_combination_temp.size(); i++)
 			{
@@ -333,10 +301,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 
 					boostgenotype_column(j,0) =  _genotypes(j,current_SNP);
 				}
-				cout << "boostgenotype column size 1 =  "<<endl;
-				cout << boostgenotype_column.size1();
-				cout << "boostgenotype column size 2 =  "<<endl;
-				cout << boostgenotype_column.size2()<<endl; //TODO DEBUG
 				if(mb_temp.size()==0)
 					break;
 				G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
@@ -346,64 +310,20 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 
 				// A G2 independency test is reliable when there are enough observations in each cell of the contingency table.
 				// See the method Contingency::is_reliable() for details.
-
-				cout << "Entering condg2 reliable"<<endl;
-				cout << "-------------------------------------------"<<endl;
 				if(cond_g2.pval() < best_subset_pvalue)
 				{
 					vector<double> g2_results_temp;
-					cout << "entering the new pval is better than older"<<endl;
-					cout <<"x is equal to" << x<<endl;//TODO DEBUG
-					cout << "---------------------------------------"<<endl;
 					best_subset_pvalue = cond_g2.pval();
-					cout <<"TESTETSETSESTESETSETSETSETSETSETSETSET"<<endl;
-					cout << "current best subset pvalue is : " << best_subset_pvalue<<endl;
 					best_snp_index = x;
-					cout << "current best snp index is : " << current_SNP <<endl;
-					// g2_results_temp.push_back(cond_g2.pval());
-					// g2_results_temp.push_back(cond_g2.g2());
-					// if(cond_g2.is_reliable())
-					// {
-					// 	g2_results_temp.push_back(1); //if reliable, add 1
-					// }else
-					// {
-					// 	g2_results_temp.push_back(0); // if no, add 0
-					// }
-					// map<vector<unsigned int>,vector<double>>::iterator it;
-					// it = results.find(current_combination_temp); //search for the current combination
-					// if (it != results.end()) //if this combination exist in results
-					// {
-					// 	int k = 0;
-					// 	for (auto key_it = it->second.cbegin(); key_it != it->second.cend(); key_it++)
-					// 	{
-					// 		cout << *key_it << "VS"<< g2_results_temp[k] << endl;
-					// 		if ((*key_it < g2_results_temp[k]) && (k < 1))
-					// 		{
-					// 			#pragma omp critical
-					// 			results[current_combination_temp][k] = g2_results_temp[k];
-					// 			results[current_combination_temp][k+1] = g2_results_temp[k+1];
-					// 			results[current_combination_temp][k+2] = g2_results_temp[k+2];
-					// 		}
-          //
-					// 		k++;
-					// 	}
-					// }else
-					// {
-					// 	#pragma omp critical
-					// 	results[current_combination_temp] = g2_results_temp;
-					// }
 					#pragma omp critical
 					scores[current_SNP].push_back(cond_g2.g2());
 
 				}
-
 			}
 		cout << best_snp_index<<endl;
 		// Append the best subset if alpha < threshold
 		if(best_subset_pvalue < _params.alpha)
 		{
-			cout << "ENTERING BEST SUBSET PVALUE UNDER ACO ALPHA"<<endl;
-			cout << "all snps test  " << best_snp_index; //TODO DEBUG, SNP index is too high
 			vector<unsigned> best_subset;
 			for(unsigned int j= 0; j<all_snps_combinations[best_snp_index].size();j++)
 			{
@@ -411,7 +331,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 			}
 			if(!best_subset.empty())
 			{
-				cout << "ENTERING BEST SUBSET NOT EMPTY"<<endl;
 				for(unsigned int i=0; i<best_subset.size(); i++)
 				{
 					list<unsigned int>::iterator findIter = find(mb.begin(), mb.end(), best_subset.at(i));
@@ -444,13 +363,12 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 		vector<unsigned int> current_comb;
 		vector<vector<unsigned int>> all_snps_combinations;
         vector<unsigned int> mb_minus_elem;
-    	//TODO: The list container is not the more optimized choice but its the working one atm
+    	//TODO: The list container is not the more optimized choice but is the working one atm
 		vector<unsigned int> mb_temp;
 		for(auto i = mb.begin();i!= mb.end();i++)
 		{
 			mb_temp.push_back(*i);
 		}
-		cout << "mb_temb_backward equals to" << mb_temp.size()<<endl;
 		//Erase duplicate values in the markov_blanket
         sort(mb_temp.begin(), mb_temp.end());
         mb_temp.erase(unique(mb_temp.begin(), mb_temp.end()), mb_temp.end());
@@ -471,8 +389,6 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         	}
 
         }
-        cout <<"size of the markov blanket" << mb.size()<<endl;
-        cout << "size of the mb_minus_elem vector" << mb_minus_elem.size()<<endl;
         if(mb.size()==0)
         {
         	break;
@@ -490,15 +406,12 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 
         	boostgenotype_column(j,0) =  _genotypes(j,current_mb_elem);
         }
-        cout << "number of combinations"<<endl;
         for (unsigned int i=0; i<all_snps_combinations.size(); i++)
         {
         	vector<unsigned int> current_combination;
-        	cout << "size of the snp combination" << all_snps_combinations[i].size()<<endl;
         	for(unsigned const& elem: all_snps_combinations[i])
         	{
         		current_combination.push_back(elem);
-        		cout << "current elem equals to"<<elem<<endl;
         	}
         	if(mb_temp.size()==0)
         		break;
@@ -521,35 +434,11 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         	if (it != results.end()) //if this combination exist in results
         	{
         		results[mb_temp][3] = results[mb_temp][3]+1;
-        		//int k = 0;
-        		/*for (auto key_it = it->second.cbegin(); key_it != it->second.cend(); key_it++)
-        		{
-        			cout << *key_it << "VS"<< g2_results_temp[k] << endl;
-        			if ((*key_it < g2_results_temp[k]) && (k < 1))
-        			{
-        				for(auto it = mb_temp.begin(); it != mb_temp.end(); it++)
-        				{
-            				cout << "current combination is actually "<< *it<<endl;
-        				}
-						#pragma omp critical
-        				results[mb_temp][k] = g2_results_temp[k];
-        				results[mb_temp][k+1] = g2_results_temp[k+1];
-        				results[mb_temp][k+2] = g2_results_temp[k+2];
-        				results[mb_temp][k+3] = results[mb_temp][k+3]+1; // count occurences of a MB
-        			}
-
-        			k++;*/
-        		//}
         	}else
         	{
-        		for(auto it = mb_temp.begin(); it != mb_temp.end(); it++)
-        		{
-        			cout << "current combination is actually "<< *it<<endl;
-        		}
-#pragma omp critical
+				#pragma omp critical
         		results[mb_temp] = g2_results_temp;
         	}
-        	cout << "the backward p_value is : "<<cond_g2.pval()<<endl;
         	if(cond_g2.pval() > _params.alpha)
         	{
         		//If the SNP is removed from the MB, we won't test it over different combinations,
@@ -571,10 +460,6 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
 void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 {
 		vector<vector<unsigned int>>::iterator uniq_it;
-		cout << "unique markov blankets:";
-
-		cout << "mbs size one" << mbs.size()<<endl;
-
 		for (uniq_it=mbs.begin(); uniq_it!=mbs.end(); uniq_it++)
 		{
 			vector<unsigned int>temp_mb = *uniq_it;
@@ -596,8 +481,8 @@ void Smmb_ACO::write_results(){
 	ofstream file;
 	file.open("/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO_results/"+ file_basename);
 
-	file << "number of markov blankets learnt: " << mbs.size()<<endl;
-	file << "number of different markov blankets in the results map" << results.size()<<endl;
+	//file << "number of markov blankets learnt: " << mbs.size()<<endl;
+	//file << "number of different markov blankets in the results map" << results.size()<<endl;
 	/* Map order*/
 	vector<pair<vector<unsigned>, vector<double>>> _optimum_set_vector;
 	for (auto pattern : results)
@@ -612,23 +497,6 @@ void Smmb_ACO::write_results(){
 		file << endl;
 		file << "Epistasis Pattern      p-value      score      reliable       occurences" <<endl;
 		//TODO : Link the SNP index with the Phenotype header !
-		/*{
-			for(auto it = results.cbegin();it != results.cend(); it++)
-			{
-				file << "{";
-				for (auto key_it = it->first.cbegin(); key_it != it->first.cend(); key_it++)
-				{
-					file << *key_it << " ";
-				}
-				file << "}        ";
-				for (auto val_it = it->second.cbegin(); val_it != it->second.cend(); val_it++)
-				{
-					file << *val_it << "      ";
-				}
-				file << endl;
-			}
-		}*/
-
 		for(int i = 0 ; i<_optimum_set_vector.size() ; i++)
 		{
 			file << "{";
@@ -648,29 +516,3 @@ void Smmb_ACO::write_results(){
 	}else
 		cerr << "Cannot open file." << endl;
 }
-//somme des tau DONE
-
-// calcul des distributions de proba et des proba de chaque snp DONE
-
-// TODO calcul parallelle et boucle pour faire travailler chaque fourmi.
-
-//TODO select SNP, fonction de sampling
-// TODO learn Markov blanket
-// TODO ajout des mB à la secltion de mbs
-//TODO mise a jour de tau
-//Fin de la fonction qui fait tourner la smmb
-
-//il faut une fonction de calcul du taux de phéromone.
-//Une fonction de stockage en mémoire des proba et du taux de phréromone?
-//Une fonction de sampling des snps: ceux qui n'ont pas encore été sample
-//sont ajoutés à la selection de snps
-//Une fonction qui permet de tirer les SNPs selon leur proba et au sort si deux snps ont la meme proba
-//Une fonction qui permet l'update de tau (pas obligatoire mais allège le code)
-//Une fonction qui permet la somme des taux de pheromone pour tous les sNPs
-//Une fonction qui va concretement réaliser la markov blanket en appellant la phase forward et la phase backward
-//Phase forward
-//Phase backward
-// Une fonction qui permet la raffinnement des résultats
-// via la transformation de MB en une seule
-// via la selection de SNPs uniques
-// Réalisation des tests statistiques (G2)

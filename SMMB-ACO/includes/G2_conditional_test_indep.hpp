@@ -1,3 +1,13 @@
+/*
+ * G2_conditional_test_indep.hpp
+ *
+ *  Created on: 9 nov. 2018
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *  Modified on: 05 fev 2018
+ */
+
 #ifndef G2_CONDITIONAL_TEST_INDEP_HPP
 #define G2_CONDITIONAL_TEST_INDEP_HPP
 
@@ -22,8 +32,6 @@ public:
             vector<unsigned int> const& cond_genos_indexes,
 			blas::matrix<int> ref_matrix,
 			bool print_contingency=false);
-
-    G2_conditional_test_indep(Contingency const& c, unsigned number_of_sub_contingencies);
 
     void run(bool verbose=false);
     void print_contingencies();

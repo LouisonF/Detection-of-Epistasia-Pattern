@@ -1,8 +1,11 @@
 /*
  * SmmbACO.hpp
  *
- *  Created on: 24 nov. 2018
- *      Author: louison
+ *  Created on: 9 nov. 2018
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *  Modified on: 05 fev 2018
  */
 
 #ifndef SMMBACO_HPP_

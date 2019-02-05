@@ -12,11 +12,8 @@ phenos_file ouiphenotypes1.txt
 # alpha type I error rate
 alpha 0.05
 
-# precision used in adaptative permutations
-precision 0.1
-
 # number of SNP to be drawn
-aco_set_size 6
+aco_set_size 10
 
 # size of the smallest subset, k (draw in Algorithm 2)
 smallest_subset_size 3
@@ -24,25 +21,22 @@ smallest_subset_size 3
 #size of the epistasia pattern
 epistasia_size 2
 
-# Maximal number of iterations if there is no convergence (top level procedure of SMMB algorithm)
-max_trials_smmb 100
-
 # Maximal number of iterations allowed to learn one Markov blanket, #for one given large subset K, to escape the issue of non-modified MB.
 # If the sampling of k variables among K variables does not allow to #identify a candidate subset s which is actually added to the growing #MB, then the MB would not be modified and learnMB (inner level #procedure of SMMB algorithm) would stop.
 # To palliate this problem, one coerces the exploration of the subset #of K variables through max_trials_learn_mb.
-max_trials_learn_mb 100
+max_trials_learn_mb 30
 
 # number of consecutive runs of SMMB-ACO
-number_smmbaco_runs 1
+number_smmbaco_runs 1#2
 
 # Number of ants (500 or more (antEpiSeeker))
-number_ants 100
+number_ants 75
 
 # Number of snps sampled in each ant
 number_snp_per_ant 10
 
 # Number of iterations in ACO
-number_aco_iter 100
+number_aco_iter 15
 
 # Parameters for ACO optimization
 #   Parameters related to evaporation rates

@@ -1,12 +1,12 @@
 /*
  * Parametersfileparsing.cpp
  *
- *  Created on: 16 nov. 2018
+ *  Created on: 9 nov. 2018
  *      Author: Louison Fresnais, François Courtin M2BB
  *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
  *      Under the supervision of Christine Sinoquet(Nantes University)
  *      Most of this code is from the SMMB-ACO implementation from Clément Niel
- *  Modified on: 19 nov. 2018
+ *  Modified on: 05 fev. 2019
  */
 
 #include "Parametersfileparsing.hpp"
@@ -108,10 +108,6 @@ void Parameters_file_parsing::import_line(string const line)
     {
     	size = atoi(value.c_str());
     }
-    else if(key == "max_trials_smmb")
-    {
-    	max_trials_smmb = atoi(value.c_str());
-    }
     else if(key == "max_trials_learn_mb")
     {
     	max_trials_learn_mb = atoi(value.c_str());
@@ -199,7 +195,6 @@ void Parameters_file_parsing::list_parameters()
     << "precision => " << precision << endl
     << "number_snp_per_ant => " << number_snp_per_ant << endl
     << "smallest_subset_size => " << smallest_subset_size << endl
-    << "max_trials_smmb => " << max_trials_smmb << endl
     << "max_trials_learn_mb => " << max_trials_learn_mb << endl
 	<< "genos_file => " << genos_file << endl
 	<< "phenos_file => "<< phenos_file <<endl

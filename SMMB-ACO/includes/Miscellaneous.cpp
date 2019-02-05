@@ -1,8 +1,11 @@
 /*
  * Miscellaneous.cpp
  *
- *  Created on: 24 nov. 2018
- *      Author: louison
+ *  Created on: 9 nov. 2018
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
+ *  Modified on: 05 fev 2018
  */
 
 #include "Miscellaneous.hpp"
@@ -31,26 +34,6 @@ void Miscellaneous::remove_list_from_list(list<unsigned> list1, list<unsigned> l
 		list2.remove(temp);
 	}
 }
-
-void Miscellaneous::append_to_file(string filename, string data_to_append)
-{
-	ofstream content;
-	content.open(filename, ofstream::out | ofstream::app);
-	//option out allow to open the file in writing mode.
-	//option app allow to append data at the end of the file.
-
-	if(content.is_open())
-	{
-		content << data_to_append;
-	}
-	else
-	{
-		cerr << "error in file parsing \n";
-		exit(-1);
-	}
-	content.close();
-}
-
 void Miscellaneous::random_subset(vector<unsigned int> &in_subset, vector<unsigned int> &out_subset, unsigned int n_to_draw, mt19937 rand_seed)
 {
 	//We generate a discrete distribution of in_subset size
@@ -61,9 +44,7 @@ void Miscellaneous::random_subset(vector<unsigned int> &in_subset, vector<unsign
 	while(out_subset.size() < n_to_draw)
 	{
 		unsigned int subset_max_indice = in_subset.size();
-		//cout << "subset_max_indice" << subset_max_indice <<endl;
 		int random_indice = rand() % subset_max_indice + 0;
-		//cout << "random indice is" << random_indice;
 		if(find(out_subset.begin(), out_subset.end(), in_subset.at(random_indice)) == out_subset.end())
 		{
 			out_subset.push_back(in_subset.at(random_indice));
@@ -80,7 +61,7 @@ void Miscellaneous::random_subset(vector<unsigned int> &in_subset, vector<unsign
 void Miscellaneous::combinator(vector<unsigned int> snps_sorted, vector<vector<unsigned int>> &all_index_combinations, unsigned int size)
 {
     int n = snps_sorted.size();
-    for(int s=1; s<=size; s++)
+    for(unsigned int s=1; s<=size; s++)
     {
     	cout << "value for n" << n <<endl;
         std::vector<bool> v(n);
@@ -99,18 +80,14 @@ void Miscellaneous::combinator(vector<unsigned int> snps_sorted, vector<vector<u
        } while (std::prev_permutation(v.begin(), v.end()));
     }
     //TODO comment following block to remove combination verbose
-       for (int x=0; x<all_index_combinations.size(); x++)
+       /*for (unsigned int x=0; x<all_index_combinations.size(); x++)
        {
-    	   for(int y=0; y<all_index_combinations[x].size();y++)
+    	   for(unsigned int y=0; y<all_index_combinations[x].size();y++)
     	   {
     		   cout << all_index_combinations[x][y];
     	   }
     	   cout << "\n";
-       }
-
-    //}
-
-    //}
+       }*/
 }
 void Miscellaneous::link_comb_to_snp(vector<unsigned int> snps_sorted, vector<vector<unsigned int>> &all_index_combinations) //Link snp_sorted with their index
 //This method is useless if all snps are in the subset but is usefull to match a subset of size < all snps with the input matrix
