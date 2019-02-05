@@ -13,7 +13,7 @@
 #include <boost/array.hpp>
 
 typedef boost::numeric::ublas::matrix<int> int_matrix_type;
-typedef boost::numeric::ublas::matrix<float> float_matrix_type;
+typedef boost::numeric::ublas::matrix<double> double_matrix_type;
 typedef boost::numeric::ublas::matrix<int_matrix_type> matrix_of_int_matrix_type;
 
 
