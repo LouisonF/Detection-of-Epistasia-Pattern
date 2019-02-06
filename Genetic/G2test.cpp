@@ -39,7 +39,7 @@ void G2test::run_G2(int &not_reliable, bool child){
 		{
 			if(cont_table(i,j) != 0)
 			{
-				double div = (double) cont_table(i,j) / theo_table(i,j);
+				float div = (float) cont_table(i,j) / theo_table(i,j);
 				g2 += cont_table(i,j) * log(div);
 			}
 		}
@@ -47,14 +47,12 @@ void G2test::run_G2(int &not_reliable, bool child){
 	g2 *= 2;
 	df = (cont_table.size1()-1)*(cont_table.size2()-1);
 
-	/*boost::math::chi_squared_distribution<double> chi2_dist(df);
-	pval = 1 - boost::math::cdf(chi2_dist, g2);
-*/
+
 	if (g2 != std::numeric_limits<double>::infinity()){
 		boost::math::chi_squared_distribution<double> chi2_dist(df);
 		pval = 1 - boost::math::cdf(chi2_dist, g2);
 	}else {
-		g2 = 94; // High value of G2 instead of inf value to be able to run the cdf()
+		g2 = 0; // High value of G2 instead of inf value to be able to run the cdf()
 		boost::math::chi_squared_distribution<double> chi2_dist(df);
 		pval = 1 - boost::math::cdf(chi2_dist, g2);
 	}
