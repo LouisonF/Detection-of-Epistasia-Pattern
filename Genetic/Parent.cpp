@@ -24,19 +24,32 @@ void Parent::parents_selection(){
 	cout << "Parents selection" << endl;
 	vector<int> parents_list = {};
 	int selected_parent;
+	int compt = 0; //if more than 20 try to find a unique parent then get the parent even if not unique
+
 	for (int i = 0; i < nb_parents; i++){
 		if ((rand()%100)+1 > P_selection){
 			do {
 				selected_parent = rand()%nb_sol;
+				compt ++;
+				if (compt == 20){
+					break;
+				}
 			}
 			while (count(parents_list.begin(), parents_list.end(),selected_parent) != 0 or Mpop_geno(selected_parent, len_pattern) < median);
 			parents_list.push_back(selected_parent);
+
 		}else{
 			do {
 				selected_parent = rand()%nb_sol;
+				compt ++;
+				if (compt == 20){
+					break;
+				}
 			}
 			while (count(parents_list.begin(), parents_list.end(),selected_parent) != 0 or Mpop_geno(selected_parent, len_pattern) >= median);
+
 			parents_list.push_back(selected_parent);
+
 		}
 		Mparents(i, 0) = selected_parent;
 	}

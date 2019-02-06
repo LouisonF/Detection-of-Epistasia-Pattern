@@ -21,7 +21,7 @@ void Child::set_children(){
 	int it = 0;
 
 
-	if (len_pattern < 3){
+	if (len_pattern == 2){
 		while (it < int(MParents.size1())){
 			MChildren(it,0) = Mpop_geno(MParents(it,0), 0);
 			MChildren(it,1) = Mpop_geno(MParents(it+1,0),1);
