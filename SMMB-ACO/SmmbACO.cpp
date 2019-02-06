@@ -17,7 +17,6 @@ Smmb_ACO::Smmb_ACO(blas::matrix<int> & genos, blas::matrix<int> & phenos, Parame
 
 	//Output file opening
     file_basename = basename((char*)_params.genos_file.c_str());
-    cout << "file_basename : "<< file_basename <<endl;
 
 	//Random seed
     srand(time(NULL));
@@ -81,13 +80,9 @@ void Smmb_ACO::run_ACO()
     			}
             	mbs.push_back(mb_temp);
             }
-            cout << "END OF ANT"<<endl;
 
         }
         update_tau(); //TODO
-  	  cout <<"**********************************************"<<endl;
-  	  cout << "END OF ACO ITERATIN"<<endl;
-
 
 	 }
 }
@@ -150,7 +145,6 @@ void Smmb_ACO::compute_cumulative_dristrib_proba()
 	{
 		if (pdf.at(i) >0)
 		{
-			cout << "PDF at "<< i << "  " << pdf.at(i) <<endl;
 			memory += pdf.at(i);
 			cumulated_distrib_prob[memory].push_back(i);
 		}
@@ -207,7 +201,6 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 		{
 			float proba = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 			unsigned int drawn_snp = select_snp_in_distrib_prob(proba);
-			cout << "drawn snp is" << drawn_snp <<endl;
 
 			//if nothing found, the find method return the last position of the vector
 			if(find(snp_table.begin(), snp_table.end(), drawn_snp) == snp_table.end())
@@ -303,7 +296,7 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 				}
 				if(mb_temp.size()==0)
 					break;
-				G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, true);
+				G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, mb_temp,_genotypes, false);
 				number_of_indep_test ++;
 
 				//We get the snp column number and get datas from it
@@ -320,7 +313,6 @@ void Smmb_ACO::forward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_t
 
 				}
 			}
-		cout << best_snp_index<<endl;
 		// Append the best subset if alpha < threshold
 		if(best_subset_pvalue < _params.alpha)
 		{
@@ -415,7 +407,7 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         	}
         	if(mb_temp.size()==0)
         		break;
-        	G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination,_genotypes, true);
+        	G2_conditional_test_indep cond_g2(boostgenotype_column, _phenotypes, current_combination,_genotypes, false);
         	number_of_indep_test ++;
         	//If the pvalue of the test is above accepted alpha risk, discard this snp from MB
         	//TODO TRYING TO ADD THE RESULTS IN THE MARKOV BLANKET
@@ -477,9 +469,9 @@ void Smmb_ACO::best_mbs(vector<vector<unsigned int>> &mbs)
 		cout <<"#########################################################################"<<endl;
 		cout << "fin de best mbs"<<endl;
 }
-void Smmb_ACO::write_results(){
+void Smmb_ACO::write_results(string output_path){
 	ofstream file;
-	file.open("/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO_results/"+ file_basename);
+	file.open(output_path);
 
 	//file << "number of markov blankets learnt: " << mbs.size()<<endl;
 	//file << "number of different markov blankets in the results map" << results.size()<<endl;
@@ -494,15 +486,23 @@ void Smmb_ACO::write_results(){
 
 	if(file)
 	{
-		file << endl;
 		file << "Epistasis Pattern      p-value      score      reliable       occurences" <<endl;
 		//TODO : Link the SNP index with the Phenotype header !
-		for(int i = 0 ; i<_optimum_set_vector.size() ; i++)
+		for(unsigned int i = 0 ; i<_optimum_set_vector.size() ; i++)
 		{
+			unsigned int j = 1;
 			file << "{";
 			for (auto key_it = _optimum_set_vector[i].first.cbegin(); key_it != _optimum_set_vector[i].first.cend(); key_it++)
 			{
-				file << *key_it << " ";
+				if(j < _params.size)
+				{
+					file << *key_it << ",";
+				}else
+				{
+					file << *key_it;
+				}
+
+				j++;
 			}
 			file << "}        ";
 			for (auto val_it = _optimum_set_vector[i].second.cbegin(); val_it != _optimum_set_vector[i].second.cend(); val_it++)

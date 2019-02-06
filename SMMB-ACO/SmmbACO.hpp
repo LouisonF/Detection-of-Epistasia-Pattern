@@ -55,7 +55,7 @@ public:
 	void evaporation_rate_update(unsigned int snp_index, float g2_score);
 	void update_tau();
 	void best_mbs(vector<vector<unsigned int>> &mbs);
-	void write_results();
+	void write_results(string output_path);
 	vector<vector<unsigned int>> mbs;
 
 private:

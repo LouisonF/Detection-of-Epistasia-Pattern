@@ -20,21 +20,23 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
-   /* if(argc < 3)
+    if(argc < 4)
     {
         cerr << "Missing parameter :\n"
-             << "\t./executable <path_to_genotypes> <path_to_phenotypes>"
+             << "\t./executable <output_path> <path_to_genotypes> <path_to_phenotypes> <param_path>"
              << endl;
         exit(-1);
-    }*/
+    }
 
     // Arguments
- /* string genos_file = argv[1];
-    string phenos_file = argv[2];
-    string param_file = argv[3];*/
-    string genos_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/Debug/Naif_1_Genotype.txt";
-    string phenos_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/Debug/Naif_1_Phenotype.txt";
-    string param_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/SMMB-ACO-parameters.txt";
+    string output = argv[1];
+    string genos_file = argv[2];
+    string phenos_file = argv[3];
+    string param_file = argv[4];
+    //string genos_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/Debug/Naif_1_Genotype.txt";
+    //string phenos_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/Debug/Naif_1_Phenotype.txt";
+    //string param_file = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/SMMB-ACO-parameters.txt";
+
 //  PARAMETERS
     Parameters_file_parsing params(param_file);
     params.list_parameters();
@@ -65,12 +67,11 @@ int main(int argc, char *argv[])
     chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
     Smmb_ACO smmb_ACO(genos, phenos, params);
     smmb_ACO.run_ACO();
-    smmb_ACO.best_mbs(smmb_ACO.mbs);
-    smmb_ACO.write_results();
+    //smmb_ACO.best_mbs(smmb_ACO.mbs);
+    smmb_ACO.write_results(output);
     chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
     double duration = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
-
-    //smmb_ACO.write_result(duration);
+    cout << "run time" << duration<<endl;
     cout << "END OF THE PROGRAM"<<endl;
 
     return 0;

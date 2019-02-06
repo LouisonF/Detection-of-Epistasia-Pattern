@@ -19,25 +19,26 @@ nb_snp = sys.argv[4] #number of snp in the matrix
 len_pattern = sys.argv[5]
 caus_snp = ""
 
-for i in range(int(len_pattern)):
+for i in range(1,int(len_pattern)+1):
     caus_snp += str(int(nb_snp) - int(i))+","
 
 caus_snp = caus_snp[0:(len(caus_snp)-1)] #pop the "," at the end of the string
 
 print("causal SNPs" + caus_snp)
 #List of directories of conditionnal dataset
+try:
+    os.makedirs(output+"/"+os.path.basename(input))
+except FileExistsError:
+    print("Directory already exist")
 
-os.mkdir(output+"/"+os.path.basename(input))
 condition = os.path.basename(output+"/"+os.path.basename(input))
 print(os.path.basename(input))
 #List of directories of simulated conditionnal dataset
 for simu_file in os.listdir(input):
-
     #List of n_runs result files for one simulated conditionnal dataset
     for res_file in os.listdir(input+"/"+simu_file):
         #Get TP or FP or FN for each result file
         result = set_res(input+"/"+simu_file+"/"+res_file, caus_snp)
-
         #Write the result in the f_measure.txt file
         output_file = write_res(output+"/"+condition+"/"+simu_file, result, "result")
 

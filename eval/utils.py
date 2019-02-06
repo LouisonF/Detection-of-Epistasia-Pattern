@@ -31,12 +31,14 @@ def set_res(file, caus_snp):
     caus_snp_array = caus_snp_array[::-1] #Reverse the array to match the right sort
 
     res_file  = open(file, "r")
-
     for line in res_file:
-
+        print(line)
+        if line[0] != "{":
+            continue;
         try:
             pattern = re.search('{(.+?)}', line).group(1)
         except AttributeError:
+            print("c'est l'exception12")
             pattern = ''
         if pattern == '':
             return("FN")
