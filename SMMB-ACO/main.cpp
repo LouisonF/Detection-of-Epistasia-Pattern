@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
     chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
     Smmb_ACO smmb_ACO(genos, phenos, params);
     smmb_ACO.run_ACO();
-    //smmb_ACO.best_mbs(smmb_ACO.mbs);
     smmb_ACO.write_results(output);
     chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
     double duration = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();

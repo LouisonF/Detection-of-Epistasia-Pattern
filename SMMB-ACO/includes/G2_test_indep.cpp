@@ -60,7 +60,6 @@ void G2_test_indep::run(Contingency const& c)
     }
     compute_g2(c, e);
 
-//    cout << "g2(non-cond):" << _g2 << endl;
     boost::math::chi_squared_distribution<double> chi2_dist(_df);
     _pval = 1 - boost::math::cdf(chi2_dist, _g2);
 }

@@ -207,7 +207,6 @@ void Smmb_ACO::snp_sampling(vector<unsigned int> &snp_table)
 			{
 				//if drawn_snp is not in snp_table, we add it
 				snp_table.push_back(drawn_snp);
-				cout << "snp table size" << snp_table.size() <<endl;
 				snp_in_sample = true;
 
 			}else
@@ -375,9 +374,6 @@ void Smmb_ACO::backward_phase(list<unsigned int> &mb, vector<unsigned int> &snp_
         	}else if(*i != current_mb_elem)
         	{
         		mb_minus_elem.push_back(*i);
-        	}else
-        	{
-        		cout << "else block, i equals to " << *i <<endl;
         	}
 
         }

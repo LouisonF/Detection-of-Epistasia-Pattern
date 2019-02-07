@@ -13,14 +13,18 @@ dataset = sys.argv[3] #nom du jeu de données
 param_path = "/home/louison/Documents/FAC/M2/c++_project/detection-of-epistasia-pattern/SMMB-ACO/SMMB-ACO-parameters.txt"
 try:
     os.makedirs("SMMB-ACO_results/"+dataset)
-    os.makedirs(SMMB-ACO_eval_results)
+    os.makedirs("SMMB-ACO_eval_results")
 
 except FileExistsError:
     print("Directory already exist")
 
 for geno in os.listdir(geno_path):
     geno_dir = "SMMB-ACO_results/"+ dataset + "/" + geno[:-13]
-    os.makedirs(geno_dir)
+    try:
+        os.makedirs(geno_dir)
+    except FileExistsError:
+        print("Directory already exist")
+
     for i in range(1,21):
         pheno = geno[:-12] + "Phenotype.txt"
         print(geno)

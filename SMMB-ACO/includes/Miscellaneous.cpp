@@ -63,7 +63,6 @@ void Miscellaneous::combinator(vector<unsigned int> snps_sorted, vector<vector<u
     int n = snps_sorted.size();
     for(unsigned int s=1; s<=size; s++)
     {
-    	cout << "value for n" << n <<endl;
         std::vector<bool> v(n);
         std::fill(v.begin(), v.begin() + s, true);
 
