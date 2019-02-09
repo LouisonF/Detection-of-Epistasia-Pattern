@@ -92,17 +92,13 @@ void Parameters_file_parsing::import_line(string const line)
     {
     	alpha = atof(value.c_str());
     }
-    else if(key == "number_snp_per_ant")
-    {
-    	number_snp_per_ant = atoi(value.c_str());
-    }
-    else if(key == "precision")
-    {
-    	precision = atof(value.c_str());
-    }
     else if(key == "smallest_subset_size")
     {
     	smallest_subset_size = atoi(value.c_str());
+    }
+    else if(key == "number_snp_per_ant")
+    {
+    	number_snp_per_ant = atoi(value.c_str());
     }
     else if(key == "epistasia_size")
     {
@@ -189,12 +185,13 @@ vector<string> Parameters_file_parsing::split(string const s, char delim)
 //Method from Clément Niel's code
 void Parameters_file_parsing::list_parameters()
 {
-    cout << "########### PARAMETERS ###########\n" << "header_nrows => " << header_nrows << endl
+    cout << "########### PARAMETERS ###########\n"
+    << "header_nrows => " << header_nrows << endl
     << "separator => " << sep << endl
     << "alpha => " << alpha << endl
-    << "precision => " << precision << endl
+	<< "epistasia_size" << size << endl
+	<< "smallest_subset_size" << smallest_subset_size <<endl
     << "number_snp_per_ant => " << number_snp_per_ant << endl
-    << "smallest_subset_size => " << smallest_subset_size << endl
     << "max_trials_learn_mb => " << max_trials_learn_mb << endl
 	<< "genos_file => " << genos_file << endl
 	<< "phenos_file => "<< phenos_file <<endl
