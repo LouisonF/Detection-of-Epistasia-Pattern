@@ -436,11 +436,16 @@ Algo_genet.o: ../Algo_genet.cpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/core/swap.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/detail/iterator.hpp \
  /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp \
- /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/parsing/Parametersfileparsing.hpp \
- ../Population.h ../TypeDef.h ../InitialMatrix.h ../Parent.h \
- ../ContingencyTable.h ../TheoricalTable.h ../G2test.h ../Child.h \
- ../Output.h \
- /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput/datainput.hpp
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Parametersfileparsing.hpp \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Population.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/TypeDef.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Parent.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/ContingencyTable.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/TheoricalTable.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/G2test.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Child.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Output.h \
+ /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput.hpp
 
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/numeric/ublas/matrix.hpp:
 
@@ -1316,24 +1321,22 @@ Algo_genet.o: ../Algo_genet.cpp \
 
 /home/courtin/Documents/M2/ProjetC/boost_1_68_0/boost/throw_exception.hpp:
 
-/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/parsing/Parametersfileparsing.hpp:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Parametersfileparsing.hpp:
 
-../Population.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Population.h:
 
-../TypeDef.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/TypeDef.h:
 
-../InitialMatrix.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Parent.h:
 
-../Parent.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/ContingencyTable.h:
 
-../ContingencyTable.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/TheoricalTable.h:
 
-../TheoricalTable.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/G2test.h:
 
-../G2test.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Child.h:
 
-../Child.h:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/Output.h:
 
-../Output.h:
-
-/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput/datainput.hpp:
+/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/includes/datainput.hpp:
