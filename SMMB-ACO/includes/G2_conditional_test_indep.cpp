@@ -8,6 +8,7 @@
  *  Modified on: 05 fev 2018
  */
 
+//Reworked module from Clement Niel's code
 #include "G2_conditional_test_indep.hpp"
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/math/distributions/chi_squared.hpp>

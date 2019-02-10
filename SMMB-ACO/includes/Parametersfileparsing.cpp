@@ -29,7 +29,7 @@ Parameters_file_parsing::Parameters_file_parsing(const string file_path): file_p
 
 Parameters_file_parsing::Parameters_file_parsing()
 {
-	// TODO Auto-generated destructor stub
+	// TODO Auto-generated constructor stub
 }
 
 Parameters_file_parsing::~Parameters_file_parsing()
@@ -41,6 +41,9 @@ Parameters_file_parsing::~Parameters_file_parsing()
 // Parameters_file_parsing : Parsing
 //=================================================
 
+/*
+ *The Parsing method call the importline method on each line of the parameters file.
+ */
 
 void Parameters_file_parsing::Parsing()
 {
@@ -48,8 +51,10 @@ void Parameters_file_parsing::Parsing()
 	if(content.is_open())
 	{
 		string line = "";
+		//While we haven't reached the end of the file, iterate.
 		while (getline(content,line))
 		{
+			//If the line is not empty and not starting by a # we import it.
             if (line.length() != 0 && line[0] != '#')
             {
             	import_line(line);
@@ -66,6 +71,12 @@ void Parameters_file_parsing::Parsing()
 //=================================================
 
 //Method from Clément Niel's code
+
+
+/*
+ *The import_line method takes a line as input and will read the token one value. If it match a key in the list of if,else
+ *we store the value linked to the key in the relevant variable.
+ */
 
 void Parameters_file_parsing::import_line(string const line)
 {
@@ -168,6 +179,10 @@ void Parameters_file_parsing::import_line(string const line)
 // Parameters_file_parsing : split
 //=================================================
 //Method from Clément Niel's code
+
+/*
+ *The split function take a string in input and is going to split the string according to a given delimiter.
+ */
 vector<string> Parameters_file_parsing::split(string const s, char delim)
 {
     stringstream ss(s);

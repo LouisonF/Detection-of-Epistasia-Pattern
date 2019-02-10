@@ -18,6 +18,8 @@
 using namespace std;
 namespace blas = boost::numeric::ublas;
 
+// Module from Clément Niel's code.
+
 //-----------------------------------------
 // G2_test_indep : Constructors
 //-----------------------------------------
@@ -130,28 +132,3 @@ bool G2_test_indep::reliable_test(Contingency const& c)
 	return true;
 }
 
-
-bool G2_test_indep::deprecated_reliable_test(Contingency const& e)
-{
-    unsigned ncells = e.size1()*e.size2();
-    int count_inf_5 = 0;
-    for(unsigned i=0; i<e.size1(); ++i)
-    {
-        for(unsigned j=0; j<e.size2(); ++j)
-        {
-            if(e(i,j) < 0 || e(i,j)!=e(i,j)) // test for nan
-            {
-                return false;
-            }
-            if(e(i,j) < 5)
-            {
-                count_inf_5 ++;
-                if((double)count_inf_5 / ncells > 0.2)
-                {
-                    return false;
-                }
-            }
-        }
-    }
-    return true;
-}

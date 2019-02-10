@@ -8,6 +8,8 @@
  *      Imported from Clément Niel's code
  *  Modified on: 05 fev 2018
  */
+
+//Module from Clement Niel's code.
 #include "Contingency.hpp"
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 

@@ -25,13 +25,10 @@ class Miscellaneous {
 public:
 	Miscellaneous();
 	virtual ~Miscellaneous();
-	static void append_list(list<unsigned>, list<unsigned>);
-	static void remove_list_from_list(list<unsigned>, list<unsigned>);
 	static void combinator(vector<unsigned int> snps_sorted, vector<vector<unsigned int>> &all_index_combinations, unsigned int size);
 	static void random_subset(vector<unsigned int> &in_subset, vector<unsigned int> &out_subset, unsigned int n_to_draw, mt19937 rand_seed);
 	static void link_comb_to_snp(vector<unsigned int> snps_sorted, vector<vector<unsigned int>> &all_index_combinations); //Link snp_sorted with their index
 	static void print_human_readable_combinations(vector<vector<unsigned int>> all_index_combinations);
-	static void append_vector_to_list(list<unsigned> & l, vector<unsigned> const& v);
 	static bool compareFunc(pair<vector<unsigned>, vector<double>> const& a, pair<vector<unsigned>, vector<double>> const& b);
 };
 

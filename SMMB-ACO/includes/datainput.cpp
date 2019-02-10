@@ -31,18 +31,18 @@ Data_input::Data_input(const string filename, char sep, const unsigned int heade
 	nrows = count_rows() - header_nrows;
 	ncols = count_cols();
 
-	//bool transpose = false; Temporary, removed when I'll decide if I add the transpose mode or not.
-
-
 }
 //Destructor
 Data_input::~Data_input() {
 	// TODO Auto-generated destructor stub
 }
-//Debut des méthodes
+
 //***********************************************************************************************************
 
- //This function read the input file and store data in a matrix.
+
+/*
+ *The read method iterate over the lines of the file given by the filename attribute. This is the main method of the datainput class.
+ */
 
 blas::matrix<int> Data_input::read()
 {
@@ -51,13 +51,14 @@ blas::matrix<int> Data_input::read()
 
 	unsigned int row_pos = 1;
 	unsigned int row_matrix = 0;
-
+	//if the file is open, we iterate over its content
 	if(content.is_open())
 	{
 
 		string line = "";
 		while (getline(content,line))
 		{
+			//if the line number (first line, second line of the file for example) is in the header section, we ignore it.
 			if(row_pos <= header_nrows)
 			{
 				cout << "HEADER Line, IGNORED \n";
@@ -65,9 +66,11 @@ blas::matrix<int> Data_input::read()
 			{
 				unsigned int col_pos = 0;
 				string temp_string = line;
-
+				//we iterate over the line content stored in the temp_string variable
 				for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it)
 						{
+							//if the current char is not a sep, we convert it from string to int
+							//and add its value in the matrix at the appropriate coordinate
 							if(*it == sep){continue;}
 							string temp_char(1,*it);
 							int temp_value = stoi(temp_char);
@@ -90,6 +93,12 @@ blas::matrix<int> Data_input::read()
 
 }
 
+
+/*
+ *The get_snps function will return the name of the snps in the dataset. In the final version we don't use it anymore in order because
+ *of differences in snps names from naive data that are incompatible with the evaluation script.
+ */
+
 vector<string> Data_input::get_snps()
 {
 	vector<string> list_snps;
@@ -98,7 +107,7 @@ vector<string> Data_input::get_snps()
 
 	unsigned int row_pos = 1;
 	unsigned int row_matrix = 0;
-
+	//if the file is open, we iterate over its content.
 	if(content.is_open())
 	{
 
@@ -112,15 +121,18 @@ vector<string> Data_input::get_snps()
 
 				for(auto it=temp_string.begin(); it!=temp_string.end(); ++ it)
 						{
+							//if we arrive at a separator, it means that the previous value is a SNP, that is why we add the temp_char
 							if(*it == sep)
 							{
 								list_snps.push_back(temp_char);
 								temp_char = "";
 								continue;
 							}
+							//add the current value of iterator to the temp_char variable.
 							temp_char+= *it;
 							col_pos++;
 						}
+				//Push back the last snp in the list_snps
 				list_snps.push_back(temp_char);
 				row_matrix++;
 			}
@@ -139,13 +151,18 @@ vector<string> Data_input::get_snps()
 
 }
 
-// This function count the number of rows in the input file
+
+/*
+ *The count_rows function will count the number of rows in the file in order to remove the header when necessary
+ *and initialize the storage matrix. called in the constructor
+ */
+
 unsigned int Data_input::count_rows()
 {
 	unsigned int nrows=0;
 	string line = "";
 	ifstream content(filename);
-
+	//if the file is open, iterate over its contennt and count lines.
 	if(content.is_open())
 	{
 		while(getline(content,line))
@@ -160,7 +177,11 @@ unsigned int Data_input::count_rows()
 	return nrows;
 };
 
-//This function count the number of cols in the input file
+
+/*
+ *The count_cols function will count the number of columns in the file in order to define the storage matrix.
+ *called in the constructor
+ */
 unsigned int Data_input::count_cols()
 {
 	unsigned int ncols=0;

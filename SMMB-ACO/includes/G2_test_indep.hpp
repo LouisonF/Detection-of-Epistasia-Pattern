@@ -38,8 +38,6 @@ protected:
 
     void compute_g2(Contingency const& observeds_contingency, Contingency const& expected_contingency);
     bool reliable_test(Contingency const& contingency);
-    bool deprecated_reliable_test(Contingency const& expected_contingency);
-
     double _pval;
     double _g2;
     bool _reliable;
