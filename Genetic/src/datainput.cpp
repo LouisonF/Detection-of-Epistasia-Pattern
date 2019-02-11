@@ -38,14 +38,16 @@ Data_input::Data_input(const string filename, char sep, const unsigned int heade
 Data_input::~Data_input() {
 	// TODO Auto-generated destructor stub
 }
-//Debut des méthodes
-//***********************************************************************************************************
+
+/*
+ * *************************************************************
+ */
 
  //This function read the input file and store data in a matrix.
 
 blas::matrix<int> Data_input::read()
 {
-	cout << "Reading the input data..." << endl;
+	//cout << "Reading the input data..." << endl;
 	blas::matrix<int> matrix(nrows,ncols);
 	ifstream content(filename);
 
@@ -60,7 +62,7 @@ blas::matrix<int> Data_input::read()
 		{
 			if(row_pos <= header_nrows)
 			{
-				cout << "HEADER Line, IGNORED \n";
+				//cout << "HEADER Line, IGNORED \n";
 			}else
 			{
 				unsigned int col_pos = 0;
@@ -89,6 +91,10 @@ blas::matrix<int> Data_input::read()
 	return matrix;
 
 }
+
+/*
+ * *************************************************************
+ */
 
 vector<string> Data_input::get_snps()
 {
@@ -139,6 +145,10 @@ vector<string> Data_input::get_snps()
 
 }
 
+/*
+ * *************************************************************
+ */
+
 // This function count the number of rows in the input file
 unsigned int Data_input::count_rows()
 {
@@ -158,7 +168,11 @@ unsigned int Data_input::count_rows()
 		exit(-1);
 	}
 	return nrows;
-};
+}
+
+/*
+ * *************************************************************
+ */
 
 //This function count the number of cols in the input file
 unsigned int Data_input::count_cols()

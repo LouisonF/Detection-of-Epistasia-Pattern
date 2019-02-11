@@ -2,7 +2,9 @@
  * Output.cpp
  *
  *  Created on: 3 déc. 2018
- *      Author: courtin
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
 #include "Output.h"
@@ -17,6 +19,11 @@ Output::~Output() {
 	// TODO Auto-generated destructor stub
 }
 
+/*
+ * *************************************************************
+ */
+
+//Function for the Quicksort recursive function
 int Output::cut(vector<vector<double>> & vect, int start, int end) {
 	double pivot = vect[start][len_pattern+1];
 	vector<double> vect_pivot(len_pattern+2);
@@ -35,7 +42,6 @@ int Output::cut(vector<vector<double>> & vect, int start, int end) {
 		if (vect[from_left][len_pattern+1]  <= pivot) from_left++;
 		else {
 			while (( from_left != from_right)  && (pivot < vect[from_right][len_pattern+1])) from_right--;
-			//cout << "swaping " << a[from_left] << " with "<< a[from_right] << endl;
 			for (int i = 0; i < len_pattern+2; i++){
 				tmp =  vect[from_right][i];
 				vect[from_right][i] = vect[from_left][i];
@@ -61,7 +67,11 @@ int Output::cut(vector<vector<double>> & vect, int start, int end) {
 	return (from_left);
 }
 
+/*
+ * *************************************************************
+ */
 
+//QuickSort recursive function
 void Output::quickSort(vector<vector<double>> & vect, int p, int r) {
   if (p < r) {
     int q = cut(vect, p, r);
@@ -70,15 +80,20 @@ void Output::quickSort(vector<vector<double>> & vect, int p, int r) {
   }
 }
 
+/*
+ * *************************************************************
+ */
 
+//Set a list of one copy of all the pattern contained in the population
 void Output::set_list_pattern(){
-	cout << "Set list pattern for output..." << endl;
+	//cout << "Set list pattern for output..." << endl;
 	vector<double> pattern;
 	for (int i = 0; i < len_pop; i++){
 		pattern.clear();
 		for (int j = 0; j < len_pattern+2; j++){
 			pattern.push_back(Mpop_geno(i,j));
 		}
+		//If the pattern isn't already in the list, add it to the list
 		if (count(list_pattern.begin(), list_pattern.end(), pattern) == 0){
 			list_pattern.push_back(pattern);
 		}
@@ -86,18 +101,10 @@ void Output::set_list_pattern(){
 }
 
 /*
-void Output::set_list_sol(){
+ * *************************************************************
+ */
 
-	vector<double> sol;
-	for (int i = 0; i < len_pop; i++){
-		sol.clear();
-		for (int j = 0; j < len_pattern+2; j++){
-			sol.push_back(Mpop_geno(i,j));
-		}
-		list_sol.push_back(sol);
-	}
-}
-*/
+//Call the quicksort function and print the solutions with their g2 score and p-values
 void Output::set_best_sol(){
 	/*vector<int> occurences_list;
 	vector<double> best_pattern;
@@ -131,15 +138,15 @@ void Output::set_best_sol(){
 	}*/
 
 	set_list_pattern();
-	cout << "Quick sorting..." << endl;
+	//cout << "Quick sorting..." << endl;
 	quickSort(list_pattern, 0, list_pattern.size()-1);
 
-	cout << "List of solutions : " << endl;
-	for (int i = 0; i < list_pattern.size(); i++){
+	//cout << "List of solutions : " << endl;
+	for (int i = 0; i < int(list_pattern.size()); i++){
 		for (int j = 0; j < len_pattern; j++){
-			cout << list_pattern[i][j] << "/";
+			//cout << list_pattern[i][j] << "/";
 		}
-		cout << "\t score : " << list_pattern[i][len_pattern] << "\t p-value : " << list_pattern[i][len_pattern+1] << endl;
+		//cout << "\t score : " << list_pattern[i][len_pattern] << "\t p-value : " << list_pattern[i][len_pattern+1] << endl;
 	}
 }
 
@@ -173,9 +180,15 @@ void Output::write_best_sol(){
 }
 */
 
+
+/*
+ * *************************************************************
+ */
+
+//Write the solutions, g2 score and p-value in the output file
 void Output::write_best_sol(){
 
-	cout << "Write solutions..." << endl;
+	//cout << "Write solutions..." << endl;
 	ofstream file(filename + ".txt", ios::out);
 
 	if(file)

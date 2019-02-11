@@ -2,7 +2,9 @@
  * ContengencyTable.h
  *
  *  Created on: 21 nov. 2018
- *      Author: courtin
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
 #ifndef CONTINGENCYTABLE_H_
@@ -15,8 +17,8 @@ class ContingencyTable {
 private:
 	int len_pattern;
 	int nb_col;
-	vector<vector<int>> list_pattern;
-	vector<int> pattern;
+	vector<vector<int>> list_pattern; //Vector of all possible genotype patterns according to its length
+	vector<int> pattern; //Vector for ine pattern
 	int_matrix_type Mgeno;
 	int_matrix_type Mpheno;
 	int_matrix_type Msol_geno;

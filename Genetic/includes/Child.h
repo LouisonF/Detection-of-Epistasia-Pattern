@@ -2,7 +2,9 @@
  * Child.h
  *
  *  Created on: 19 nov. 2018
- *      Author: courtin
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
 #ifndef CHILD_H_
@@ -13,11 +15,11 @@ using namespace std;
 class Child{
 private:
 
-	double_matrix_type Mpop_geno;
-	int_matrix_type MParents;
-	int_matrix_type MChildren;
+	double_matrix_type Mpop_geno; //Matrix of index of solution of the population in the global matrix
+	int_matrix_type MParents; //Matrix of the selected parents
+	int_matrix_type MChildren; //Matrix of the children created by crossing over
 	int len_pattern;
-	double P_mutation;
+	double P_mutation; //Probability of mutation
 	int nb_snp;
 
 public:

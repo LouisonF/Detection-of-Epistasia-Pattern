@@ -2,7 +2,9 @@
  * ContengencyTable.cpp
  *
  *  Created on: 21 nov. 2018
- *      Author: courtin
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
 #include "ContingencyTable.h"
@@ -19,8 +21,13 @@ ContingencyTable::~ContingencyTable() {
 	// TODO Auto-generated destructor stub
 }
 
+/*
+ * *************************************************************
+ */
+
+//Set a list of all possibble patterns of snp according to the length of the pattern
 void ContingencyTable::set_pattern_list(){
-	cout << "Set pattern list..." << endl;
+	//cout << "Set pattern list..." << endl;
 
 	int x1 = 0;
 	int x2;
@@ -52,9 +59,15 @@ void ContingencyTable::set_pattern_list(){
 	}
 }
 
-void ContingencyTable::set_table(){
-	cout << "Set contingency table..." << endl;
+/*
+ * *************************************************************
+ */
 
+//Set the contingency table
+void ContingencyTable::set_table(){
+	//cout << "Set contingency table..." << endl;
+
+	//Initalize the table with 0 value everywhere
 	for (int i = 0; i < int(cont_table.size1()); i++){
 		for (int j = 0; j < int(cont_table.size2()); j++){
 			cont_table(i, j) = 0;
@@ -67,11 +80,14 @@ void ContingencyTable::set_table(){
 
 	for (int i = 0; i < int(Mpheno.size1()); i++){
 		pattern.clear();
+		//Get the pattern of the solution i and put it into a vector
 		for (int j = 0; j < len_pattern; j++){
 			pattern.push_back(int(Mgeno(i, Msol_geno(0,j))));
 		}
+		//Get the index of the selected pattern into the list of all possible patterns
 		it = find(list_pattern.begin(), list_pattern.end(), pattern);
 		index = distance(list_pattern.begin(), it);
+		//Incrementation of the case corresponding to the genotype of the pattern at the right index depending to the penotype
 		switch (Mpheno(i, 0)){
 		case 0:
 			cont_table(0, index)++;
@@ -83,9 +99,17 @@ void ContingencyTable::set_table(){
 	}
 }
 
+/*
+ * *************************************************************
+ */
+
 void ContingencyTable::display_table(){
-	cout << "contingency table : " << cont_table << endl;
+	//cout << "contingency table : " << cont_table << endl;
 }
+
+/*
+ * *************************************************************
+ */
 
 int_matrix_type ContingencyTable::get_cont_table(){
 	return(cont_table);

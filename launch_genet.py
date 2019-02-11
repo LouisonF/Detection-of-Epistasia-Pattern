@@ -2,7 +2,7 @@
 #-*-coding: utf-8-*-
 
 #Launch exemple :
-# ./launch_genet.py /home/courtin/Documents/M2/ProjetC/smu_naive_100/Simu_naive_2snp_0.5 naive_2snp_05 /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/PARAMETERS_GENETIC.txt 1 100 2
+# ./launch_genet.py /home/courtin/Documents/M2/ProjetC/smu_naive_100/Simu_naive_2snp_0.5 naive_2snp_05 /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/PARAMETERS_GENETIC.txt 1 100 2 20
 # Louison Fresnais M2BB
 # François Courtin M2BB
 
@@ -34,8 +34,7 @@ for pheno in pipe_pheno.stdout:
     pheno_list.append(temp_pheno)
 j = 0
 print(pheno_list)
-file = open("time.txt", "a")
-start_time = int(round(time.time() * 1000))
+file = open("time_"+dataset+".txt", "a")
 
 pipe_geno = Popen("ls "+data_path+" | grep -i geno", shell=True, stdout=PIPE)
 for geno in pipe_geno.stdout:
@@ -49,20 +48,19 @@ for geno in pipe_geno.stdout:
     except FileExistsError:
         print("Directory already exists")
 
-    for i in range(1,2):
+    for i in range(1,int(n_runs)+1):
         pheno_str = str(pheno_list[j])
         print(pheno_str)
         exec_start_time = int(round(time.time() * 1000))
-        os.system("./Genetic/Debug/Genetic "+geno_dir+"/res_"+geno_temp+"_"+str(i)+" "+data_path+"/"+geno_temp+".txt "+data_path+"/"+pheno_str +" "+param_path)
+        os.system("./Genetic/Release/Genetic "+geno_dir+"/res_"+geno_temp+"_"+str(i)+" "+data_path+"/"+geno_temp+".txt "+data_path+"/"+pheno_str +" "+param_path)
         exec_end_time = str(float(int(round(time.time() * 1000)) - exec_start_time)/1000)
         file.write(exec_end_time+"s\n")
 
     j+=1
-end_time = str(float((int(round(time.time() * 1000)) - start_time))/1000/60)
-print(end_time)
-file.write(end_time+"min")
+
+
 
 #LAUNCH EVAL SCRIPT
 #run : ./eval_simu.py input_directory_path output_directory_path n_runs nb_snp len_pattern
 #The input directory path must be <Model_results_directory>/<Jeu_donnees_x_directory> with a directory /<fichier_simulé_x> inside containing the n itération for that file.
-os.system("./eval/eval_simu.py " "/home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/Genetic_results/"+dataset+ " /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/Genetic_eval_results "+n_runs+" "+nb_snp+" "+len_pattern)
+os.system("./eval/eval_simu.py " "Genetic/Genetic_results/"+dataset+ " Genetic/Genetic_eval_results "+n_runs+" "+nb_snp+" "+len_pattern)

@@ -54,7 +54,7 @@ def set_res(file, caus_snp):
                         if snp_array[i] == caus_snp_array[j]:
                             return("TP")
         return("FP")
-
+    res_file.close()
 
 #************************************************************#
 

@@ -2,7 +2,9 @@
  * G2test.h
  *
  *  Created on: 23 nov. 2018
- *      Author: courtin
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
 #ifndef G2TEST_H_

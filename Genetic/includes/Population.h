@@ -2,7 +2,9 @@
  * Population.h
  *
  *  Created on: 19 nov. 2018
- *      Author: courtin
+ *      Author: Louison Fresnais, François Courtin
+ *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
+ *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
 #ifndef POPULATION_H_
@@ -19,8 +21,10 @@ protected:
 	int len_pattern;
 	double_matrix_type Mpop_geno;
 public:
-	Population(int_matrix_type, int_matrix_type, int, int);
+	Population(int_matrix_type, int_matrix_type, int &len_pop, int);
 	~Population();
+	long double fact(long int N);
+	void check_pop_len();
 	void sol_selection();
 	void init_pop_geno();
 	void display_geno_sol();

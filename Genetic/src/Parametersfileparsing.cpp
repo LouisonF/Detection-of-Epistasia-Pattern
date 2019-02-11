@@ -88,41 +88,41 @@ void Parameters_file_parsing::import_line(string const line)
     else if(key == "population_size")
     {
     	len_pop = atoi(value.c_str());
-    	cout << "len pop" << endl;
+    	//cout << "len pop" << endl;
     }
     else if(key == "pattern_size")
     {
     	len_pattern = atoi(value.c_str());
-    	cout << "len pattern" << endl;
+    	//cout << "len pattern" << endl;
     }
     else if(key == "number_of_parents_selected")
     {
     	nb_parents = atoi(value.c_str());
-    	cout << "nb parents" << endl;
+    	//cout << "nb parents" << endl;
     }
     else if(key == "number_of_iterations")
     {
     	nb_it = atoi(value.c_str());
-    	cout << "nb it" << endl;
+    	//cout << "nb it" << endl;
     }
     else if(key == "alpha")
     {
     	alpha = atof(value.c_str());
-    	cout << "alpha" << endl;
+    	//cout << "alpha" << endl;
     }
     else if(key == "mutation_probability")
     {
     	P_mutation = atof(value.c_str());
-    	cout << "mutation" << endl;
+    	//cout << "mutation" << endl;
     }
     else if(key == "bad_solution_selection_probability")
     {
     	P_selection = atof(value.c_str());
-    	cout << "selection" << endl;
+    	//cout << "selection" << endl;
     }
     else
     {
-    	cout << "parameter unknown"<<endl;
+    	//cout << "parameter unknown"<<endl;
     }
 }
 
@@ -147,7 +147,7 @@ vector<string> Parameters_file_parsing::split(string const s, char delim)
 //Method from Clément Niel's code
 void Parameters_file_parsing::list_parameters()
 {
-    cout << "########### PARAMETERS ###########\n" << "header_nrows => " << header_nrows << endl
+    /*cout << "########### PARAMETERS ###########\n" << "header_nrows => " << header_nrows << endl
     << "separator => " << sep << endl
     << "population_size => " << len_pop << endl
 	<< "pattern_size => " << len_pattern << endl
@@ -156,5 +156,5 @@ void Parameters_file_parsing::list_parameters()
 	<< "alpha => " << alpha << endl
     << "mutation_probability => " << P_mutation << endl
     << "bad_solution_selection_probability => " << P_selection << endl
-    << "#################################" << endl;
+    << "#################################" << endl;*/
 }
