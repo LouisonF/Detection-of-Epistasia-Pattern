@@ -32,13 +32,13 @@ def set_res(file, caus_snp):
 
     res_file  = open(file, "r")
     for line in res_file:
-        print(line)
+        #print(line)
         if line[0] != "{":
             continue;
         try:
             pattern = re.search('{(.+?)}', line).group(1)
         except AttributeError:
-            print("c'est l'exception12")
+            #print("c'est l'exception12")
             pattern = ''
         if pattern == '':
             return("FN")
@@ -88,7 +88,7 @@ def run_f_measure(input):
     else:
         f_measure = 2/((1/recall)+(1/precision))
 
-    print("F-measure : ",f_measure)
+    #print("F-measure : ",f_measure)
     file.close()
     return(f_measure)
 
@@ -109,6 +109,6 @@ def run_power(input,n_runs):
 
     power = TP/n_runs
 
-    print("Power : ",power)
+    #print("Power : ",power)
     file.close()
     return(power)

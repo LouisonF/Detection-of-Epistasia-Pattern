@@ -73,7 +73,7 @@ void G2test::run_G2(int &not_reliable, bool child){
 
 	//Incrementation of non reliable test count if the test is not reliable
 	if (!reliable_test(cont_table) and child){
-		cout << "Running G2..." << endl;
+		//cout << "Running G2..." << endl;
 		not_reliable ++;
 	}else{
 		//cout << "Running G2..." << endl;

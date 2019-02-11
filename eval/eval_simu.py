@@ -24,7 +24,7 @@ for i in range(1,int(len_pattern)+1):
 
 caus_snp = caus_snp[0:(len(caus_snp)-1)] #pop the "," at the end of the string
 
-print("causal SNPs" + caus_snp)
+#print("causal SNPs" + caus_snp)
 #List of directories of conditionnal dataset
 try:
     os.makedirs(output+"/"+os.path.basename(input))
@@ -32,7 +32,7 @@ except FileExistsError:
     print("Directory already exist")
 
 condition = os.path.basename(output+"/"+os.path.basename(input))
-print(os.path.basename(input))
+#print(os.path.basename(input))
 #List of directories of simulated conditionnal dataset
 for simu_file in os.listdir(input):
     #List of n_runs result files for one simulated conditionnal dataset
@@ -42,7 +42,7 @@ for simu_file in os.listdir(input):
         #Write the result in the f_measure.txt file
         output_file = write_res(output+"/"+condition+"/"+simu_file, result, "result")
 
-    print(os.path.basename(output_file))
+    #print(os.path.basename(output_file))
     f_measure = run_f_measure(output_file)
     write_res(output+"/"+condition, str(f_measure), "f_measure")
 
