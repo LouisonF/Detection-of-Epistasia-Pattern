@@ -44,15 +44,15 @@ def set_res(file, caus_snp):
             return("FN")
         else:
             snp_array = pattern.split(",")
-            if (snp_array == caus_snp_array) or (snp_array[::-1] == caus_snp_array):
+            if (caus_snp in pattern) or (caus_snp in ','.join(snp_array[::-1])):
                 return("TP")
             elif len(snp_array) < len(caus_snp_array):
                 return("FN")
-            else:
-                for i in range(len(snp_array)):
-                    for j in range(len(caus_snp_array)):
-                        if snp_array[i] == caus_snp_array[j]:
-                            return("TP")
+            # else:
+            #     for i in range(len(snp_array)):
+            #         for j in range(len(caus_snp_array)):
+            #             if snp_array[i] == caus_snp_array[j]:
+            #                 return("TP")
         return("FP")
     res_file.close()
 
