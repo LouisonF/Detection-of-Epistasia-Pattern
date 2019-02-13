@@ -1,8 +1,7 @@
 #! /usr/bin/python3
 #-*-coding: utf-8-*-
-
 #Launch exemple :
-# ./launch_genet.py /home/courtin/Documents/M2/ProjetC/smu_naive_100/Simu_naive_2snp_0.5 naive_2snp_05 /home/courtin/Documents/M2/ProjetC/detection-of-epistasia-pattern/Genetic/PARAMETERS_GENETIC.txt 1 100 2 20
+# ./launch_genet.py input_path name_of_dataset parameters_file_path number_of_runs number_of_snps pattern_length
 # Louison Fresnais M2BB
 # François Courtin M2BB
 
@@ -12,12 +11,12 @@ import time
 from subprocess import Popen, PIPE
 
 
-data_path = sys.argv[1]
-dataset = sys.argv[2]
-param_path = sys.argv[3]
-n_runs = sys.argv[4]
-nb_snp = sys.argv[5]
-len_pattern = sys.argv[6]
+data_path = sys.argv[1] #Give the data directory
+dataset = sys.argv[2] #name of dataset
+param_path = sys.argv[3] #path to the parameters file
+n_runs = sys.argv[4] #number of runs on each file
+nb_snp = sys.argv[5] # the number of snps in the dataset
+len_pattern = sys.argv[6] # the size of the epistasia pattern
 
 try:
     os.makedirs("Genetic/Genetic_results/"+dataset)

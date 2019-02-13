@@ -12,7 +12,7 @@ from subprocess import Popen, PIPE
 
 
 data_path = sys.argv[1] #Give the data directory
-dataset = sys.argv[2] #nom du jeu de données
+dataset = sys.argv[2] #name of dataset
 param_path = sys.argv[3] #path to the parameters file
 number_snps = sys.argv[4] # the number of snps in the dataset
 size_epistasia = sys.argv[5] # the size of the epistasia pattern
@@ -63,4 +63,4 @@ file.close()
 #LAUNCH EVAL SCRIPT
 #run : ./eval_simu.py input_directory_path output_directory_path n_runs nb_snp len_pattern
 #The input directory path must be <Model_results_directory>/<Jeu_donnees_x_directory> with a directory /<fichier_simulé_x> inside containing the n itération for that file.
-os.system("./eval/eval_simu.py " "/comptes/E146938Q/c++_project/rendu_smmb_aco/SMMB-ACO_results/"+dataset+ " /comptes/E146938Q/c++_project/rendu_smmb_aco/SMMB-ACO_eval_results "+str(nbr_runs)+" "+str(number_snps)+" "+str(size_epistasia))
+os.system("./eval/eval_simu.py " "SMMB-ACO_results/"+dataset+ " SMMB-ACO_eval_results "+str(nbr_runs)+" "+str(number_snps)+" "+str(size_epistasia))
