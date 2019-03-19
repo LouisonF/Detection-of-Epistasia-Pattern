@@ -7,7 +7,7 @@
  *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
-#include "TheoricalTable.h"
+#include "includes/TheoricalTable.h"
 
 TheoricalTable::TheoricalTable(int len_pattern, int_matrix_type cont_table) : len_pattern(len_pattern), cont_table(cont_table){
 	nb_col = pow(3, len_pattern);

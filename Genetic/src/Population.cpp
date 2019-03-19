@@ -9,8 +9,8 @@
 #include <string>
 #include <iostream>
 #include <set>
-#include "TypeDef.h"
-#include "Population.h"
+#include "includes/TypeDef.h"
+#include "includes/Population.h"
 
 using namespace std;
 

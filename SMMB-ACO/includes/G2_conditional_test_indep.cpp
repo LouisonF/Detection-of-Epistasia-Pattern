@@ -19,6 +19,7 @@ using namespace std;
 //----------------------------------------------------
 // G2_conditional_test_indep : Constructor 1
 //----------------------------------------------------
+//This constructor call every required method to compute contingency tables and then run a g2_cond_test on contingency tables.
 G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, blas::matrix<int> phenos,
                                                      vector<unsigned int> const& cond_genos_indexes,
 													 blas::matrix<int> ref_matrix,
@@ -33,7 +34,6 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
     {
     	n_contingencies=1;
     }
-
     blas_column genos_column = blas_column(genos,0);
     blas_column phenos_column = blas_column(phenos,0);
     _df = 2;
@@ -56,6 +56,7 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
             {
                 contingency_index += pow(3,j) * ref_matrix(i,*it);
             }
+            //Add +1 in to the relevant combination.
             Contingency& c = _contingencies[contingency_index];
             unsigned cr = phenos_column(i);
             unsigned cc = genos_column(i);
@@ -72,12 +73,13 @@ G2_conditional_test_indep::G2_conditional_test_indep(blas::matrix<int> genos, bl
             c(cr, cc) += 1;
         }
     }
-
+//run g2 on contingency tables
     run(do_print_contingency);
 }
 //-----------------------------------------
 // G2_conditional_test_indep : run
 //-----------------------------------------
+//run a g2_conditional_test_indep on a vector of contingency tables
 void G2_conditional_test_indep::run(bool verbose)
 {
     _g2 = 0;
@@ -108,6 +110,7 @@ void G2_conditional_test_indep::run(bool verbose)
 //-----------------------------------------
 // G2_conditional_test_indep : print_contingencies
 //-----------------------------------------
+//if requested by the user in the g2_cond call, print contingencies tables.
 void G2_conditional_test_indep::print_contingencies()
 {
     cout << "Contingencies:" << endl;

@@ -6,7 +6,7 @@
  *      Project: SMMB-ACO and Genetic Algorithm for epistasis detection
  *      Under the supervision of Christine Sinoquet(Nantes University)
  */
-#include "Child.h"
+#include "includes/Child.h"
 
 Child::Child(double_matrix_type Mpop_geno, int_matrix_type MParents, int len_pattern, double P_mutation, int nb_snp) : Mpop_geno(Mpop_geno), MParents(MParents), len_pattern(len_pattern), P_mutation(P_mutation), nb_snp(nb_snp)
 {

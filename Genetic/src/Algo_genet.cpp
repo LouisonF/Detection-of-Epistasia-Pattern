@@ -16,15 +16,15 @@
 #include <time.h>
 #include <vector>
 #include <string>
-#include "Parametersfileparsing.hpp"
-#include "Population.h"
-#include "Parent.h"
-#include "ContingencyTable.h"
-#include "TheoricalTable.h"
-#include "G2test.h"
-#include "Child.h"
-#include "Output.h"
-#include "datainput.hpp"
+#include "includes/Parametersfileparsing.hpp"
+#include "includes/Population.h"
+#include "includes/Parent.h"
+#include "includes/ContingencyTable.h"
+#include "includes/TheoricalTable.h"
+#include "includes/G2test.h"
+#include "includes/Child.h"
+#include "includes/Output.h"
+#include "includes/datainput.hpp"
 
 
 using namespace std;
@@ -239,7 +239,7 @@ int main (int argc, char *argv[]) {
 
 
 	//Constructor for the output module
-	Output output(population.get_Mpop_geno(), header, len_pattern, len_pop, namefile);
+	Output output(population.get_Mpop_geno(), header, len_pattern, len_pop, namefile, alpha);
 
 	//output.set_list_pattern();
 	//Set the list of the final solutions sorting it by p-value

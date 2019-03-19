@@ -4,11 +4,6 @@ header_nrows 1
 # separation between fields in the genotype file
 sep ,
 
-#Name of the genotype file
-genos_file ouigenotypes1.txt
-
-#Name of the phenotype file
-phenos_file ouiphenotypes1.txt
 # alpha type I error rate
 alpha 0.05
 

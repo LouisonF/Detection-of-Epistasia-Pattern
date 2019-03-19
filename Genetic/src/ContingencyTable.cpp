@@ -7,7 +7,7 @@
  *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
-#include "ContingencyTable.h"
+#include "includes/ContingencyTable.h"
 #include <string>
 
 ContingencyTable::ContingencyTable(int_matrix_type &Mgeno, int_matrix_type &Mpheno, int_matrix_type Msol_geno, int len_pattern) : len_pattern(len_pattern), Mgeno(Mgeno), Mpheno(Mpheno), Msol_geno(Msol_geno){

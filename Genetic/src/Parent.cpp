@@ -7,8 +7,8 @@
  *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
-#include "Parent.h"
-#include "Population.h"
+#include "includes/Parent.h"
+#include "includes/Population.h"
 
 using namespace std;
 

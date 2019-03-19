@@ -19,8 +19,8 @@ nb_snp = sys.argv[5] # the number of snps in the dataset
 len_pattern = sys.argv[6] # the size of the epistasia pattern
 
 try:
-    os.makedirs("Genetic/Genetic_results/"+dataset)
-    os.makedirs("Genetic/Genetic_eval_results")
+    os.makedirs("Genetic_results/"+dataset)
+    os.makedirs("Genetic_eval_results")
 
 except FileExistsError:
     print("Directory already exists")
@@ -41,7 +41,7 @@ for geno in pipe_geno.stdout:
     geno_temp = geno_temp.strip('\n')
     geno_temp = geno_temp.strip('.txt')
     #print(geno_temp)
-    geno_dir = "Genetic/Genetic_results/"+dataset+"/"+geno_temp
+    geno_dir = "Genetic_results/"+dataset+"/"+geno_temp
     try:
         os.makedirs(geno_dir)
     except FileExistsError:
@@ -52,9 +52,9 @@ for geno in pipe_geno.stdout:
         pheno_str = str(pheno_list[j])
         #print(pheno_str)
         exec_start_time = int(round(time.time() * 1000))
-        os.system("./Genetic/Release/Genetic "+geno_dir+"/res_"+geno_temp+"_"+str(i)+" "+data_path+"/"+geno_temp+".txt "+data_path+"/"+pheno_str +" "+param_path)
+        os.system("./Genetic/genetic "+geno_dir+"/res_"+geno_temp+"_"+str(i)+" "+data_path+"/"+geno_temp+".txt "+data_path+"/"+pheno_str +" "+param_path)
         exec_end_time = str(float(int(round(time.time() * 1000)) - exec_start_time)/1000)
-        file.write(exec_end_time+"s\n")
+        file.write(exec_end_time+"\n")
 
     j+=1
 
@@ -63,4 +63,4 @@ for geno in pipe_geno.stdout:
 #LAUNCH EVAL SCRIPT
 #run : ./eval_simu.py input_directory_path output_directory_path n_runs nb_snp len_pattern
 #The input directory path must be <Model_results_directory>/<Jeu_donnees_x_directory> with a directory /<fichier_simulé_x> inside containing the n itération for that file.
-os.system("./eval/eval_simu.py " "Genetic/Genetic_results/"+dataset+ " Genetic/Genetic_eval_results "+n_runs+" "+nb_snp+" "+len_pattern)
+os.system("./eval/eval_simu.py " "Genetic_results/"+dataset+ " Genetic_eval_results "+n_runs+" "+nb_snp+" "+len_pattern)

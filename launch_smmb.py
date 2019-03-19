@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 #-*-coding: utf-8-*-
-# launch example: python launch_smmb.py ../Simu_naive/Simu_naive_2snp_0.5_geno/ Simu_naive_2snp_0.5
-# launch exemple: python launch_smmb.py ../simu_naive_CARLUER_OUEDRAOGO/simu_naive_2snp_0_059_0_25 simu_naive_2snp_0_059_0_25
+# launch example: python3 launch_smmb.py ../Simu_naive/Simu_naive_2snp_0.25 Simu_naive_2snp_0.25 SMMB-ACO/SMMB-ACO-parameters_2snp.txt 100 51 2
+# launch exemple: python3 launch_smmb.py ../simu_naive_CARLUER_OUEDRAOGO/simu_naive_2snp_0_059_0_25 simu_naive_2snp_0_059_0_25 SMMB-ACO/SMMB-ACO-parameters_2snp.txt 28 51 2
 # Louison Fresnais M2BB
 # François Courtin M2BB
 
@@ -14,10 +14,11 @@ from subprocess import Popen, PIPE
 data_path = sys.argv[1] #Give the data directory
 dataset = sys.argv[2] #name of dataset
 param_path = sys.argv[3] #path to the parameters file
-number_snps = sys.argv[4] # the number of snps in the dataset
-size_epistasia = sys.argv[5] # the size of the epistasia pattern
+nbr_runs = sys.argv[4] # the number of runs required by the user
+number_snps = sys.argv[5] # the number of snps in the dataset
+size_epistasia = sys.argv[6] # the size of the epistasia pattern
 
-nbr_runs = 2 #change this value in order to modifiy the number of runs
+
 try:
     os.makedirs("SMMB-ACO_results/"+dataset)
     os.makedirs("SMMB-ACO_eval_results")
@@ -47,7 +48,7 @@ for geno in pipe_geno.stdout:
     except FileExistsError:
         print("Directory already exist")
 
-    for i in range(1,nbr_runs):
+    for i in range(1,int(nbr_runs)):
         pheno_str = str(pheno_list[j])
         print(pheno_str)
         exec_start_time = int(round(time.time() * 1000))

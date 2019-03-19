@@ -61,7 +61,7 @@ void G2_test_indep::run(Contingency const& c)
         return;
     }
     compute_g2(c, e);
-
+    //produce a chi_squared distribution in order to get the p-value of the g2 conditional test.
     boost::math::chi_squared_distribution<double> chi2_dist(_df);
     _pval = 1 - boost::math::cdf(chi2_dist, _g2);
 }
@@ -101,6 +101,7 @@ bool G2_test_indep::is_reliable() const
 void G2_test_indep::compute_g2(Contingency const& c, Contingency const& e)
 {
 //    _g2 = 0;      // initialized in constructor and this function is called in constructor
+	//iterate over rows and columns of a contingency table and compute g2 on the contingency datas.
     for(unsigned i=0; i<c.size1(); ++i)
     {
         for(unsigned j=0; j<c.size2(); ++j)
@@ -118,7 +119,7 @@ void G2_test_indep::compute_g2(Contingency const& c, Contingency const& e)
 //-----------------------------------------
 // G2_test_indep : reliable_test
 //-----------------------------------------
-
+//Called by the is_reliable method. if there is a value under 5 in the contigency table, g2 is not reliable.
 bool G2_test_indep::reliable_test(Contingency const& c)
 {
 	for(unsigned i=0; i<c.size1(); ++i)

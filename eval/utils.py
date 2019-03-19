@@ -27,33 +27,44 @@ def write_res(output, value, res_type):
 #Set TP of FP or FN for one result file
 def set_res(file, caus_snp):
 
+    FN = 0
+    FP = 0
+    TP = False
+
     caus_snp_array = caus_snp.split(',')
     caus_snp_array = caus_snp_array[::-1] #Reverse the array to match the right sort
 
     res_file  = open(file, "r")
+
     for line in res_file:
-        #print(line)
+
         if line[0] != "{":
             continue;
         try:
             pattern = re.search('{(.+?)}', line).group(1)
+
         except AttributeError:
-            #print("c'est l'exception12")
+            print("exception")
             pattern = ''
         if pattern == '':
-            return("FN")
+            FN += 1
         else:
             snp_array = pattern.split(",")
             if (caus_snp in pattern) or (caus_snp in ','.join(snp_array[::-1])):
+                TP = True
                 return("TP")
             elif len(snp_array) < len(caus_snp_array):
-                return("FN")
+                FN += 1
             # else:
             #     for i in range(len(snp_array)):
             #         for j in range(len(caus_snp_array)):
             #             if snp_array[i] == caus_snp_array[j]:
             #                 return("TP")
+        FP += 1
+    if (FP > 0) :
         return("FP")
+    else :
+        return("FN")
     res_file.close()
 
 #************************************************************#

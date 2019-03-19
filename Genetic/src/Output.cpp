@@ -7,10 +7,10 @@
  *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
-#include "Output.h"
+#include "includes/Output.h"
 #include <fstream>
 
-Output::Output(double_matrix_type Mpop_geno, vector<string>header, int len_pattern, int len_pop, string filename) : Mpop_geno(Mpop_geno), header(header), len_pattern(len_pattern), len_pop(len_pop), filename(filename) {
+Output::Output(double_matrix_type Mpop_geno, vector<string>header, int len_pattern, int len_pop, string filename, double alpha) : Mpop_geno(Mpop_geno), header(header), len_pattern(len_pattern), len_pop(len_pop), filename(filename), alpha(alpha) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -94,7 +94,7 @@ void Output::set_list_pattern(){
 			pattern.push_back(Mpop_geno(i,j));
 		}
 		//If the pattern isn't already in the list, add it to the list
-		if (count(list_pattern.begin(), list_pattern.end(), pattern) == 0){
+		if ((count(list_pattern.begin(), list_pattern.end(), pattern) == 0) and (pattern[len_pattern+1] <= alpha)){
 			list_pattern.push_back(pattern);
 		}
 	}

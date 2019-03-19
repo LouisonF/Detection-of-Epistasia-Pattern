@@ -7,7 +7,7 @@
  *      Under the supervision of Christine Sinoquet(Nantes University)
  */
 
-#include "G2test.h"
+#include "includes/G2test.h"
 #include <boost/math/distributions/chi_squared.hpp>
 
 G2test::G2test(int_matrix_type cont_table, int_matrix_type theo_table) : cont_table(cont_table), theo_table(theo_table) {

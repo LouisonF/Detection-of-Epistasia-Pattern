@@ -5,13 +5,13 @@ header_nrows 1
 sep ,
 
 # Initial population size
-population_size 500
+population_size 170
 
 # SNPs pattern size
 pattern_size 2
 
 # Number of parents selected at each loop (must be pair)
-number_of_parents_selected 10
+number_of_parents_selected 4
 
 # Number of iterations
 number_of_iterations 100
